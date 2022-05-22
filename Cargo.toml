@@ -1,0 +1,15 @@
+[package]
+name = "youtubei-rs"
+version = "0.1.0"
+edition = "2021"
+license = "AGPL-3.0 license"
+license-file = "LICENSE"
+repository = "https://github.com/11tuvork28/youtubei-rs"
+readme = "README.md"
+description = """
+A warpper for the innertube api, which supports all endpoints.
+"""
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+serde_json = "1.0.81"
