@@ -47,6 +47,14 @@ pub fn resolve_url(url: &str, client_config: &ClientConfig){
   return post_json("/youtubei/v1/resolve_url", data, &client_config);
 }
 
+pub fn search(search_query: &str, params:  &str, client_config: &ClientConfig){
+  let data = json!({
+    "query"   : search_query,
+    "context" : make_context(client_config),
+    "params"  : params,
+  });
+  return post_json("/youtubei/v1/search", data, client_config);
+}
 fn post_json(endpoint: &str, data: Value, client_config : &ClientConfig) {
     todo!()
 }
