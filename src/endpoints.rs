@@ -1,5 +1,5 @@
 use serde_json::{json, Value};
-use crate::types::clientConfig::ClientConfig;
+use crate::types::client_config::ClientConfig;
 use crate::utils::{merge, default_client_config};
 
 pub async fn browse_continuation(continuation : &str, client_config : &ClientConfig) -> Value{

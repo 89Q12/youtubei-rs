@@ -1,4 +1,4 @@
-use super::clientTypes::ClientTypes;
+use super::client_types::ClientTypes;
 use reqwest::Client;
 use reqwest::header;
 pub struct ClientConfig{

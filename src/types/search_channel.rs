@@ -1,14 +1,14 @@
-pub struct search_channel{
-    author: String,
-    ucid: String,
-    author_thumbnail: String,
-    subscriber_count: String,
-    video_count: String,
-    description_html: String,
-    auto_generated: String,
-    author_verified: String,
+pub struct SearchChannel{
+   pub author: String,
+   pub ucid: String,
+   pub author_thumbnail: String,
+   pub subscriber_count: String,
+   pub video_count: String,
+   pub description_html: String,
+   pub auto_generated: String,
+   pub author_verified: String,
 }
 
-impl search_channel {
+impl SearchChannel {
     
 }
