@@ -57,15 +57,14 @@ pub async fn search(search_query: &str, params:  &str, client_config: &ClientCon
 }
 
 fn make_context(client_config: &ClientConfig) -> serde_json::Value{
-  let mut client_context = json!({"client": {
-    "hl"           : "en",
-    "gl"           : client_config.region(),
-    "clientName"   : client_config.name(),
-    "clientVersion": client_config.version(),
-  }
-});
+  let mut client_context = json!({
+      "hl"           : "en",
+      "gl"           : client_config.region(),
+      "clientName"   : client_config.name(),
+      "clientVersion": client_config.version(),
+  });
 if !client_config.client_type.get_client_type().screen.is_empty() {
-  client_context["client"]["clientScreen"] = serde_json::Value::String(client_config.client_type.get_client_type().screen);
+  client_context["clientScreen"] = serde_json::Value::String(client_config.client_type.get_client_type().screen);
 }
 if client_config.client_type.get_client_type().screen == "EMBED"{
   client_context["third_party"] = json!({"embedUrl":  "https://www.youtube.com/embed/dQw4w9WgXcQ"})
@@ -77,7 +76,7 @@ async fn post_json(endpoint: &str, data: Value, client_config : &ClientConfig) -
   let url = endpoint.to_owned()+"?key="+ &client_config.client_type.get_client_type().api_key.to_owned() +"&prettyPrint=false";
   let wrapped_response=  client_config.http_client
   .post("https://www.youtube.com".to_owned() +&url)
-  .json(&data.to_string())
+  .json(&data )
   .send().await;
   let response = {
     match wrapped_response{
@@ -85,8 +84,8 @@ async fn post_json(endpoint: &str, data: Value, client_config : &ClientConfig) -
       Err(e) => return json!({"err": e.to_string()}),
     }
   };
-  let json={ match response.text().await{
-      Ok(json) =>json!(json.to_string()),
+  let json={ match response.json().await{
+      Ok(json) =>json,
       Err(e) => return json!({"err": e.to_string()}),
   }};
   return json;
