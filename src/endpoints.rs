@@ -76,7 +76,7 @@ return json!({"client": &client_context});
 async fn post_json(endpoint: &str, data: Value, client_config : &ClientConfig) -> Value {
   let url = endpoint.to_owned()+"?key="+ &client_config.client_type.get_client_type().api_key.to_owned() +"&prettyPrint=false";
   let wrapped_response=  client_config.http_client
-  .post(url)
+  .post("https://www.youtube.com".to_owned() +&url)
   .json(&data.to_string())
   .send().await;
   let response = {
