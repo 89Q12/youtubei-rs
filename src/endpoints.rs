@@ -30,7 +30,14 @@ pub fn next_with_data(mut data: serde_json::Value, client_config: &ClientConfig)
   merge(&mut data, &json!({"context": make_context(client_config)}));
   return post_json("/youtubei/v1/next", data, &client_config);
 }
-
+pub fn player(video_id: &str, params:  &str,client_config: &ClientConfig){
+  let data = json!({
+    "videoId" : video_id,
+    "context" : make_context(client_config),
+    "params"       : params,
+  });
+  return post_json("/youtubei/v1/player", data, &client_config);
+}
 
 
 
