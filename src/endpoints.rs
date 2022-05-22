@@ -1,24 +1,38 @@
 use serde_json::{json, Value};
 use crate::types::clientConfig::ClientConfig;
+use crate::utils::merge;
 
-
-fn browse_continuation(continuation : &str, client_config : &ClientConfig){
+pub fn browse_continuation(continuation : &str, client_config : &ClientConfig){
   
   let data = json!({
     "context"      : make_context(&client_config),
     "continuation" : continuation,
   });
-  return post_json("/youtubei/v1/browse", data, &client_config);
+  return post_json("/youtubei/v1/browse", data, client_config);
 }
-fn browse_browseid(browse_id : &str, params:  &str, client_config : &ClientConfig){
+pub fn browse_browseid(browse_id : &str, params:  &str, client_config : &ClientConfig){
   
   let data = json!({
     "context"      : make_context(&client_config),
     "browseId"     : browse_id,
     "params"       : params,
   });
-  return post_json("/youtubei/v1/browse", data, &client_config);
+  return post_json("/youtubei/v1/browse", data, client_config);
 }
+pub fn next(continuation : &str, client_config: &ClientConfig){
+  let data = json!({
+    "context"      : make_context(&client_config),
+    "continuation" : continuation,
+  });
+  return post_json("/youtubei/v1/next", data, &client_config);
+}
+pub fn next_with_data(mut data: serde_json::Value, client_config: &ClientConfig){
+  merge(&mut data, &json!({"context": make_context(client_config)}));
+  return post_json("/youtubei/v1/next", data, &client_config);
+}
+
+
+
 
 fn post_json(endpint: &str, data: Value, client_config : &ClientConfig) {
     todo!()
