@@ -8,7 +8,7 @@ keywords = ["api", "youtube","innertube", "wrapper"]
 repository = "https://github.com/11tuvork28/youtubei-rs"
 readme = "README.md"
 description = """
-A wrapper for the innertube api, which supports all endpoints.
+A asynchronous implementation of the invidious innertube aka youtubei API wrapper.
 """
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
