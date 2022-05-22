@@ -46,10 +46,18 @@ fn post_json(endpint: &str, data: Value, client_config : &ClientConfig) {
 }
 
 fn make_context(client_config: &ClientConfig) -> serde_json::Value{
-  let  client_context = json!({"client": {
-    "hl"           : "en",
-    "gl"           : client_config.region(),
-    "clientName"   : client_config.name(),
-    "clientVersion": client_config.version(),}});
+  let mut client_context = json!({"client": {
+      "hl"           : "en",
+      "gl"           : client_config.region(),
+      "clientName"   : client_config.name(),
+      "clientVersion": client_config.version(),
+      }
+    });
+  if !client_config.client_type.get_client_type().screen.is_empty() {
+    client_context["client"]["clientScreen"] = serde_json::Value::String(client_config.client_type.get_client_type().screen);
+  }
+  if client_config.client_type.get_client_type().screen == "EMBED"{
+    client_context["third_party"] = json!({"embedUrl":  "https://www.youtube.com/embed/dQw4w9WgXcQ"})
+  }
   return json!({"client": &client_context});
 }
