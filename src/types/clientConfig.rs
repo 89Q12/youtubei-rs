@@ -2,9 +2,9 @@ use super::clientTypes::ClientTypes;
 use serde::{Deserialize, Serialize};
 #[derive(Serialize, Deserialize)]
 pub struct ClientConfig{
-    client_type: ClientTypes,
-    region: String,
-    proxy_region:String,
+   pub client_type: ClientTypes,
+   pub region: String,
+   pub proxy_region:String,
 }
 
 impl ClientConfig {
