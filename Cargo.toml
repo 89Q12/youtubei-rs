@@ -4,10 +4,11 @@ version = "0.1.0"
 edition = "2021"
 license = "AGPL-3.0 license"
 license-file = "LICENSE"
+keywords = ["api", "youtube","innertube", "wrapper"]
 repository = "https://github.com/11tuvork28/youtubei-rs"
 readme = "README.md"
 description = """
-A warpper for the innertube api, which supports all endpoints.
+A wrapper for the innertube api, which supports all endpoints.
 """
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
