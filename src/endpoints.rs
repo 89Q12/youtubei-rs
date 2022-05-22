@@ -1,6 +1,6 @@
 use serde_json::{json, Value};
 use crate::types::clientConfig::ClientConfig;
-use crate::utils::merge;
+use crate::utils::{merge, default_client_config};
 
 pub fn browse_continuation(continuation : &str, client_config : &ClientConfig){
   
@@ -39,9 +39,15 @@ pub fn player(video_id: &str, params:  &str,client_config: &ClientConfig){
   return post_json("/youtubei/v1/player", data, &client_config);
 }
 
+pub fn resolve_url(url: &str, client_config: &ClientConfig){
+  let data = json!({
+    "context" : make_context(&default_client_config()),
+    "url"     : url,
+  });
+  return post_json("/youtubei/v1/resolve_url", data, &client_config);
+}
 
-
-fn post_json(endpint: &str, data: Value, client_config : &ClientConfig) {
+fn post_json(endpoint: &str, data: Value, client_config : &ClientConfig) {
     todo!()
 }
 
