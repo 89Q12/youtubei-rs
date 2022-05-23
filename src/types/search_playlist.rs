@@ -1,4 +1,4 @@
-use super::search_playlist_video::SearchPlaylistVideo;
+use super::{search_playlist_video::SearchPlaylistVideo, endpoints::EndpointBrowse};
 
 pub struct SearchPlaylist{
     pub title:String,
@@ -9,6 +9,7 @@ pub struct SearchPlaylist{
     pub videos: Vec<SearchPlaylistVideo>,
     pub thumbnail: String,
     pub author_verified: bool,
+    pub endpoint: EndpointBrowse,
 }
 
 impl SearchPlaylist {
