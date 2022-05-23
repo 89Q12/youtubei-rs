@@ -6,3 +6,6 @@ pub mod search_playlist;
 pub mod search_playlist_video;
 pub mod category;
 pub mod endpoints;
+pub mod search_video;
+pub mod query_results;
+pub mod channel;
