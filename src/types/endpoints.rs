@@ -1,6 +1,7 @@
 pub enum EndpointsUrl {
     Browse,
     Player,
+    Next,
 }
 pub struct EndpointWatch{
     pub url: EndpointsUrl,
@@ -12,4 +13,8 @@ pub struct EndpointWatch{
 pub struct EndpointBrowse{
     pub url: EndpointsUrl,
     pub browse_id: String,
+}
+pub struct EndpointNext{
+    pub url: EndpointsUrl,
+    pub continuation: String,
 }
