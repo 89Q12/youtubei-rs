@@ -5,11 +5,12 @@ pub struct SearchPlaylist{
     pub id: String,
     pub author: String,
     pub ucid:String,
-    pub video_count: i32,
+    pub video_count: i64,
     pub videos: Vec<SearchPlaylistVideo>,
     pub thumbnail: String,
     pub author_verified: bool,
-    pub endpoint: EndpointBrowse,
+    pub play_endpoint: EndpointBrowse,
+    pub browse_endpoint: EndpointBrowse,
 }
 
 impl SearchPlaylist {
