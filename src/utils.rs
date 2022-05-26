@@ -24,3 +24,12 @@ pub fn merge(a: &mut Value, b: &Value) {
         }
     }
 }
+pub fn is_author_verified(json: &Value) -> bool {
+    let badge = &json["metadataBadgeRenderer"]["tooltip"];
+    if badge.is_string(){
+        if badge.as_str().unwrap() =="Verified"{
+           return true;
+        }
+    }
+    return false;
+}
