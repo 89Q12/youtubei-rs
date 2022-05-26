@@ -16,7 +16,7 @@ pub struct CommentsQuery{
 }
 pub struct VideoQuery{
     pub continuation: String,
-    pub videos:Video,
+    pub video:Video,
     pub related_videos: Vec<SearchVideo>,
 }
 pub struct ChannelQuery{
