@@ -4,7 +4,6 @@ pub enum CategoryTypes{
     Video(Video),
     SearchChannel(SearchChannel),
     SearchPlaylists(SearchPlaylist)
-
 }
 pub struct Category{
    pub  title: String,
