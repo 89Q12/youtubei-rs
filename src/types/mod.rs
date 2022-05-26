@@ -9,3 +9,5 @@ pub mod endpoints;
 pub mod search_video;
 pub mod query_results;
 pub mod channel;
+pub mod tab;
+pub mod video_player;
