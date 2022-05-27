@@ -1,8 +1,9 @@
-use super::video::Video;
+use super::tab::ChannelTab;
 
 pub struct Channel{
     pub name: String,
     pub id: String,
     pub banner: String,
-    pub videos: Vec<Video>,
+    pub avatar: String,
+    pub tab: ChannelTab,
 }
