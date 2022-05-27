@@ -21,7 +21,5 @@ pub struct VideoQuery{
     pub related_videos: Vec<SearchVideo>,
 }
 pub struct ChannelQuery{
-    pub continuation: String,
     pub channel: Channel,
-    
 }
