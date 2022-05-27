@@ -13,6 +13,8 @@ pub struct Video{
    pub  premiere_timestamp: String,
    pub  author_verified: bool,
    pub  video_player: VideoPlayer,
+   pub channel_thumbnail: String,
+   pub thumbnail: String,
 }
 
 impl Video {
