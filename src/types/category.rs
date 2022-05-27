@@ -1,9 +1,11 @@
+use crate::community::CommunityPost;
 use super::{video::{Video}, search_channel::{SearchChannel}, search_playlist::SearchPlaylist, search_video::SearchVideo, channel_video::ChannelVideo};
 
 pub enum CategoryTypes{
     Video(ChannelVideo),
     SearchChannel(SearchChannel),
     SearchPlaylist(SearchPlaylist),
+    PostCommunity(CommunityPost)
 
 }
 pub struct Category{
