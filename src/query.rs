@@ -1,9 +1,11 @@
 use std::fmt::Error;
 use crate::endpoints::*;
 use crate::extractors::*;
+use crate::types::channel::Channel;
 use crate::types::query_results::{SearchResult, CommentsQuery, VideoQuery, ChannelQuery};
 use crate::utils::default_client_config;
 use crate::types::video::Video;
+
 pub async fn search(query: String) -> SearchResult{
  todo!()
 }
@@ -18,7 +20,7 @@ pub async fn get_video(video_id:String, params: String) ->Result<VideoQuery,  Er
     /*
     Error handling
     */
-    if player_json["playabilityStatus"]["status"].as_str().unwrap() == "ERROR" || !player_json["err"].is_null() {
+    if player_json["playabilityStatus"]["status"].as_str().unwrap() == "ERROR" || !player_json["error"].is_null() {
         panic!("{}", player_json["playabilityStatus"]["reason"].as_str().unwrap());
     }
     let next_video_data = next_with_data(serde_json::json!({
@@ -34,6 +36,17 @@ pub async fn get_video(video_id:String, params: String) ->Result<VideoQuery,  Er
         related_videos: Vec::new(),
     }))
 }
-pub fn get_channel(browse_id:String, url: String) ->Result<ChannelQuery,  Error>{
-todo!()
+
+pub async fn get_channel(url:String, tab:String) -> Result<ChannelQuery,  Error>{
+    let client_config =default_client_config();
+    let complete_url = url+"/"+&tab; 
+    let resolved_url = resolve_url(&complete_url,&client_config ).await;
+    if !resolved_url["error"].is_null(){
+        panic!("{}",resolved_url["error"]["message"]);
+    }
+    let channel_json = browse_browseid(resolved_url["endpoint"]["browseEndpoint"]["browseId"].as_str().unwrap(), resolved_url["endpoint"]["browseEndpoint"]["params"].as_str().unwrap(), &client_config).await;
+    let channel: Channel = extract_channel(&channel_json, &tab);
+    Ok(ChannelQuery{
+        channel,
+    })
 }
