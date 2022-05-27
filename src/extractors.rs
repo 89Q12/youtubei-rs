@@ -24,7 +24,6 @@ pub fn extract_video_player_formats(json: &Value) -> VideoPlayer {
         formats: Vec::new(),
         apdaptiveformts: Vec::new(),
     };
-    println!("{}", json);
     for i  in 0..json["formats"].as_array().unwrap().len() {
         video_player.formats.push(Format{
             itag: unwrap_to_i64(json["formats"][i]["itag"].as_i64()),
