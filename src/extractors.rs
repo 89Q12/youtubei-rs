@@ -1,5 +1,5 @@
 use serde_json::Value;
-use crate::{types::{endpoints::{EndpointBrowse, EndpointWatch}, query_results::VideoQuery, search_video::SearchVideo, video::Video, video_player::{VideoPlayer, Format}, channel::Channel, tab::ChannelTab, channel_video::ChannelVideo, category::CategoryTypes::*, search_playlist::SearchPlaylist}, utils::{is_author_verified, unwrap_to_string, unwrap_to_i64}};
+use crate::{types::{endpoints::{EndpointBrowse, EndpointWatch}, query_results::VideoQuery, search_video::SearchVideo, video::Video, video_player::{VideoPlayer, Format}, channel::Channel, tab::ChannelTab, channel_video::ChannelVideo, category::CategoryTypes::*, search_playlist::SearchPlaylist, community::CommunityPost}, utils::{is_author_verified, unwrap_to_string, unwrap_to_i64}};
 /*
 region video_extraction
 */
@@ -97,9 +97,38 @@ pub fn extract_channel(json: &Value, tab: &str) -> Channel{
         tab: match tab {
             "videos"=> extract_videos_tab(&json["contents"]["twoColumnBrowseResultsRenderer"],&name),
             "playlists" => extract_playlists_tab(&json["contents"]["twoColumnBrowseResultsRenderer"], &name),
+            "community" => extract_community_tab(&json["contents"]["twoColumnBrowseResultsRenderer"], &name),
             _ => panic!("Unrecognized Tab: {}", tab)
         }
     }
+}
+
+fn extract_community_tab(json: &Value, name: &str) -> ChannelTab {
+    let mut tab = ChannelTab{ 
+        title: unwrap_to_string(json["tabs"][3]["tabRenderer"]["title"].as_str()), 
+        selected: true, 
+        content: Vec::with_capacity(29), // Youtube provides always 30 items, -1 due to the continuation token. 
+        continuation: unwrap_to_string(json["tabs"][3]["tabRenderer"]["content"]["sectionListRenderer"]["contents"].as_array().unwrap().last().unwrap()["continuationItemRenderer"]["continuationEndpoint"]["continuationCommand"]["token"].as_str()),
+    };
+    let items = &json["tabs"][3]["tabRenderer"]["content"]["sectionListRenderer"]["contents"][0]["itemSectionRenderer"]["contents"].as_array().unwrap();
+    for i in 0..items.iter().len()-1 {
+        let item = &items[i]["backstagePostThreadRenderer"]["post"]["backstagePostRenderer"];
+        tab.content.push(PostCommunity(CommunityPost{
+            content_text: unwrap_to_string(item["contentText"].as_str()),
+            content_attachment: unwrap_to_string(item["backstageAttachment"]["backstageImageRenderer"]["image"]["thumbnails"][0]["url"].as_str()) ,
+            author_name:  name.to_owned(),
+            author_thumbnail:  unwrap_to_string(item["authorThumbnail"]["thumbnails"][0]["url"].as_str()),
+            vote_count:  unwrap_to_i64(item["voteCount"]["simpleText"].as_i64()),
+            published_time_text:  unwrap_to_string(item["publishedTimeText"]["runs"][0]["text"].as_str()),
+            browse_endpoint: EndpointBrowse{
+                url: unwrap_to_string(item["authorEndpoint"]["browseEndpoint"]["canonicalBaseUrl"].as_str()),
+                browse_id:  unwrap_to_string(item["authorEndpoint"]["browseEndpoint"]["browseId"].as_str()),
+                params: String::from(""),
+            }
+        }
+        ))
+    } 
+    return tab
 }
 /// Playlist are either in a gridRenderer or multiple shelfRenderer.
 /// Which makes parsing a bit more complicated
@@ -117,7 +146,7 @@ fn extract_playlists_tab(json: &Value, name: &str) -> ChannelTab {
         for (section, value) in item.as_object().unwrap(){
             match  section.as_str(){
                 "gridRenderer" => {
-                    tab.continuation = unwrap_to_string(value["items"][30]["continuationItemRenderer"]["continuationEndpoint"]["continuationCommand"]["token"].as_str());
+                    tab.continuation = unwrap_to_string(value["items"].as_array().unwrap().last().unwrap()["continuationItemRenderer"]["continuationEndpoint"]["continuationCommand"]["token"].as_str());
                     grid_playlist_renderer(&mut tab, &value, name)
                 },
                 "shelfRenderer" => {
@@ -125,7 +154,7 @@ fn extract_playlists_tab(json: &Value, name: &str) -> ChannelTab {
                     tab.continuation = String::from("");
                     grid_playlist_renderer(&mut tab, &value["content"]["horizontalListRenderer"], name)
                 },
-                _ => println!("Lol")
+                _ => println!("Unsupported value: {} Consider reporting a bug", section)
             };
         }
     }
@@ -134,7 +163,7 @@ fn extract_playlists_tab(json: &Value, name: &str) -> ChannelTab {
 fn grid_playlist_renderer(tab: &mut ChannelTab, value: &Value, name: &str){
     for i in 0..value["items"].as_array().unwrap().len()-1{
         let playlist = &value["items"][i]["gridPlaylistRenderer"];
-        tab.content.push(SearchPlaylists(
+        tab.content.push(SearchPlaylist(
             SearchPlaylist{
                 title: unwrap_to_string(playlist["title"]["runs"][0]["text"].as_str()),
                 id:  unwrap_to_string(playlist["playlistId"].as_str()),
@@ -166,8 +195,8 @@ fn extract_videos_tab(json: &Value, channel_name:&str) -> ChannelTab{
         content: Vec::with_capacity(29), // Youtube provides always 30 items, -1 due to the continuation token. 
         continuation: unwrap_to_string(json["tabs"][1]["tabRenderer"]["content"]["sectionListRenderer"]["contents"][0]["itemSectionRenderer"]["contents"][0]["gridRenderer"]["items"][30]["continuationItemRenderer"]["continuationEndpoint"]["continuationCommand"]["token"].as_str())
     };
-    let items = &json["tabs"][1]["tabRenderer"]["content"]["sectionListRenderer"]["contents"][0]["itemSectionRenderer"]["contents"][0]["gridRenderer"]["items"];;
-    for item in 0..items.as_array().unwrap().len(){
+    let items = &json["tabs"][1]["tabRenderer"]["content"]["sectionListRenderer"]["contents"][0]["itemSectionRenderer"]["contents"][0]["gridRenderer"]["items"];
+    for item in 0..items.as_array().unwrap().len()-1{
         tab.content.push(Video( ChannelVideo{
             title:  unwrap_to_string(items[item]["gridVideoRenderer"]["title"]["runs"][0]["text"].as_str()), 
             id: unwrap_to_string(items[item]["gridVideoRenderer"]["videoId"].as_str()), 
