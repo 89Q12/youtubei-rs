@@ -81,13 +81,13 @@ async fn post_json(endpoint: &str, data: Value, client_config : &ClientConfig) -
   let response = {
     match wrapped_response{
       Ok(t) => t,
-      Err(e) => return json!({"err": e.to_string()}),
+      Err(e) => return json!({"error": e.to_string()}),
     }
   };
   let json: Value={ 
     match response.json().await{
       Ok(json) => json,
-      Err(e) => return json!({"err": e.to_string()}),
+      Err(e) => return json!({"error": e.to_string()}),
   }};
   return json;
 }
