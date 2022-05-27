@@ -4,7 +4,7 @@ pub struct VideoPlayer{
 }
 
 pub struct Format{
-    pub itag: String,
+    pub itag: i64,
     pub url: String,
     pub mime_type: String,
     pub bitrate: i64,
