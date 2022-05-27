@@ -3,7 +3,8 @@ use super::{video::{Video}, search_channel::{SearchChannel}, search_playlist::Se
 pub enum CategoryTypes{
     Video(ChannelVideo),
     SearchChannel(SearchChannel),
-    SearchPlaylists(SearchPlaylist)
+    SearchPlaylist(SearchPlaylist),
+
 }
 pub struct Category{
    pub  title: String,
