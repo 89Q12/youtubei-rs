@@ -33,3 +33,16 @@ pub fn is_author_verified(json: &Value) -> bool {
     }
     return false;
 }
+pub fn unwrap_to_string(input: Option<&str>) -> String{
+    match input{
+        Some(s) => s.to_string(),
+        None => "".to_string(),
+    }
+}
+
+pub fn unwrap_to_i64(input:  Option<i64>) -> i64{
+    match input{
+        Some(n) => n,
+        None => 0,
+    }
+}
