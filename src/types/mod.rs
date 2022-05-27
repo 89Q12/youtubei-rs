@@ -12,3 +12,4 @@ pub mod channel;
 pub mod tab;
 pub mod video_player;
 pub mod channel_video;
+pub mod community;

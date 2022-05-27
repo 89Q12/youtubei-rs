@@ -1,4 +1,4 @@
-use crate::types::endpoints::EndpointBrowse;
+use super::endpoints::EndpointBrowse;
 
 pub struct CommunityPost {
     pub content_text: String,
@@ -8,5 +8,4 @@ pub struct CommunityPost {
     pub vote_count: i64,
     pub published_time_text: String,
     pub browse_endpoint: EndpointBrowse,
-    pub continuation: String,
 }
