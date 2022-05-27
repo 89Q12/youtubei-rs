@@ -44,7 +44,7 @@ pub async fn resolve_url(url: &str, client_config: &ClientConfig) -> Value{
     "context" : make_context(&default_client_config()),
     "url"     : url,
   });
-  return post_json("/youtubei/v1/resolve_url", data, &client_config).await;
+  return post_json("/youtubei/v1/navigation/resolve_url", data, &client_config).await;
 }
 
 pub async fn search(search_query: &str, params:  &str, client_config: &ClientConfig) -> Value{
