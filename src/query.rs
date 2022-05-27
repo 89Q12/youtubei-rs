@@ -26,7 +26,7 @@ pub async fn get_video(video_id:String, params: String) ->Result<VideoQuery,  Er
         "params": params 
     }),&client_config).await;
     let video_player = extract_video_player_formats(&player_json["streamingData"]);
-    let video: Video = video_from_next_and_player(&player_json["videoDetails"], &next_video_data["contents"]["twoColumnWatchNextResults"]["results"]["results"]["contents"][0], video_player);
+    let video: Video = video_from_next_and_player(&player_json["videoDetails"], &next_video_data["contents"]["twoColumnWatchNextResults"]["results"]["results"]["contents"], video_player);
     Ok(extract_next_video_results(&next_video_data, VideoQuery{
         continuation_comments: "".to_string(),
         continuation_related: next_video_data["contents"]["twoColumnWatchNextResults"]["secondaryResults"]["secondaryResults"]["results"][20]["continuationItemRenderer"]["continuationEndpoint"]["continuationCommand"]["token"].to_string(),
