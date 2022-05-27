@@ -1,7 +1,7 @@
-use super::{video::{Video}, search_channel::{SearchChannel}, search_playlist::SearchPlaylist};
+use super::{video::{Video}, search_channel::{SearchChannel}, search_playlist::SearchPlaylist, search_video::SearchVideo, channel_video::ChannelVideo};
 
 pub enum CategoryTypes{
-    Video(Video),
+    Video(ChannelVideo),
     SearchChannel(SearchChannel),
     SearchPlaylists(SearchPlaylist)
 }
