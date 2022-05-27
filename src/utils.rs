@@ -5,7 +5,7 @@ use crate::types::client_types;
 pub fn default_client_config() -> ClientConfig {
     ClientConfig::new(client_types::ClientTypes::Web,"US".to_string(),"US".to_string())
 }
-// Used to merge 2 values into one, probably could be optimized
+/// Used to merge 2 values into one, probably could be optimized
 pub fn merge(a: &mut Value, b: &Value) {
     match (a, b) {
         (Value::Object(ref mut a), &Value::Object(ref b)) => {
@@ -24,10 +24,13 @@ pub fn merge(a: &mut Value, b: &Value) {
         }
     }
 }
+/// Utility function to check if a channel is verified
+/// Takes &Value with index "ownerBadges" or "badges"
+/// returns true if channel is verified else false
 pub fn is_author_verified(json: &Value) -> bool {
     let badge = &json["metadataBadgeRenderer"]["tooltip"];
     if badge.is_string(){
-        if badge.as_str().unwrap() =="Verified"{
+        if badge.as_str().unwrap().to_lowercase() =="verified"{
            return true;
         }
     }
