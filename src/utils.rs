@@ -25,7 +25,7 @@ pub fn merge(a: &mut Value, b: &Value) {
     }
 }
 /// Utility function to check if a channel is verified
-/// Takes &Value with index "ownerBadges" or "badges"
+/// Takes &Value with index "ownerBadges[0]" or "badges"
 /// returns true if channel is verified else false
 pub fn is_author_verified(json: &Value) -> bool {
     let badge = &json["metadataBadgeRenderer"]["tooltip"];
@@ -35,6 +35,13 @@ pub fn is_author_verified(json: &Value) -> bool {
         }
     }
     return false;
+}
+pub fn is_auto_generated(author: String) -> bool{
+    if author.ends_with(" - Topic") ||  ["Popular on YouTube", "Music", "Sports", "Gaming"].contains(&author.as_str()){
+        return true
+    }else{
+        return false
+    }
 }
 pub fn unwrap_to_string(input: Option<&str>) -> String{
     match input{
