@@ -41,7 +41,7 @@ pub async fn player(video_id: &str, params:  &str,client_config: &ClientConfig) 
 
 pub async fn resolve_url(url: &str, client_config: &ClientConfig) -> Value{
   let data = json!({
-    "context" : make_context(&default_client_config()),
+    "context" : make_context(&client_config),
     "url"     : url,
   });
   return post_json("/youtubei/v1/navigation/resolve_url", data, &client_config).await;
