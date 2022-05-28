@@ -5,7 +5,7 @@ use crate::extractors::*;
 use crate::types::channel::Channel;
 use crate::types::client_config::ClientConfig;
 use crate::types::query_results::SearchQuery;
-use crate::types::query_results::{SearchResult, CommentsQuery, VideoQuery, ChannelQuery};
+use crate::types::query_results::{CommentsQuery, VideoQuery, ChannelQuery};
 use crate::types::search_video::SearchVideo;
 use crate::types::video::Video;
 
