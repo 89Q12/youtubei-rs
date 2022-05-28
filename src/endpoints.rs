@@ -1,6 +1,6 @@
 use serde_json::{json, Value};
 use crate::types::client_config::ClientConfig;
-use crate::utils::{merge, default_client_config};
+use crate::utils::merge;
 
 pub async fn browse_continuation(continuation : &str, client_config : &ClientConfig) -> Value{
   
@@ -94,6 +94,6 @@ async fn post_json(endpoint: &str, data: Value, client_config : &ClientConfig) -
     match response.json().await{
       Ok(json) => json,
       Err(e) => return json!({"error": e.to_string()}),
-  }};
+    }};
   return json;
 }
