@@ -3,13 +3,26 @@ use crate::endpoints::*;
 use crate::extractors::*;
 use crate::types::channel::Channel;
 use crate::types::query_results::{SearchResult, CommentsQuery, VideoQuery, ChannelQuery};
+use crate::types::search_video::SearchVideo;
 use crate::utils::default_client_config;
 use crate::types::video::Video;
 
-pub async fn search(query: String) -> SearchResult{
- todo!()
+pub async fn search(query: String) -> Result<SearchResult, Error>{
+    todo!()
 }
 
+pub async fn load_search(continuation:String) ->Result<SearchResult, Error>{
+    todo!()
+}
+pub async fn load_related_videos(continuation:String) -> Result<Vec<SearchVideo>, Error>{
+    todo!()
+}
+pub async fn load_playlists(continuation:String) -> Result<ChannelQuery, Error>{
+    todo!()
+}
+pub async fn load_channel_videos(continuation:String) -> Result<ChannelQuery, Error>{
+    todo!()
+}
 pub async fn get_comments(continuation:String) ->Result<CommentsQuery,  Error>{
     todo!()
 }
