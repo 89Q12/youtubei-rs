@@ -1,5 +1,5 @@
 use serde_json::Value;
-use crate::{types::{endpoints::{EndpointBrowse, EndpointWatch}, query_results::VideoQuery, search_video::SearchVideo, video::Video, video_player::{VideoPlayer, Format}, channel::Channel, tab::ChannelTab, channel_video::ChannelVideo, category::CategoryTypes::*, search_playlist::SearchPlaylist, community::CommunityPost}, utils::{is_author_verified, unwrap_to_string, unwrap_to_i64}};
+use crate::{types::{endpoints::{EndpointBrowse, EndpointWatch}, query_results::{VideoQuery, SearchQuery,SearchResult}, search_video::SearchVideo, video::Video, video_player::{VideoPlayer, Format}, channel::Channel, tab::ChannelTab, channel_video::ChannelVideo, category::CategoryTypes::*, search_playlist::SearchPlaylist, community::CommunityPost, search_channel::SearchChannel}, utils::{is_author_verified, unwrap_to_string, unwrap_to_i64, is_auto_generated}};
 /*
 region video_extraction
 */
@@ -170,9 +170,8 @@ fn grid_playlist_renderer(tab: &mut ChannelTab, value: &Value, name: &str){
                 author: name.to_string(),
                 ucid: String::from(""),
                 video_count: unwrap_to_i64(playlist["videoCountShortText"]["simpleText"].as_i64()),
-                videos: Vec::with_capacity(0),
                 thumbnail: unwrap_to_string(playlist["thumbnail"]["thumbnails"][0]["url"].as_str()),
-                author_verified: is_author_verified(&playlist["ownerBadges"]),
+                author_verified: is_author_verified(&playlist["ownerBadges"][0]),
                 play_endpoint: EndpointWatch{
                     url: unwrap_to_string(playlist["navigationEndpoint"]["commandMetadata"]["webCommandMetadata"]["url"].as_str()),
                     video_id: unwrap_to_string(playlist["navigationEndpoint"]["watchEndpoint"]["videoId"].as_str()),
@@ -202,7 +201,7 @@ fn extract_videos_tab(json: &Value, channel_name:&str) -> ChannelTab{
             id: unwrap_to_string(items[item]["gridVideoRenderer"]["videoId"].as_str()), 
             published_text:  unwrap_to_string(items[item]["gridVideoRenderer"]["publishedTimeText"]["simpleText"].as_str()), 
             author: channel_name.to_string(), 
-            author_verified: is_author_verified(&items[item]["gridVideoRenderer"]["ownerBadges"]), 
+            author_verified: is_author_verified(&items[item]["gridVideoRenderer"]["ownerBadges"][0]), 
             thumbnail: unwrap_to_string(items[item]["gridVideoRenderer"]["thumbnail"]["thumbnails"][0]["url"].as_str()),
             view_count_text:  unwrap_to_string(items[item]["gridVideoRenderer"]["viewCountText"]["simpleText"].as_str()), 
             length_text:  unwrap_to_string(items[item]["gridVideoRenderer"]["thumbnailOverlays"][0]["thumbnailOverlayTimeStatusRenderer"]["text"]["simpleText"].as_str()),
@@ -216,4 +215,97 @@ fn extract_videos_tab(json: &Value, channel_name:&str) -> ChannelTab{
         }));
     }
     return tab;
+}
+/*
+endregion channel_extraction
+*/
+/*
+region search_extraction
+*/
+pub fn extract_search_results(json: &Value)-> SearchQuery{
+    let content = &json["contents"]["twoColumnSearchResultsRenderer"]["primaryContents"]["sectionListRenderer"]["contents"];
+    let mut search_query = SearchQuery{
+        continuation: unwrap_to_string(content[1]["continuationItemRenderer"]["continuationEndpoint"]["continuationCommand"]["token"].as_str()),
+        results: Vec::new(),
+    };
+    for renderer in content[0]["itemSectionRenderer"]["contents"].as_array().unwrap().iter() {
+        for (key, item) in renderer.as_object().unwrap() {
+            match key.as_str(){
+                "videoRenderer" => search_query.results.push(SearchResult::VideoRenderer(video_renderer(&item))),
+                "channelRenderer" => search_query.results.push(SearchResult::SearchChannel(channel_renderer(&item))),
+                "playlistRenderer" => search_query.results.push(SearchResult::PlaylistRenderer(playlist_renderer(&item))),
+                "shelfRenderer" => for i  in 0..item["content"]["verticalListRenderer"]["items"].as_array().unwrap().len(){
+                    search_query.results.push(SearchResult::VideoRenderer(video_renderer(&item["content"]["verticalListRenderer"]["items"][i]["videoRenderer"])));
+                }
+                _ => break
+            }
+        }
+    }
+    return search_query;
+}
+
+fn channel_renderer(channel_renderer:&Value) -> SearchChannel{
+   return SearchChannel{
+    author: unwrap_to_string(channel_renderer["title"]["simpleText"].as_str()),
+    ucid: unwrap_to_string(channel_renderer["channelId"].as_str()),
+    author_thumbnail: unwrap_to_string(channel_renderer["channelId"].as_str()),
+    subscriber_count: unwrap_to_string(channel_renderer["subscriberCountText"]["simpleText"].as_str()),
+    video_count:  channel_renderer["videoCountText"]["runs"][0]["text"].to_string()+ " videos",
+    description_html: unwrap_to_string(channel_renderer["descriptionSnippet"]["runs"][0]["text"].as_str()),
+    auto_generated: is_auto_generated(unwrap_to_string(channel_renderer["title"]["simpleText"].as_str())),
+    author_verified: is_author_verified(&channel_renderer["ownerBadges"][0]),
+    endpoint: EndpointBrowse { 
+        url: unwrap_to_string(channel_renderer["navigationEndpoint"]["commandMetadata"]["webCommandMetadata"]["url"].as_str()), 
+        browse_id: unwrap_to_string(channel_renderer["navigationEndpoint"]["browseEndpoint"]["browseId"].as_str()), 
+        params: String::from("")
+    },
+}
+}
+
+fn video_renderer(video_renderer:&Value) -> SearchVideo{
+    return SearchVideo{ 
+        title: unwrap_to_string(video_renderer["title"]["runs"][0]["text"].as_str()),  
+        id: unwrap_to_string(video_renderer["videoId"].as_str()), 
+        channel_name: unwrap_to_string(video_renderer["longBylineText"]["runs"][0]["text"].as_str()), 
+        author: unwrap_to_string(video_renderer["longBylineText"]["runs"][0]["navigationEndpoint"]["browseEndpoint"]["canonicalBaseUrl"].as_str()), 
+        author_verified: is_author_verified(&video_renderer["ownerBadges"][0]), 
+        channel_thumbnail: unwrap_to_string(video_renderer["channelThumbnail"]["thumbnails"][0]["url"].as_str()), 
+        view_count_text: unwrap_to_string(video_renderer["viewCountText"]["simpleText"].as_str()), 
+        length_text: unwrap_to_string(video_renderer["lengthText"]["simpleText"].as_str()), 
+        endpoint: EndpointWatch{
+            url: unwrap_to_string(video_renderer["navigationEndpoint"]["commandMetadata"]["webCommandMetadata"]["url"].as_str()),
+            video_id:unwrap_to_string(video_renderer["videoId"].as_str()),
+            playlist_id: "".to_string(),
+            params: "".to_string(),
+        }, 
+        browse_channel: EndpointBrowse { 
+            url: unwrap_to_string(video_renderer["longBylineText"]["runs"][0]["navigationEndpoint"]["browseEndpoint"]["canonicalBaseUrl"].as_str()), 
+            browse_id: unwrap_to_string(video_renderer["longBylineText"]["runs"][0]["navigationEndpoint"]["browseEndpoint"]["browseId"].as_str()), 
+            params: "".to_string() 
+        }, 
+        thumbnail: unwrap_to_string(video_renderer["thumbnail"]["thumbnails"][0]["url"].as_str()),
+        published_text: unwrap_to_string(video_renderer["publishedTimeText"]["simpleText"].as_str()),
+    }
+}
+fn playlist_renderer(playlist_renderer:&Value) -> SearchPlaylist{
+    return SearchPlaylist{
+        title: unwrap_to_string(playlist_renderer["title"]["simpleText"].as_str()),
+        id:  unwrap_to_string(playlist_renderer["playlistId"].as_str()),
+        author: unwrap_to_string(playlist_renderer["shortBylineText"]["runs"][0]["text"].as_str()),
+        ucid: unwrap_to_string(playlist_renderer["shortBylineText"]["runs"][0]["navigationEndpoint"]["browseEndpoint"]["browseId"].as_str()),
+        video_count: unwrap_to_i64(playlist_renderer["videoCountText"]["runs"][0]["text"].as_i64()),
+        thumbnail: unwrap_to_string(playlist_renderer["playlistId"].as_str()),
+        author_verified: is_author_verified(&playlist_renderer["ownerBadges"][0]),
+        play_endpoint: EndpointWatch{
+            url: unwrap_to_string(playlist_renderer["navigationEndpoint"]["commandMetadata"]["webCommandMetadata"]["url"].as_str()),
+            video_id: unwrap_to_string(playlist_renderer["navigationEndpoint"]["watchEndpoint"]["videoId"].as_str()),
+            playlist_id: unwrap_to_string(playlist_renderer["navigationEndpoint"]["watchEndpoint"]["playlistId"].as_str()),
+            params: unwrap_to_string(playlist_renderer["navigationEndpoint"]["watchEndpoint"]["params"].as_str()),
+        },
+        browse_endpoint: EndpointBrowse { 
+            url: unwrap_to_string(playlist_renderer["viewPlaylistText"]["runs"][0]["navigationEndpoint"]["commandMetadata"]["webCommandMetadata"]["url"].as_str()), 
+            browse_id:unwrap_to_string(playlist_renderer["viewPlaylistText"]["runs"][0]["navigationEndpoint"]["browseEndpoint"]["browseId"].as_str()), 
+            params: String::from(""),
+        },
+    }
 }
