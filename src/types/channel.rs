@@ -5,5 +5,5 @@ pub struct Channel{
     pub id: String,
     pub banner: String,
     pub avatar: String,
-    pub tab: ChannelTab,
+    pub description: String,
 }
