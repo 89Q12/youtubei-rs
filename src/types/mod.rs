@@ -1,14 +1,6 @@
-pub mod client_config;
-pub mod client_types;
+pub mod client;
 pub mod video;
-pub mod search_channel;
-pub mod search_playlist;
-pub mod category;
+pub mod playlist;
 pub mod endpoints;
-pub mod search_video;
 pub mod query_results;
 pub mod channel;
-pub mod tab;
-pub mod video_player;
-pub mod channel_video;
-pub mod community;
