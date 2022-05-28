@@ -3,6 +3,7 @@ use crate::endpoints;
 use crate::endpoints::*;
 use crate::extractors::*;
 use crate::types::channel::Channel;
+use crate::types::client_config::ClientConfig;
 use crate::types::query_results::SearchQuery;
 use crate::types::query_results::{SearchResult, CommentsQuery, VideoQuery, ChannelQuery};
 use crate::types::search_video::SearchVideo;
@@ -26,8 +27,12 @@ pub async fn load_search(continuation:String) ->Result<SearchQuery, Error>{
     }
     return Ok(extract_search_results(&json, true));
 }
-pub async fn load_related_videos(continuation:String) -> Result<Vec<SearchVideo>, Error>{
-    todo!()
+pub async fn load_related_videos(continuation:String,client_config: &ClientConfig) -> Result<Vec<SearchVideo>, Error>{
+    let json = next(&continuation, client_config).await;
+    if !json["error"].is_null(){
+        panic!("Unexpected error: {}", json["error"].to_string());
+    }
+    Ok(load_related(&json))
 }
 pub async fn load_playlists(continuation:String) -> Result<ChannelQuery, Error>{
     todo!()
