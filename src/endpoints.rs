@@ -50,12 +50,18 @@ pub async fn resolve_url(url: &str, client_config: &ClientConfig) -> Value{
 pub async fn search(search_query: &str, params:  &str, client_config: &ClientConfig) -> Value{
   let data = json!({
     "query"   : search_query,
-    "context" : make_context(client_config),
+    "context" : make_context(&client_config),
     "params"  : params,
   });
   return post_json("/youtubei/v1/search", data, client_config).await;
 }
-
+pub async fn search_continuation(continuation : &str, client_config: &ClientConfig) -> Value{
+  let data = json!({
+    "context"      : make_context(&client_config),
+    "continuation" : continuation,
+  });
+  return post_json("/youtubei/v1/search", data, &client_config).await;
+}
 fn make_context(client_config: &ClientConfig) -> serde_json::Value{
   let mut client_context = json!({
       "hl"           : "en",
