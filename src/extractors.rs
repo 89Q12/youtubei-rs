@@ -1,5 +1,5 @@
 use serde_json::Value;
-use crate::{types::{endpoints::{EndpointBrowse, EndpointWatch}, query_results::{VideoQuery, SearchQuery,SearchResult}, search_video::SearchVideo, video::Video, video_player::{VideoPlayer, Format}, channel::Channel, tab::ChannelTab, channel_video::ChannelVideo, category::CategoryTypes::*, search_playlist::SearchPlaylist, community::CommunityPost, search_channel::SearchChannel}, utils::{is_author_verified, unwrap_to_string, unwrap_to_i64, is_auto_generated}};
+use crate::{types::{endpoints::{EndpointBrowse, EndpointWatch}, query_results::{VideoQuery, SearchQuery,SearchResult}, video::{Video,SearchVideo,ChannelVideo,VideoPlayer, Format}, channel::{Channel,ChannelTab, SearchChannel,CommunityPost,TabTypes::*}, playlist::SearchPlaylist}, utils::{is_author_verified, unwrap_to_string, unwrap_to_i64, is_auto_generated}};
 /*
 region video_extraction
 */
@@ -95,19 +95,14 @@ endregion video_extraction
 /*
 region channel_extraction
 */
-pub fn extract_channel(json: &Value, tab: &str) -> Channel{
+pub fn extract_channel_info(json: &Value) -> Channel{
     let name = unwrap_to_string(json["header"]["c4TabbedHeaderRenderer"]["title"].as_str());
     Channel{ 
         name: name.to_owned(),
         id: unwrap_to_string(json["header"]["c4TabbedHeaderRenderer"]["channelId"].as_str()),
         banner: unwrap_to_string(json["header"]["c4TabbedHeaderRenderer"]["banner"]["thumbnails"][0]["url"].as_str()),
         avatar: unwrap_to_string(json["header"]["c4TabbedHeaderRenderer"]["avatar"]["thumbnails"][0]["url"].as_str()),
-        tab: match tab {
-            "videos"=> extract_videos_tab(&json["contents"]["twoColumnBrowseResultsRenderer"],&name),
-            "playlists" => extract_playlists_tab(&json["contents"]["twoColumnBrowseResultsRenderer"], &name),
-            "community" => extract_community_tab(&json["contents"]["twoColumnBrowseResultsRenderer"], &name),
-            _ => panic!("Unrecognized Tab: {}", tab)
-        }
+        description: unwrap_to_string( json["contents"]["twoColumnBrowseResultsRenderer"]["tabs"][5]["tabRenderer"]["content"]["sectionListRenderer"]["contents"][0]["itemSectionRenderer"]["contents"][0]["channelAboutFullMetadataRenderer"]["description"]["simpleText"].as_str())
     }
 }
 
@@ -231,7 +226,7 @@ endregion channel_extraction
 region search_extraction
 */
 pub fn extract_search_results(json: &Value, continuation: bool)-> SearchQuery{
-    let mut content;
+    let content;
     if continuation {
         content = &json["onResponseReceivedCommands"]["appendContinuationItemsAction"]["continuationItems"];
     }

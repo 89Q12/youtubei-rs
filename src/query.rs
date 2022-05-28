@@ -2,13 +2,10 @@ use std::fmt::Error;
 use crate::endpoints;
 use crate::endpoints::*;
 use crate::extractors::*;
-use crate::types::channel::Channel;
-use crate::types::client_config::ClientConfig;
-use crate::types::query_results::SearchQuery;
-use crate::types::query_results::{CommentsQuery, VideoQuery, ChannelQuery};
-use crate::types::search_video::SearchVideo;
-use crate::types::tab::ChannelTab;
-use crate::types::video::Video;
+use crate::types::channel::{Channel,ChannelTab};
+use crate::types::client::ClientConfig;
+use crate::types::query_results::{CommentsQuery, VideoQuery, ChannelQuery,SearchQuery};
+use crate::types::video::{SearchVideo,Video};
 
 pub async fn search(query: String,client_config: &ClientConfig) -> Result<SearchQuery, Error>{
     let json = endpoints::search(&query, "", &client_config).await;

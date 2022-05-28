@@ -1,4 +1,4 @@
-use super::{search_video::SearchVideo, search_playlist::SearchPlaylist, search_channel::SearchChannel, video::Video, channel::Channel};
+use super::{video::SearchVideo, playlist::SearchPlaylist, channel::SearchChannel, video::Video, channel::Channel};
 
 pub enum SearchResult {
     VideoRenderer(SearchVideo),

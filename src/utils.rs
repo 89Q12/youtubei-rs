@@ -1,9 +1,9 @@
 use serde_json::Value;
-use crate::types::client_config::ClientConfig;
-use crate::types::client_types;
+use crate::types::client::ClientConfig;
+use crate::types::client;
 
 pub fn default_client_config() -> ClientConfig {
-    ClientConfig::new(client_types::ClientTypes::Web,"US".to_string(),"US".to_string())
+    ClientConfig::new(client::ClientTypes::Web,"US".to_string(),"US".to_string())
 }
 /// Used to merge 2 values into one, probably could be optimized
 pub fn merge(a: &mut Value, b: &Value) {
