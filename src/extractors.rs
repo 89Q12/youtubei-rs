@@ -60,6 +60,14 @@ pub fn extract_next_video_results(json: &Value,mut  video_query: VideoQuery) -> 
     }
     return video_query;
 }
+pub fn load_related(json: &Value) -> Vec<SearchVideo> {
+    let mut videos: Vec<SearchVideo> = Vec::new();
+    let content =  &json["onResponseReceivedEndpoints"][0]["appendContinuationItemsAction"]["continuationItems"];
+    for i in 0..content.as_array().unwrap().len()-1 {
+        videos.push(compact_video_renderer(&content[i]["compactVideoRenderer"]))
+    }
+    return videos;
+}
 fn compact_video_renderer(video: &Value)-> SearchVideo{
     return SearchVideo{ 
         title: unwrap_to_string(video["title"]["simpleText"].as_str()), 
