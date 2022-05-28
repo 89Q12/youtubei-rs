@@ -35,9 +35,7 @@ pub struct ChannelTab{
     pub continuation: String,
 }
 pub enum TabTypes{
-    Video(ChannelVideo),
-    SearchChannel(SearchChannel),
-    SearchPlaylist(SearchPlaylist),
-    PostCommunity(CommunityPost)
-
+    Videos(ChannelVideo),
+    Playlists(SearchPlaylist),
+    Community(CommunityPost)
 }
