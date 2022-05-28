@@ -7,11 +7,9 @@ use crate::types::client_config::ClientConfig;
 use crate::types::query_results::SearchQuery;
 use crate::types::query_results::{SearchResult, CommentsQuery, VideoQuery, ChannelQuery};
 use crate::types::search_video::SearchVideo;
-use crate::utils::default_client_config;
 use crate::types::video::Video;
 
-pub async fn search(query: String) -> Result<SearchQuery, Error>{
-    let client_config =default_client_config();
+pub async fn search(query: String,client_config: &ClientConfig) -> Result<SearchQuery, Error>{
     let json = endpoints::search(&query, "", &client_config).await;
     if !json["error"].is_null(){
         panic!("Unexpected error: {}", json["error"].to_string());
@@ -19,8 +17,7 @@ pub async fn search(query: String) -> Result<SearchQuery, Error>{
     return Ok(extract_search_results(&json, false));
 }
 
-pub async fn load_search(continuation:String) ->Result<SearchQuery, Error>{
-    let client_config =default_client_config();
+pub async fn load_search(continuation:String,client_config: &ClientConfig) ->Result<SearchQuery, Error>{
     let json = endpoints::search_continuation(&continuation, &client_config).await;
     if !json["error"].is_null(){
         panic!("Unexpected error: {}", json["error"].to_string());
@@ -34,18 +31,17 @@ pub async fn load_related_videos(continuation:String,client_config: &ClientConfi
     }
     Ok(load_related(&json))
 }
-pub async fn load_playlists(continuation:String) -> Result<ChannelQuery, Error>{
+pub async fn load_playlists(continuation:String,client_config: &ClientConfig) -> Result<ChannelQuery, Error>{
     todo!()
 }
-pub async fn load_channel_videos(continuation:String) -> Result<ChannelQuery, Error>{
+pub async fn load_channel_videos(continuation:String,client_config: &ClientConfig) -> Result<ChannelQuery, Error>{
     todo!()
 }
-pub async fn get_comments(continuation:String) ->Result<CommentsQuery,  Error>{
+pub async fn get_comments(continuation:String,client_config: &ClientConfig) ->Result<CommentsQuery,  Error>{
     todo!()
 }
 
-pub async fn get_video(video_id:String, params: String) ->Result<VideoQuery,  Error>{
-    let client_config =default_client_config();
+pub async fn get_video(video_id:String, params: String,client_config: &ClientConfig) ->Result<VideoQuery,  Error>{
     let player_json = player(&video_id, &params, &client_config).await;
     /*
     Error handling
@@ -67,8 +63,7 @@ pub async fn get_video(video_id:String, params: String) ->Result<VideoQuery,  Er
     }))
 }
 
-pub async fn get_channel(url:String, tab:String) -> Result<ChannelQuery,  Error>{
-    let client_config =default_client_config();
+pub async fn get_channel(url:String, tab:String,client_config: &ClientConfig) -> Result<ChannelQuery,  Error>{
     let complete_url = url+"/"+&tab; 
     let resolved_url = resolve_url(&complete_url,&client_config ).await;
     if !resolved_url["error"].is_null(){
