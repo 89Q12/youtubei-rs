@@ -7,6 +7,7 @@ use crate::types::client_config::ClientConfig;
 use crate::types::query_results::SearchQuery;
 use crate::types::query_results::{CommentsQuery, VideoQuery, ChannelQuery};
 use crate::types::search_video::SearchVideo;
+use crate::types::tab::ChannelTab;
 use crate::types::video::Video;
 
 pub async fn search(query: String,client_config: &ClientConfig) -> Result<SearchQuery, Error>{
@@ -31,7 +32,7 @@ pub async fn load_related_videos(continuation:String,client_config: &ClientConfi
     }
     Ok(load_related(&json))
 }
-pub async fn load_playlists(continuation:String,client_config: &ClientConfig) -> Result<ChannelQuery, Error>{
+pub async fn load_channel_playlists(continuation:String,client_config: &ClientConfig) -> Result<ChannelQuery, Error>{
     todo!()
 }
 pub async fn load_channel_videos(continuation:String,client_config: &ClientConfig) -> Result<ChannelQuery, Error>{
@@ -63,17 +64,24 @@ pub async fn get_video(video_id:String, params: String,client_config: &ClientCon
     }))
 }
 
-pub async fn get_channel(url:String, tab:String,client_config: &ClientConfig) -> Result<ChannelQuery,  Error>{
-    let complete_url = url+"/"+&tab; 
+pub async fn get_channel_info(url:String,client_config: &ClientConfig) -> Result<ChannelQuery,  Error>{
+    let complete_url = url.to_string()+"/about"; 
     let resolved_url = resolve_url(&complete_url,&client_config ).await;
     if !resolved_url["error"].is_null(){
         panic!("{}",resolved_url["error"]["message"]);
     }
-    let channel_json = browse_browseid(resolved_url["endpoint"]["browseEndpoint"]["browseId"].as_str().unwrap(), resolved_url["endpoint"]["browseEndpoint"]["params"].as_str().unwrap(), &client_config).await;
-    let channel: Channel = extract_channel(&channel_json, &tab);
+    let channel_json = browse_browseid(
+        resolved_url["endpoint"]["browseEndpoint"]["browseId"].as_str().unwrap(), 
+        resolved_url["endpoint"]["browseEndpoint"]["params"].as_str().unwrap(), 
+        &client_config
+    ).await;
+    let channel: Channel = extract_channel_info(&channel_json);
     Ok(ChannelQuery{
         channel,
     })
+}
+pub async fn get_channel_tab(url:String, client_config: &ClientConfig) -> Result<ChannelTab, Error>{
+    todo!()
 }
 pub async fn get_playlist(playlist_id: String, client_config: &ClientConfig){
     todo!()
