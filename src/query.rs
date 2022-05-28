@@ -15,11 +15,16 @@ pub async fn search(query: String) -> Result<SearchQuery, Error>{
     if !json["error"].is_null(){
         panic!("Unexpected error: {}", json["error"].to_string());
     }
-    return Ok(extract_search_results(&json));
+    return Ok(extract_search_results(&json, false));
 }
 
 pub async fn load_search(continuation:String) ->Result<SearchQuery, Error>{
-    todo!()
+    let client_config =default_client_config();
+    let json = endpoints::search_continuation(&continuation, &client_config).await;
+    if !json["error"].is_null(){
+        panic!("Unexpected error: {}", json["error"].to_string());
+    }
+    return Ok(extract_search_results(&json, true));
 }
 pub async fn load_related_videos(continuation:String) -> Result<Vec<SearchVideo>, Error>{
     todo!()
