@@ -75,3 +75,6 @@ pub async fn get_channel(url:String, tab:String,client_config: &ClientConfig) ->
         channel,
     })
 }
+pub async fn get_playlist(playlist_id: String, client_config: &ClientConfig){
+    todo!()
+}
