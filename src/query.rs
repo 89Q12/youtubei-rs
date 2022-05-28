@@ -1,17 +1,24 @@
 use std::fmt::Error;
+use crate::endpoints;
 use crate::endpoints::*;
 use crate::extractors::*;
 use crate::types::channel::Channel;
+use crate::types::query_results::SearchQuery;
 use crate::types::query_results::{SearchResult, CommentsQuery, VideoQuery, ChannelQuery};
 use crate::types::search_video::SearchVideo;
 use crate::utils::default_client_config;
 use crate::types::video::Video;
 
-pub async fn search(query: String) -> Result<SearchResult, Error>{
-    todo!()
+pub async fn search(query: String) -> Result<SearchQuery, Error>{
+    let client_config =default_client_config();
+    let json = endpoints::search(&query, "", &client_config).await;
+    if !json["error"].is_null(){
+        panic!("Unexpected error: {}", json["error"].to_string());
+    }
+    return Ok(extract_search_results(&json));
 }
 
-pub async fn load_search(continuation:String) ->Result<SearchResult, Error>{
+pub async fn load_search(continuation:String) ->Result<SearchQuery, Error>{
     todo!()
 }
 pub async fn load_related_videos(continuation:String) -> Result<Vec<SearchVideo>, Error>{
