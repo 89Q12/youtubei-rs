@@ -222,8 +222,14 @@ endregion channel_extraction
 /*
 region search_extraction
 */
-pub fn extract_search_results(json: &Value)-> SearchQuery{
-    let content = &json["contents"]["twoColumnSearchResultsRenderer"]["primaryContents"]["sectionListRenderer"]["contents"];
+pub fn extract_search_results(json: &Value, continuation: bool)-> SearchQuery{
+    let mut content;
+    if continuation {
+        content = &json["onResponseReceivedCommands"]["appendContinuationItemsAction"]["continuationItems"];
+    }
+    else {
+        content = &json["contents"]["twoColumnSearchResultsRenderer"]["primaryContents"]["sectionListRenderer"]["contents"];
+    }
     let mut search_query = SearchQuery{
         continuation: unwrap_to_string(content[1]["continuationItemRenderer"]["continuationEndpoint"]["continuationCommand"]["token"].as_str()),
         results: Vec::new(),
