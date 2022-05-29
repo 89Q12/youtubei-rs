@@ -2,7 +2,7 @@ use std::fmt::Error;
 use crate::endpoints;
 use crate::endpoints::*;
 use crate::extractors::*;
-use crate::types::channel::{Channel,ChannelTab};
+use crate::types::channel::{Channel,ChannelTab,Tab};
 use crate::types::client::ClientConfig;
 use crate::types::query_results::{CommentsQuery, VideoQuery, ChannelQuery,SearchQuery};
 use crate::types::video::{SearchVideo,Video};
@@ -77,9 +77,25 @@ pub async fn get_channel_info(url:String,client_config: &ClientConfig) -> Result
         channel,
     })
 }
-pub async fn get_channel_tab(url:String, client_config: &ClientConfig) -> Result<ChannelTab, Error>{
-    todo!()
+pub async fn get_channel_tab_url(url:String,tab: Tab, client_config: &ClientConfig) -> Result<ChannelTab, Error>{
+    let index = tab.get_index();
+    let complete_url = url + "/"+ tab.get_name();
+    let resolved_url = resolve_url(&complete_url,&client_config).await;
+    if !resolved_url["error"].is_null(){
+        panic!("{}",resolved_url["error"]["message"]);
+    }
+    let channel_json = browse_browseid(
+        resolved_url["endpoint"]["browseEndpoint"]["browseId"].as_str().unwrap(), 
+        resolved_url["endpoint"]["browseEndpoint"]["params"].as_str().unwrap(), 
+        &client_config
+    ).await;
+    Ok(extract_channel_tab(&channel_json,index))
 }
-pub async fn get_playlist(playlist_id: String, client_config: &ClientConfig){
+pub async fn get_channel_tab_continuation(continuation:String,tab: Tab, client_config: &ClientConfig) -> Result<ChannelTab, Error>{
+    let index = tab.get_index();
+    let channel_json = browse_continuation(&continuation,&client_config).await;
+    Ok(extract_channel_tab(&channel_json,index))
+}
+pub async fn get_playlist(playlist_id: String,client_config: &ClientConfig){
     todo!()
 }
