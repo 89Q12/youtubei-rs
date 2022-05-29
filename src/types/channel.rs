@@ -1,4 +1,4 @@
-use super::{video::ChannelVideo, playlist::SearchPlaylist, endpoints::EndpointBrowse};
+use super::{video::ChannelVideo, playlist::{ChannelPlaylist}, endpoints::EndpointBrowse};
 
 pub struct Channel{
     pub name: String,
@@ -40,7 +40,7 @@ pub struct Author{
 }
 pub enum TabTypes{
     Videos(ChannelVideo),
-    Playlists(SearchPlaylist),
+    Playlists(ChannelPlaylist),
     Community(CommunityPost)
 }
 pub enum Tab{
