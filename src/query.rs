@@ -32,7 +32,11 @@ pub async fn load_related_videos(continuation:String,client_config: &ClientConfi
 }
 
 pub async fn get_comments(continuation:String,client_config: &ClientConfig) ->Result<CommentsQuery,  Error>{
-    todo!()
+    let comments_json = next(&continuation, client_config).await;
+    if !comments_json["error"].is_null() || comments_json["onResponseReceivedEndpoints"].is_null(){
+        panic!("Wrong token!");
+    }
+    Ok(extract_comments(&comments_json))
 }
 
 pub async fn get_video(video_id:String, params: String,client_config: &ClientConfig) ->Result<VideoQuery,  Error>{
