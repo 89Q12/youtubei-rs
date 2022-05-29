@@ -4,6 +4,7 @@ use crate::endpoints::*;
 use crate::extractors::*;
 use crate::types::channel::{Channel,ChannelTab,Tab};
 use crate::types::client::ClientConfig;
+use crate::types::playlist::Playlist;
 use crate::types::query_results::{CommentsQuery, VideoQuery, ChannelQuery,SearchQuery};
 use crate::types::video::{SearchVideo,Video};
 
@@ -29,12 +30,7 @@ pub async fn load_related_videos(continuation:String,client_config: &ClientConfi
     }
     Ok(load_related(&json))
 }
-pub async fn load_channel_playlists(continuation:String,client_config: &ClientConfig) -> Result<ChannelQuery, Error>{
-    todo!()
-}
-pub async fn load_channel_videos(continuation:String,client_config: &ClientConfig) -> Result<ChannelQuery, Error>{
-    todo!()
-}
+
 pub async fn get_comments(continuation:String,client_config: &ClientConfig) ->Result<CommentsQuery,  Error>{
     todo!()
 }
@@ -96,6 +92,16 @@ pub async fn get_channel_tab_continuation(continuation:String,tab: Tab, client_c
     let channel_json = browse_continuation(&continuation,&client_config).await;
     Ok(extract_channel_tab(&channel_json,index))
 }
-pub async fn get_playlist(playlist_id: String,client_config: &ClientConfig){
-    todo!()
+pub async fn get_playlist(playlist_id: String,client_config: &ClientConfig)-> Result<Playlist, Error>{
+    let complete_url = "https://www.youtube.com/playlist?list=".to_owned()+ &playlist_id;
+    let resolved_url = resolve_url(&complete_url,&client_config).await;
+    if !resolved_url["error"].is_null(){
+        panic!("{}",resolved_url["error"]["message"]);
+    }
+    let playlist_json = browse_browseid(
+        resolved_url["endpoint"]["browseEndpoint"]["browseId"].as_str().unwrap(), 
+        "", 
+        &client_config
+    ).await;
+    Ok(extract_playlist(&playlist_json))
 }
