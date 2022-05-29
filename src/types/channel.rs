@@ -17,14 +17,13 @@ pub struct CommunityPost {
     pub browse_endpoint: EndpointBrowse,
 }
 pub struct SearchChannel{
-    pub author: String,
+    pub author: Author,
     pub ucid: String,
     pub author_thumbnail: String,
     pub subscriber_count: String,
     pub video_count:String,
     pub description_html: String,
     pub auto_generated: bool,
-    pub author_verified: bool,
     pub endpoint: EndpointBrowse,
  }
  

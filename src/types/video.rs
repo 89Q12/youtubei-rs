@@ -1,8 +1,8 @@
-use super::endpoints::{EndpointWatch, EndpointBrowse};
+use super::{endpoints::{EndpointWatch, EndpointBrowse}, channel::Author};
 pub struct Video{
    pub title: String,
    pub id: String,
-   pub author: String,
+   pub author: Author,
    pub ucid: String,
    pub published: String,
    pub views: String,
@@ -10,7 +10,6 @@ pub struct Video{
    pub length_seconds: i64,
    pub live_now: bool,
    pub premiere_timestamp: String,
-   pub author_verified: bool,
    pub video_player: VideoPlayer,
    pub channel_thumbnail: String,
    pub thumbnail: String,
@@ -39,8 +38,7 @@ pub struct SearchVideo{
     pub id: String,
     pub channel_name: String,
     pub published_text: String,
-    pub author: String,
-    pub author_verified: bool,
+    pub author: Author,
     pub channel_thumbnail: String,
     pub view_count_text: String,
     pub length_text: String,
@@ -53,8 +51,7 @@ pub struct ChannelVideo{
     pub title: String, 
     pub id: String, 
     pub published_text: String, 
-    pub author: String, 
-    pub author_verified: bool,
+    pub author: Author,
     pub thumbnail:String,
     pub view_count_text:  String,
     pub length_text: String,
@@ -64,7 +61,7 @@ pub struct ChannelVideo{
 pub struct PlaylistVideo{
    pub title: String, 
    pub id: String, 
-   pub author: String, 
+   pub author: Author, 
    pub thumbnail:String,
    pub length_text: String,
    pub index: i64,
