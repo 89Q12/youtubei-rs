@@ -1,23 +1,38 @@
 use serde_json::Value;
-use crate::{types::{endpoints::{EndpointBrowse, EndpointWatch}, query_results::{VideoQuery, SearchQuery,SearchResult}, video::{Video,SearchVideo,ChannelVideo,VideoPlayer, Format, PlaylistVideo}, channel::{Channel,ChannelTab, SearchChannel,CommunityPost,TabTypes::*,TabTypes, Author}, playlist::{SearchPlaylist, Playlist, ChannelPlaylist}}, utils::{is_author_verified, unwrap_to_string, unwrap_to_i64, is_auto_generated}};
+use crate::{types::{endpoints::{EndpointBrowse, EndpointWatch}, query_results::{VideoQuery, SearchQuery,SearchResult, CommentsQuery}, video::{Video,SearchVideo,ChannelVideo,VideoPlayer, Format, PlaylistVideo, Comment}, channel::{Channel,ChannelTab, SearchChannel,CommunityPost,TabTypes::*,TabTypes, Author}, playlist::{SearchPlaylist, Playlist, ChannelPlaylist}}, utils::{is_author_verified, unwrap_to_string, unwrap_to_i64, is_auto_generated}};
 /*
 region video_extraction
 */
 pub fn video_from_next_and_player(player_video_details: &Value, next_video_details: &Value, video_player: VideoPlayer) -> Video {
+    let is_upcoming: bool = !next_video_details[0]["videoSecondaryInfoRenderer"]["upcomingEventData"]["startTime"].is_null();
+    let microformat = &player_video_details["microformat"]["playerMicroformatRenderer"];
+    let whitelisted_regions = microformat["availableCountries"].as_array().unwrap().to_owned();
+    let gerne =unwrap_to_string(microformat["category"].as_str());
+    let is_family_safe = microformat["isFamilySafe"].as_bool().unwrap();
+    let likes = unwrap_to_string(next_video_details[0]["videoPrimaryInfoRenderer"]["videoActions"]["menuRenderer"]["topLevelButtons"][0]["toggleButtonRenderer"]["defaultText"]["simpleText"].as_str());
     Video { 
-        title: unwrap_to_string(player_video_details["title"].as_str()), 
-        id: unwrap_to_string(player_video_details["videoId"].as_str()), 
+        title: unwrap_to_string(player_video_details["videoDetails"]["title"].as_str()), 
+        id: unwrap_to_string(player_video_details["videoDetails"]["videoId"].as_str()), 
         author: extract_author(&next_video_details[0]["videoSecondaryInfoRenderer"]["owner"]["videoOwnerRenderer"]["title"]["runs"],Some(&next_video_details[0]["videoSecondaryInfoRenderer"]["owner"]["videoOwnerRenderer"]["badges"])), 
-        ucid: unwrap_to_string(player_video_details["channelId"].as_str()), 
+        ucid: unwrap_to_string(player_video_details["videoDetails"]["channelId"].as_str()), 
         published: unwrap_to_string(next_video_details[0]["videoPrimaryInfoRenderer"]["dateText"]["simpleText"].as_str()), 
         views:unwrap_to_string(next_video_details[0]["videoPrimaryInfoRenderer"]["viewCount"]["videoViewCountRenderer"]["viewCount"]["simpleText"].as_str()), 
-        description_html: unwrap_to_string(player_video_details["shortDescription"].as_str()), 
-        length_seconds: unwrap_to_i64( player_video_details["lengthSeconds"].as_i64()), 
-        live_now: player_video_details["isLiveContent"].as_bool().unwrap(), 
-        premiere_timestamp: "".to_string(), 
+        description_html: unwrap_to_string(player_video_details["videoDetails"]["shortDescription"].as_str()), 
+        length_seconds: unwrap_to_string(player_video_details["videoDetails"]["lengthSeconds"].as_str()).parse().unwrap(), 
+        live_now: player_video_details["videoDetails"]["isLiveContent"].as_bool().unwrap(), 
+        premiere_timestamp: if is_upcoming{
+            unwrap_to_string(next_video_details[0]["videoSecondaryInfoRenderer"]["upcomingEventData"]["startTime"].as_str())
+        }else{
+            String::from("")
+        }, 
         video_player,
-        thumbnail: unwrap_to_string(player_video_details["thumbnail"]["thumbnails"][0]["url"].as_str()),
-        channel_thumbnail: unwrap_to_string(next_video_details[1]["videoSecondaryInfoRenderer"]["owner"]["videoOwnerRenderer"]["thumbnail"]["thumbnails"][0]["url"].as_str())
+        thumbnail: unwrap_to_string(player_video_details["videoDetails"]["thumbnail"]["thumbnails"][0]["url"].as_str()),
+        channel_thumbnail: unwrap_to_string(next_video_details[1]["videoSecondaryInfoRenderer"]["owner"]["videoOwnerRenderer"]["thumbnail"]["thumbnails"][0]["url"].as_str()),
+        whitelisted_regions,
+        likes,
+        gerne,
+        is_family_safe,
+        is_upcoming,
     }
 }
 pub fn extract_video_player_formats(json: &Value) -> VideoPlayer {
@@ -320,6 +335,42 @@ pub fn extract_playlist(json: &Value) -> Playlist{
 }
 /*
 endregion playlist_extraction
+*/
+/*
+region comment_extraction
+*/
+pub fn extract_comments(json: &Value) -> CommentsQuery{
+    let mut comments:Vec<Comment> = Vec::new();
+    let mut continuation = String::from("");
+    for comment in json["onResponseReceivedEndpoints"][1]["reloadContinuationItemsCommand"]["continuationItems"].as_array().unwrap(){
+        match comment.as_object().unwrap().keys().last().unwrap().as_str(){
+            "commentThreadRenderer" => comments.push(Comment { 
+                                        comment_id: unwrap_to_string(comment["commentThreadRenderer"]["comment"]["commentRenderer"]["commentId"].as_str()), 
+                                        text: unwrap_to_string(comment["commentThreadRenderer"]["comment"]["commentRenderer"]["contentText"]["runs"][0]["text"].as_str()),
+                                        author: Author {
+                                             name: unwrap_to_string(comment["commentThreadRenderer"]["comment"]["commentRenderer"]["authorText"]["simpleText"].as_str()), 
+                                             verified: !comment["commentThreadRenderer"]["comment"]["commentRenderer"]["authorCommentBadge"].is_null(), 
+                                             browse_endpoint: extract_browse_endpoint(&comment["commentThreadRenderer"]["comment"]["authorEndpoint"])
+                                        }, 
+                                        // this filed is always there so we can safely unwrap inline
+                                        is_author_channel_owner: comment["commentThreadRenderer"]["comment"]["commentRenderer"]["authorIsChannelOwner"].as_bool().unwrap(),
+                                        author_thumbnail: unwrap_to_string(comment["commentThreadRenderer"]["comment"]["commentRenderer"]["authorThumbnail"]["thumbnails"][0]["url"].as_str()), 
+                                        replies: unwrap_to_i64(comment["commentThreadRenderer"]["comment"]["commentRenderer"]["replyCount"].as_i64()), 
+                                        reply_continuation: extract_continuation_token(&comment["commentThreadRenderer"]["replies"]["commentRepliesRenderer"]["contents"][0]["continuationItemRenderer"]), 
+                                        published_time_text: unwrap_to_string(comment["commentThreadRenderer"]["comment"]["commentRenderer"]["publishedTimeText"]["runs"][0]["text"].as_str()),
+                                        vote_count: unwrap_to_string(comment["commentThreadRenderer"]["comment"]["commentRenderer"]["voteCount"]["simpleText"].as_str()),
+                                    }),
+            "continuationItemRenderer" => continuation= extract_continuation_token(&comment["continuationItemRenderer"]),
+            _ => break
+        }
+    }
+    CommentsQuery{
+        comments,
+        continuation,
+    }
+}
+/*
+endregion comment_extraction
 */
 /*
 region helper functions
