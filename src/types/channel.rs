@@ -34,6 +34,11 @@ pub struct ChannelTab{
     pub content: Vec<TabTypes>,
     pub continuation: String,
 }
+pub struct Author{
+    pub name: String,
+    pub verified: bool,
+    pub browse_endpoint: EndpointBrowse,
+}
 pub enum TabTypes{
     Videos(ChannelVideo),
     Playlists(SearchPlaylist),
