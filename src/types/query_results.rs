@@ -1,4 +1,4 @@
-use super::{video::SearchVideo, playlist::SearchPlaylist, channel::SearchChannel, video::Video, channel::Channel};
+use super::{video::SearchVideo, playlist::SearchPlaylist, channel::SearchChannel, video::{Video, Comment}, channel::Channel};
 
 pub enum SearchResult {
     VideoRenderer(SearchVideo),
@@ -12,7 +12,8 @@ pub struct SearchQuery{
     pub results: Vec<SearchResult>,
 }
 pub struct CommentsQuery{
-
+    pub comments: Vec<Comment>,
+    pub continuation: String,
 }
 pub struct VideoQuery{
     pub continuation_comments: String,

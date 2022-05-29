@@ -67,3 +67,12 @@ pub struct PlaylistVideo{
    pub index: i64,
    pub endpoint: EndpointWatch
 }
+pub struct Comment{
+   pub comment_id: String,
+   pub text: String,
+   pub author: Author,
+   pub replies: i64,
+   pub reply_continuation: String,
+   pub published_time_te: String,
+   pub vote_count: String,
+}
