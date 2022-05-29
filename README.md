@@ -22,6 +22,7 @@ Using tokio,reqwest, serde and serde_json.
 - browse
 - search
 - resolve_url
+- player
 
 # Supported queries
 - get_video: Fetches all information about the video except captions and storyboards
