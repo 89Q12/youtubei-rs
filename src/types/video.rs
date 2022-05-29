@@ -1,3 +1,4 @@
+use serde_json::Value;
 use super::{endpoints::{EndpointWatch, EndpointBrowse}, channel::Author};
 pub struct Video{
    pub title: String,
@@ -13,8 +14,8 @@ pub struct Video{
    pub video_player: VideoPlayer,
    pub channel_thumbnail: String,
    pub thumbnail: String,
-   pub whitelisted_regions: Vec<String>,
-   pub likes: i64,
+   pub whitelisted_regions: Vec<Value>,
+   pub likes: String,
    pub gerne: String,
    pub is_upcoming: bool,
    pub is_family_safe: bool,
