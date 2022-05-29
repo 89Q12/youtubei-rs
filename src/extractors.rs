@@ -143,7 +143,7 @@ pub fn extract_channel_tab(json: &Value, index: usize) -> ChannelTab{
             },
             "gridPlaylistRenderer" => content.push(Playlists(grid_playlist_renderer(&item["gridPlaylistRenderer"],channel_name))),
             "gridVideoRenderer"=> content.push(Videos(grid_video_renderer(&item["gridVideoRenderer"], channel_name))),
-            "continuationItemRenderer" => continuation= extract_continuation_token(&item[i]["continuationItemRenderer"]),
+            "continuationItemRenderer" => continuation= extract_continuation_token(&item["continuationItemRenderer"]),
             _ => break
 
         }
@@ -282,10 +282,10 @@ pub fn extract_playlist(json: &Value) -> Playlist{
     let mut videos:Vec<PlaylistVideo> = Vec::new();
     let items;
     let mut continuation: String = String::from("");
-    let author =extract_author(&json["sidebar"]["playlistSidebarRenderer"]["items"][1]["playlistSidebarSecondaryInfoRenderer"]["videoOwner"]["videoOwnerRenderer"]["title"]["runs"][0],None);
+    let author =extract_author(&json["sidebar"]["playlistSidebarRenderer"]["items"][1]["playlistSidebarSecondaryInfoRenderer"]["videoOwner"]["videoOwnerRenderer"]["title"]["runs"],None);
     let title =unwrap_to_string(json["sidebar"]["playlistSidebarRenderer"]["items"][0]["playlistSidebarPrimaryInfoRenderer"]["title"]["runs"][0]["text"].as_str());
     let id = unwrap_to_string(json["sidebar"]["playlistSidebarRenderer"]["items"][0]["playlistSidebarPrimaryInfoRenderer"]["title"]["runs"][0]["navigationEndpoint"]["watchEndpoint"]["playlistId"].as_str());
-    let video_count = unwrap_to_string(json["sidebar"]["playlistSidebarRenderer"]["items"][0]["playlistSidebarPrimaryInfoRenderer"][0]["stats"]["runs"][0]["text"].as_str())+ " videos";
+    let video_count = json["sidebar"]["playlistSidebarRenderer"]["items"][0]["playlistSidebarPrimaryInfoRenderer"]["stats"][0]["runs"][0]["text"].to_string()+ " videos";
     let updated_at =  "Last updated on ".to_string() + &unwrap_to_string(json["sidebar"]["playlistSidebarRenderer"]["items"][0]["playlistSidebarPrimaryInfoRenderer"]["stats"][2]["runs"][1]["text"].as_str());
     if !json["onResponseReceivedActions"].is_null() {
         items = &json["onResponseReceivedActions"][0]["appendContinuationItemsAction"]["continuationItems"]
@@ -301,7 +301,7 @@ pub fn extract_playlist(json: &Value) -> Playlist{
                 author: extract_author(&renderer["playlistVideoRenderer"]["shortBylineText"]["runs"],None),
                 thumbnail: unwrap_to_string(renderer["playlistVideoRenderer"]["thumbnail"]["thumbnails"][0]["url"].as_str()),
                 length_text: unwrap_to_string(renderer["playlistVideoRenderer"]["lengthText"]["simpleText"].as_str()),
-                index: unwrap_to_i64(renderer["playlistVideoRenderer"]["index"]["simpleText"].as_i64()),
+                index: renderer["playlistVideoRenderer"]["index"]["simpleText"].as_str().unwrap().parse().unwrap(),
                 endpoint: extract_watch_endpoint(&renderer["navigationEndpoint"]),
             }),
             "continuationItemRenderer" => continuation = extract_continuation_token(&renderer["continuationItemRenderer"]),
@@ -329,17 +329,17 @@ fn extract_continuation_token(continuation_item_render: &Value) -> String{
 }
 fn extract_browse_endpoint(navigation_endpoint: &Value) -> EndpointBrowse{
     EndpointBrowse { 
-        url: unwrap_to_string(navigation_endpoint["navigationEndpoint"]["commandMetadata"]["webCommandMetadata"]["url"].as_str()), 
-        browse_id:unwrap_to_string(navigation_endpoint["navigationEndpoint"]["browseEndpoint"]["browseId"].as_str()), 
+        url: unwrap_to_string(navigation_endpoint["commandMetadata"]["webCommandMetadata"]["url"].as_str()), 
+        browse_id:unwrap_to_string(navigation_endpoint["browseEndpoint"]["browseId"].as_str()), 
         params: String::from(""),
     }
 }
 fn extract_watch_endpoint(navigation_endpoint: &Value) -> EndpointWatch{
     EndpointWatch { 
-        url: unwrap_to_string(navigation_endpoint["navigationEndpoint"]["commandMetadata"]["webCommandMetadata"]["url"].as_str()), 
-        video_id: unwrap_to_string(navigation_endpoint["navigationEndpoint"]["watchEndpoint"]["videoId"].as_str()),
-        playlist_id: unwrap_to_string(navigation_endpoint["navigationEndpoint"]["watchEndpoint"]["playlistId"].as_str()),
-        params: unwrap_to_string(navigation_endpoint["navigationEndpoint"]["watchEndpoint"]["params"].as_str()),
+        url: unwrap_to_string(navigation_endpoint["commandMetadata"]["webCommandMetadata"]["url"].as_str()), 
+        video_id: unwrap_to_string(navigation_endpoint["watchEndpoint"]["videoId"].as_str()),
+        playlist_id: unwrap_to_string(navigation_endpoint["watchEndpoint"]["playlistId"].as_str()),
+        params: unwrap_to_string(navigation_endpoint["watchEndpoint"]["params"].as_str()),
     }
 }
 // Runs means theres is a text field and an navigationEndpoint field 
