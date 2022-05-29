@@ -100,7 +100,7 @@ pub fn extract_channel_info(json: &Value) -> Channel{
         description: unwrap_to_string( json["contents"]["twoColumnBrowseResultsRenderer"]["tabs"][5]["tabRenderer"]["content"]["sectionListRenderer"]["contents"][0]["itemSectionRenderer"]["contents"][0]["channelAboutFullMetadataRenderer"]["description"]["simpleText"].as_str())
     }
 }
-pub fn get_channel_tab(json: &Value, index: usize) -> ChannelTab{
+pub fn extract_channel_tab(json: &Value, index: usize) -> ChannelTab{
     // get the channel name from the metadata
     let channel_name = json["metadata"]["channelMetadataRenderer"]["title"].as_str().unwrap();
     // title is  always at this location
