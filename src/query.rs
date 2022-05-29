@@ -7,6 +7,7 @@ use crate::types::client::ClientConfig;
 use crate::types::playlist::Playlist;
 use crate::types::query_results::{CommentsQuery, VideoQuery, ChannelQuery,SearchQuery};
 use crate::types::video::{SearchVideo,Video};
+use crate::utils::unwrap_to_string;
 
 pub async fn search(query: String,client_config: &ClientConfig) -> Result<SearchQuery, Error>{
     let json = endpoints::search(&query, "", &client_config).await;
@@ -24,7 +25,7 @@ pub async fn load_search(continuation:String,client_config: &ClientConfig) ->Res
     return Ok(extract_search_results(&json, true));
 }
 pub async fn load_related_videos(continuation:String,client_config: &ClientConfig) -> Result<Vec<SearchVideo>, Error>{
-    let json = next(&continuation, client_config).await;
+    let json = next(&continuation, &client_config).await;
     if !json["error"].is_null(){
         panic!("Unexpected error: {}", json["error"].to_string());
     }
@@ -55,7 +56,7 @@ pub async fn get_video(video_id:String, params: String,client_config: &ClientCon
     let video: Video = video_from_next_and_player(&player_json, &next_video_data["contents"]["twoColumnWatchNextResults"]["results"]["results"]["contents"], video_player);
     Ok(extract_next_video_results(&next_video_data, VideoQuery{
         continuation_comments: "".to_string(),
-        continuation_related: next_video_data["contents"]["twoColumnWatchNextResults"]["secondaryResults"]["secondaryResults"]["results"][20]["continuationItemRenderer"]["continuationEndpoint"]["continuationCommand"]["token"].to_string(),
+        continuation_related: unwrap_to_string(next_video_data["contents"]["twoColumnWatchNextResults"]["secondaryResults"]["secondaryResults"]["results"][20]["continuationItemRenderer"]["continuationEndpoint"]["continuationCommand"]["token"].as_str()),
         video,
         related_videos: Vec::new(),
     }))
