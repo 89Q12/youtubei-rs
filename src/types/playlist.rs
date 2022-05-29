@@ -17,6 +17,7 @@ pub struct Playlist{
     pub video_count: String,
     pub updated_at: String,
     pub videos: Vec<PlaylistVideo>,
+    pub continuation: String,
 }
 
 pub struct ChannelPlaylist{
