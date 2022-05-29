@@ -39,3 +39,24 @@ pub enum TabTypes{
     Playlists(SearchPlaylist),
     Community(CommunityPost)
 }
+pub enum Tab{
+    Videos,
+    Playlists,
+    Community
+}
+impl Tab {
+    pub fn get_name(&self) -> &str {
+        match *self {
+            Tab::Videos => "videos",
+            Tab::Playlists => "playlists",
+            Tab::Community => "community"
+        }
+    }
+    pub fn get_index(&self) -> usize {
+        match *self {
+            Tab::Videos => 1,
+            Tab::Playlists => 2,
+            Tab::Community => 3,
+        }
+    }
+}
