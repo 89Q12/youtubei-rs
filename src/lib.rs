@@ -1,5 +1,5 @@
-pub mod endpoints;
+pub(crate) mod endpoints;
 pub mod types;
 pub mod utils;
-pub mod extractors;
+pub(crate) mod extractors;
 pub mod query;
