@@ -51,7 +51,7 @@ pub struct ChannelVideo{
     pub title: String, 
     pub id: String, 
     pub published_text: String, 
-    pub author: Author,
+    pub author_name: String,
     pub thumbnail:String,
     pub view_count_text:  String,
     pub length_text: String,
