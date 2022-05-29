@@ -11,7 +11,7 @@ A asynchronous implementation of the invidious innertube aka youtubei API wrappe
 """
 
 [lib]
-name = "yotubei_rs"
+name = "youtubei_rs"
 path = "src/lib.rs"
 crate-type = ["lib"]
 test = true
