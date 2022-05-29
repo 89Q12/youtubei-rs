@@ -116,9 +116,15 @@ pub fn extract_channel_tab(json: &Value, index: usize) -> ChannelTab{
         items = &json["onResponseReceivedActions"][0]["appendContinuationItemsAction"]["continuationItems"];
     }
     for i in 0..items.as_array().unwrap().len(){
+        let item;
+        if json["onResponseReceivedActions"].is_null(){
+            item = &items[i]["itemSectionRenderer"]["contents"][0];
+        }else{
+            item= &items[i];
+        }
         // itemSectionRenderer: {contents[{}]} and because we have only key we can just use the last method to get the key
-        match items[i]["itemSectionRenderer"]["contents"][0].as_object().unwrap().keys().last().unwrap().as_str(){
-            "shelfRenderer" => for renderer in items[i]["itemSectionRenderer"]["contents"][0]["shelfRenderer"]["content"]["horizontalListRenderer"]["items"].as_array().unwrap(){
+        match item.as_object().unwrap().keys().last().unwrap().as_str(){
+            "shelfRenderer" => for renderer in item["shelfRenderer"]["content"]["horizontalListRenderer"]["items"].as_array().unwrap(){
                 match renderer.as_object().unwrap().keys().last().unwrap().as_str() {
                     "gridPlaylistRenderer" => content.push(Playlists(grid_playlist_renderer(&renderer["gridPlaylistRenderer"],channel_name))),
                     "gridVideoRenderer"=> content.push(Videos(grid_video_renderer(&renderer["gridVideoRenderer"], channel_name))),
@@ -127,9 +133,9 @@ pub fn extract_channel_tab(json: &Value, index: usize) -> ChannelTab{
                     _ => break
                 }
             },
-            "backstagePostThreadRenderer" => content.push(Community(backstage_post_thread_renderer(&items[i]["backstagePostThreadRenderer"],channel_name))),
+            "backstagePostThreadRenderer" => content.push(Community(backstage_post_thread_renderer(&item["backstagePostThreadRenderer"],channel_name))),
             // Since its sometimes inside a gridRenderer object we need to iterate through the items and match against gridPlaylistRenderer and gridVideoRenderer
-            "gridRenderer" => for renderer in items[i]["itemSectionRenderer"]["contents"][0]["gridRenderer"]["items"].as_array().unwrap(){
+            "gridRenderer" => for renderer in item["gridRenderer"]["items"].as_array().unwrap(){
                 match renderer.as_object().unwrap().keys().last().unwrap().as_str() {
                     "gridPlaylistRenderer" => content.push(Playlists(grid_playlist_renderer(&renderer["gridPlaylistRenderer"],channel_name))),
                     "gridVideoRenderer"=> content.push(Videos(grid_video_renderer(&renderer["gridVideoRenderer"], channel_name))),
@@ -137,9 +143,9 @@ pub fn extract_channel_tab(json: &Value, index: usize) -> ChannelTab{
                     _ => break
                 }
             },
-            "gridPlaylistRenderer" => content.push(Playlists(grid_playlist_renderer(&items[i]["itemSectionRenderer"]["contents"][0]["gridPlaylistRenderer"],channel_name))),
-            "gridVideoRenderer"=> content.push(Videos(grid_video_renderer(&items[i]["itemSectionRenderer"]["contents"][0]["gridVideoRenderer"], channel_name))),
-            "continuationItemRenderer" => continuation= extract_continuation_token(&items[i]["itemSectionRenderer"]["contents"][0]["continuationItemRenderer"]),
+            "gridPlaylistRenderer" => content.push(Playlists(grid_playlist_renderer(&item["gridPlaylistRenderer"],channel_name))),
+            "gridVideoRenderer"=> content.push(Videos(grid_video_renderer(&item["gridVideoRenderer"], channel_name))),
+            "continuationItemRenderer" => continuation= extract_continuation_token(&item[i]["continuationItemRenderer"]),
             _ => break
 
         }
@@ -173,7 +179,7 @@ fn grid_playlist_renderer(playlist: &Value, name: &str) -> SearchPlaylist{
         id:  unwrap_to_string(playlist["playlistId"].as_str()),
         author: name.to_string(),
         ucid: String::from(""),
-        video_count: unwrap_to_i64( playlist["videoCountShortText"]["simpleText"].as_i64()),
+        video_count: unwrap_to_string( playlist["videoCountShortText"]["simpleText"].as_str()),
         thumbnail: unwrap_to_string(playlist["thumbnail"]["thumbnails"][0]["url"].as_str()),
         author_verified: is_author_verified(&playlist["ownerBadges"][0]),
         play_endpoint: extract_watch_endpoint(&playlist["navigationEndpoint"]),
@@ -265,7 +271,7 @@ fn playlist_renderer(playlist_renderer:&Value) -> SearchPlaylist{
         id:  unwrap_to_string(playlist_renderer["playlistId"].as_str()),
         author: unwrap_to_string(playlist_renderer["shortBylineText"]["runs"][0]["text"].as_str()),
         ucid: unwrap_to_string(playlist_renderer["shortBylineText"]["runs"][0]["navigationEndpoint"]["browseEndpoint"]["browseId"].as_str()),
-        video_count: unwrap_to_i64(playlist_renderer["videoCountText"]["runs"][0]["text"].as_i64()),
+        video_count: unwrap_to_string(playlist_renderer["videoCountText"]["runs"][0]["text"].as_str()),
         thumbnail: unwrap_to_string(playlist_renderer["playlistId"].as_str()),
         author_verified: is_author_verified(&playlist_renderer["ownerBadges"][0]),
         play_endpoint: extract_watch_endpoint(&playlist_renderer["navigationEndpoint"]),
