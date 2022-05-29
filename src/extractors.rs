@@ -54,7 +54,7 @@ pub fn extract_video_player_formats(json: &Value) -> VideoPlayer {
 
 }
 pub fn extract_next_video_results(json: &Value,mut  video_query: VideoQuery) -> VideoQuery{
-    video_query.continuation_comments  = unwrap_to_string( json["contents"]["twoColumnWatchNextResults"]["results"]["results"]["contents"][3]["itemSectionRenderer"]["contents"][0]["continuationItemRenderer"]["continuationEndpoint"]["continuationCommand"]["token"].as_str());
+    video_query.continuation_comments  = extract_continuation_token( &json["contents"]["twoColumnWatchNextResults"]["results"]["results"]["contents"][3]["itemSectionRenderer"]["contents"][0]["continuationItemRenderer"]);
     for value in 0..json["contents"]["twoColumnWatchNextResults"]["secondaryResults"]["secondaryResults"]["results"].as_array().unwrap().len()-1{
         video_query.related_videos.push(compact_video_renderer(&json["contents"]["twoColumnWatchNextResults"]["secondaryResults"]["secondaryResults"]["results"][value]["compactVideoRenderer"]))
     }
@@ -78,13 +78,8 @@ fn compact_video_renderer(video: &Value)-> SearchVideo{
         channel_thumbnail: unwrap_to_string(video["channelThumbnail"]["thumbnails"][0]["url"].as_str()), 
         view_count_text: unwrap_to_string(video["viewCountText"]["simpleText"].as_str()), 
         length_text: unwrap_to_string(video["lengthText"]["simpleText"].as_str()), 
-        endpoint: EndpointWatch{
-            url: unwrap_to_string(video["navigationEndpoint"]["commandMetadata"]["webCommandMetadata"]["url"].as_str()),
-            video_id:unwrap_to_string(video["videoId"].as_str()),
-            playlist_id: "".to_string(),
-            params: "".to_string(),
-        }, 
-        browse_channel: EndpointBrowse { url: unwrap_to_string(video["longBylineText"]["runs"][0]["navigationEndpoint"]["browseEndpoint"]["canonicalBaseUrl"].as_str()), browse_id: unwrap_to_string(video["longBylineText"]["runs"][0]["navigationEndpoint"]["browseEndpoint"]["browseId"].as_str()), params: "".to_string() }, 
+        endpoint: extract_watch_endpoint(&video["navigationEndpoint"]),
+        browse_channel: extract_browse_endpoint(&video["longBylineText"]["runs"][0]["navigationEndpoint"]), 
         thumbnail: unwrap_to_string(video["thumbnail"]["thumbnails"][0]["url"].as_str()),
         published_text: unwrap_to_string(video["publishedTimeText"]["simpleText"].as_str()),
     }
@@ -181,17 +176,8 @@ fn grid_playlist_renderer(playlist: &Value, name: &str) -> SearchPlaylist{
         video_count: unwrap_to_i64( playlist["videoCountShortText"]["simpleText"].as_i64()),
         thumbnail: unwrap_to_string(playlist["thumbnail"]["thumbnails"][0]["url"].as_str()),
         author_verified: is_author_verified(&playlist["ownerBadges"][0]),
-        play_endpoint: EndpointWatch{
-            url: unwrap_to_string(playlist["navigationEndpoint"]["commandMetadata"]["webCommandMetadata"]["url"].as_str()),
-            video_id: unwrap_to_string(playlist["navigationEndpoint"]["watchEndpoint"]["videoId"].as_str()),
-            playlist_id: unwrap_to_string(playlist["navigationEndpoint"]["watchEndpoint"]["playlistId"].as_str()),
-            params: unwrap_to_string(playlist["navigationEndpoint"]["watchEndpoint"]["params"].as_str()),
-        },
-        browse_endpoint: EndpointBrowse { 
-            url: unwrap_to_string(playlist["viewPlaylistText"]["runs"][0]["navigationEndpoint"]["commandMetadata"]["webCommandMetadata"]["url"].as_str()), 
-            browse_id:unwrap_to_string(playlist["viewPlaylistText"]["runs"][0]["navigationEndpoint"]["browseEndpoint"]["browseId"].as_str()), 
-            params: String::from(""),
-        },
+        play_endpoint: extract_watch_endpoint(&playlist["navigationEndpoint"]),
+        browse_endpoint:extract_browse_endpoint(&playlist["viewPlaylistText"]["runs"][0]["navigationEndpoint"])
     }
 
 }
@@ -206,12 +192,7 @@ fn grid_video_renderer(video: &Value, channel_name:&str) -> ChannelVideo{
             view_count_text:  unwrap_to_string(video["viewCountText"]["simpleText"].as_str()), 
             length_text:  unwrap_to_string(video["thumbnailOverlays"][0]["thumbnailOverlayTimeStatusRenderer"]["text"]["simpleText"].as_str()),
             channel_thumbnail: String::from(""), 
-            endpoint: EndpointWatch{
-                url: unwrap_to_string(video["navigationEndpoint"]["commandMetadata"]["webCommandMetadata"]["url"].as_str()),
-                video_id: unwrap_to_string(video["videoId"].as_str()),
-                playlist_id: String::from(""),
-                params: String::from(""),
-            },
+            endpoint: extract_watch_endpoint(&video["navigationEndpoint"]),
         }
 }
 /*
@@ -229,7 +210,7 @@ pub fn extract_search_results(json: &Value, continuation: bool)-> SearchQuery{
         content = &json["contents"]["twoColumnSearchResultsRenderer"]["primaryContents"]["sectionListRenderer"]["contents"];
     }
     let mut search_query = SearchQuery{
-        continuation: unwrap_to_string(content[1]["continuationItemRenderer"]["continuationEndpoint"]["continuationCommand"]["token"].as_str()),
+        continuation: extract_continuation_token(&content[1]["continuationItemRenderer"]),
         results: Vec::new(),
     };
     for renderer in content[0]["itemSectionRenderer"]["contents"].as_array().unwrap().iter() {
@@ -258,11 +239,7 @@ fn channel_renderer(channel_renderer:&Value) -> SearchChannel{
     description_html: unwrap_to_string(channel_renderer["descriptionSnippet"]["runs"][0]["text"].as_str()),
     auto_generated: is_auto_generated(unwrap_to_string(channel_renderer["title"]["simpleText"].as_str())),
     author_verified: is_author_verified(&channel_renderer["ownerBadges"][0]),
-    endpoint: EndpointBrowse { 
-        url: unwrap_to_string(channel_renderer["navigationEndpoint"]["commandMetadata"]["webCommandMetadata"]["url"].as_str()), 
-        browse_id: unwrap_to_string(channel_renderer["navigationEndpoint"]["browseEndpoint"]["browseId"].as_str()), 
-        params: String::from("")
-    },
+    endpoint:extract_browse_endpoint(&channel_renderer["navigationEndpoint"]),
 }
 }
 
@@ -276,17 +253,8 @@ fn video_renderer(video_renderer:&Value) -> SearchVideo{
         channel_thumbnail: unwrap_to_string(video_renderer["channelThumbnail"]["thumbnails"][0]["url"].as_str()), 
         view_count_text: unwrap_to_string(video_renderer["viewCountText"]["simpleText"].as_str()), 
         length_text: unwrap_to_string(video_renderer["lengthText"]["simpleText"].as_str()), 
-        endpoint: EndpointWatch{
-            url: unwrap_to_string(video_renderer["navigationEndpoint"]["commandMetadata"]["webCommandMetadata"]["url"].as_str()),
-            video_id:unwrap_to_string(video_renderer["videoId"].as_str()),
-            playlist_id: "".to_string(),
-            params: "".to_string(),
-        }, 
-        browse_channel: EndpointBrowse { 
-            url: unwrap_to_string(video_renderer["longBylineText"]["runs"][0]["navigationEndpoint"]["browseEndpoint"]["canonicalBaseUrl"].as_str()), 
-            browse_id: unwrap_to_string(video_renderer["longBylineText"]["runs"][0]["navigationEndpoint"]["browseEndpoint"]["browseId"].as_str()), 
-            params: "".to_string() 
-        }, 
+        endpoint: extract_watch_endpoint(&video_renderer["navigationEndpoint"]),
+        browse_channel: extract_browse_endpoint(&video_renderer["longBylineText"]["runs"][0]["navigationEndpoint"]), 
         thumbnail: unwrap_to_string(video_renderer["thumbnail"]["thumbnails"][0]["url"].as_str()),
         published_text: unwrap_to_string(video_renderer["publishedTimeText"]["simpleText"].as_str()),
     }
@@ -300,17 +268,8 @@ fn playlist_renderer(playlist_renderer:&Value) -> SearchPlaylist{
         video_count: unwrap_to_i64(playlist_renderer["videoCountText"]["runs"][0]["text"].as_i64()),
         thumbnail: unwrap_to_string(playlist_renderer["playlistId"].as_str()),
         author_verified: is_author_verified(&playlist_renderer["ownerBadges"][0]),
-        play_endpoint: EndpointWatch{
-            url: unwrap_to_string(playlist_renderer["navigationEndpoint"]["commandMetadata"]["webCommandMetadata"]["url"].as_str()),
-            video_id: unwrap_to_string(playlist_renderer["navigationEndpoint"]["watchEndpoint"]["videoId"].as_str()),
-            playlist_id: unwrap_to_string(playlist_renderer["navigationEndpoint"]["watchEndpoint"]["playlistId"].as_str()),
-            params: unwrap_to_string(playlist_renderer["navigationEndpoint"]["watchEndpoint"]["params"].as_str()),
-        },
-        browse_endpoint: EndpointBrowse { 
-            url: unwrap_to_string(playlist_renderer["viewPlaylistText"]["runs"][0]["navigationEndpoint"]["commandMetadata"]["webCommandMetadata"]["url"].as_str()), 
-            browse_id:unwrap_to_string(playlist_renderer["viewPlaylistText"]["runs"][0]["navigationEndpoint"]["browseEndpoint"]["browseId"].as_str()), 
-            params: String::from(""),
-        },
+        play_endpoint: extract_watch_endpoint(&playlist_renderer["navigationEndpoint"]),
+        browse_endpoint: extract_browse_endpoint(&playlist_renderer["navigationEndpoint"]),
     }
 }
 /*
@@ -321,4 +280,19 @@ region helper functions
 */
 fn extract_continuation_token(continuation_item_render: &Value) -> String{
     return unwrap_to_string(continuation_item_render["continuationEndpoint"]["continuationCommand"]["token"].as_str());
+}
+fn extract_browse_endpoint(navigation_endpoint: &Value) -> EndpointBrowse{
+    EndpointBrowse { 
+        url: unwrap_to_string(navigation_endpoint["navigationEndpoint"]["commandMetadata"]["webCommandMetadata"]["url"].as_str()), 
+        browse_id:unwrap_to_string(navigation_endpoint["navigationEndpoint"]["browseEndpoint"]["browseId"].as_str()), 
+        params: String::from(""),
+    }
+}
+fn extract_watch_endpoint(navigation_endpoint: &Value) -> EndpointWatch{
+    EndpointWatch { 
+        url: unwrap_to_string(navigation_endpoint["navigationEndpoint"]["commandMetadata"]["webCommandMetadata"]["url"].as_str()), 
+        video_id: unwrap_to_string(navigation_endpoint["navigationEndpoint"]["watchEndpoint"]["videoId"].as_str()),
+        playlist_id: unwrap_to_string(navigation_endpoint["navigationEndpoint"]["watchEndpoint"]["playlistId"].as_str()),
+        params: unwrap_to_string(navigation_endpoint["navigationEndpoint"]["watchEndpoint"]["params"].as_str()),
+    }
 }
