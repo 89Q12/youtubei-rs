@@ -61,3 +61,12 @@ pub struct ChannelVideo{
     pub channel_thumbnail: String, 
     pub endpoint: EndpointWatch
 }
+pub struct PlaylistVideo{
+   pub title: String, 
+   pub id: String, 
+   pub author: String, 
+   pub thumbnail:String,
+   pub length_text: String,
+   pub index: i64,
+   pub endpoint: EndpointWatch
+}
