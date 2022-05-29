@@ -300,7 +300,7 @@ pub fn extract_playlist(json: &Value) -> Playlist{
     let author =extract_author(&json["sidebar"]["playlistSidebarRenderer"]["items"][1]["playlistSidebarSecondaryInfoRenderer"]["videoOwner"]["videoOwnerRenderer"]["title"]["runs"],None);
     let title =unwrap_to_string(json["sidebar"]["playlistSidebarRenderer"]["items"][0]["playlistSidebarPrimaryInfoRenderer"]["title"]["runs"][0]["text"].as_str());
     let id = unwrap_to_string(json["sidebar"]["playlistSidebarRenderer"]["items"][0]["playlistSidebarPrimaryInfoRenderer"]["title"]["runs"][0]["navigationEndpoint"]["watchEndpoint"]["playlistId"].as_str());
-    let video_count = json["sidebar"]["playlistSidebarRenderer"]["items"][0]["playlistSidebarPrimaryInfoRenderer"]["stats"][0]["runs"][0]["text"].to_string()+ " videos";
+    let video_count = unwrap_to_string(json["sidebar"]["playlistSidebarRenderer"]["items"][0]["playlistSidebarPrimaryInfoRenderer"]["stats"][0]["runs"][0]["text"].as_str())+ " videos";
     let updated_at =  "Last updated on ".to_string() + &unwrap_to_string(json["sidebar"]["playlistSidebarRenderer"]["items"][0]["playlistSidebarPrimaryInfoRenderer"]["stats"][2]["runs"][1]["text"].as_str());
     if !json["onResponseReceivedActions"].is_null() {
         items = &json["onResponseReceivedActions"][0]["appendContinuationItemsAction"]["continuationItems"]
