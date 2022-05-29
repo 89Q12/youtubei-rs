@@ -73,6 +73,6 @@ pub struct Comment{
    pub author: Author,
    pub replies: i64,
    pub reply_continuation: String,
-   pub published_time_te: String,
+   pub published_time_text: String,
    pub vote_count: String,
 }
