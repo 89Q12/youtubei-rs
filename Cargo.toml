@@ -10,7 +10,11 @@ readme = "README.md"
 description = """
 A asynchronous implementation of the invidious innertube aka youtubei API wrapper.
 """
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[lib]
+name = "yotubei_rs"
+path = "src/lib.rs"
+crate-type = ["lib"]
 
 [dependencies]
 serde_json = "1.0.81"
