@@ -4,9 +4,9 @@ Using tokio,reqwest, serde and serde_json.
 
 # Dependencies
 - serde_json 
-- serde features = ["derive"]
-- reqwest features = ["json","gzip"]
-- tokio features = ["full"]
+- serde: features = ["derive"]
+- reqwest: features = ["json","gzip"]
+- tokio: features = ["full"]
 
 # Roadmap
 - query: load more videos from a playlist
