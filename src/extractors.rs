@@ -1,5 +1,5 @@
 use serde_json::Value;
-use crate::{types::{endpoints::{EndpointBrowse, EndpointWatch}, query_results::{VideoQuery, SearchQuery,SearchResult}, video::{Video,SearchVideo,ChannelVideo,VideoPlayer, Format}, channel::{Channel,ChannelTab, SearchChannel,CommunityPost,TabTypes::*}, playlist::SearchPlaylist}, utils::{is_author_verified, unwrap_to_string, unwrap_to_i64, is_auto_generated}};
+use crate::{types::{endpoints::{EndpointBrowse, EndpointWatch}, query_results::{VideoQuery, SearchQuery,SearchResult}, video::{Video,SearchVideo,ChannelVideo,VideoPlayer, Format}, channel::{Channel,ChannelTab, SearchChannel,CommunityPost,TabTypes::*,TabTypes}, playlist::SearchPlaylist}, utils::{is_author_verified, unwrap_to_string, unwrap_to_i64, is_auto_generated}};
 /*
 region video_extraction
 */
@@ -105,21 +105,62 @@ pub fn extract_channel_info(json: &Value) -> Channel{
         description: unwrap_to_string( json["contents"]["twoColumnBrowseResultsRenderer"]["tabs"][5]["tabRenderer"]["content"]["sectionListRenderer"]["contents"][0]["itemSectionRenderer"]["contents"][0]["channelAboutFullMetadataRenderer"]["description"]["simpleText"].as_str())
     }
 }
+pub fn get_channel_tab(json: &Value, index: usize) -> ChannelTab{
+    // get the channel name from the metadata
+    let channel_name = json["metadata"]["channelMetadataRenderer"]["title"].as_str().unwrap();
+    // title is  always at this location
+    let title = unwrap_to_string( json["contents"]["twoColumnBrowseResultsRenderer"]["tabs"][index]["tabRenderer"]["title"].as_str());
+    // placeholder values
+    let mut continuation =String::from("");
+    let mut content:Vec<TabTypes> = Vec::new();
+    let items;
+    if json["onResponseReceivedActions"].is_null() && !json["contents"].is_null(){
+        items = &json["contents"]["twoColumnBrowseResultsRenderer"]["tabs"][index]["tabRenderer"]["content"]["sectionListRenderer"]["contents"];
+    }
+    else{
+        items = &json["onResponseReceivedActions"][0]["appendContinuationItemsAction"]["continuationItems"];
+    }
+    for i in 0..items.as_array().unwrap().len(){
+        // itemSectionRenderer: {contents[{}]} and because we have only key we can just use the last method to get the key
+        match items[i]["itemSectionRenderer"]["contents"][0].as_object().unwrap().keys().last().unwrap().as_str(){
+            "shelfRenderer" => for renderer in items[i]["itemSectionRenderer"]["contents"][0]["shelfRenderer"]["content"]["horizontalListRenderer"]["items"].as_array().unwrap(){
+                match renderer.as_object().unwrap().keys().last().unwrap().as_str() {
+                    "gridPlaylistRenderer" => content.push(Playlists(grid_playlist_renderer(&renderer["gridPlaylistRenderer"],channel_name))),
+                    "gridVideoRenderer"=> content.push(Videos(grid_video_renderer(&renderer["gridVideoRenderer"], channel_name))),
+                    // I havent seen it here but theoretically it could be here so we should have it as arm
+                    "continuationItemRenderer" => continuation= extract_continuation_token(&renderer["continuationItemRenderer"]),
+                    _ => break
+                }
+            },
+            "backstagePostThreadRenderer" => content.push(Community(backstage_post_thread_renderer(&items[i]["backstagePostThreadRenderer"],channel_name))),
+            // Since its sometimes inside a gridRenderer object we need to iterate through the items and match against gridPlaylistRenderer and gridVideoRenderer
+            "gridRenderer" => for renderer in items[i]["itemSectionRenderer"]["contents"][0]["gridRenderer"]["items"].as_array().unwrap(){
+                match renderer.as_object().unwrap().keys().last().unwrap().as_str() {
+                    "gridPlaylistRenderer" => content.push(Playlists(grid_playlist_renderer(&renderer["gridPlaylistRenderer"],channel_name))),
+                    "gridVideoRenderer"=> content.push(Videos(grid_video_renderer(&renderer["gridVideoRenderer"], channel_name))),
+                    "continuationItemRenderer" => continuation= extract_continuation_token(&renderer["continuationItemRenderer"]),
+                    _ => break
+                }
+            },
+            "gridPlaylistRenderer" => content.push(Playlists(grid_playlist_renderer(&items[i]["itemSectionRenderer"]["contents"][0]["gridPlaylistRenderer"],channel_name))),
+            "gridVideoRenderer"=> content.push(Videos(grid_video_renderer(&items[i]["itemSectionRenderer"]["contents"][0]["gridVideoRenderer"], channel_name))),
+            "continuationItemRenderer" => continuation= extract_continuation_token(&items[i]["itemSectionRenderer"]["contents"][0]["continuationItemRenderer"]),
+            _ => break
 
-fn extract_community_tab(json: &Value, name: &str) -> ChannelTab {
-    let mut tab = ChannelTab{ 
-        title: unwrap_to_string(json["tabs"][3]["tabRenderer"]["title"].as_str()), 
-        selected: true, 
-        content: Vec::with_capacity(29), // Youtube provides always 30 items, -1 due to the continuation token. 
-        continuation: unwrap_to_string(json["tabs"][3]["tabRenderer"]["content"]["sectionListRenderer"]["contents"].as_array().unwrap().last().unwrap()["continuationItemRenderer"]["continuationEndpoint"]["continuationCommand"]["token"].as_str()),
-    };
-    let items = &json["tabs"][3]["tabRenderer"]["content"]["sectionListRenderer"]["contents"][0]["itemSectionRenderer"]["contents"].as_array().unwrap();
-    for i in 0..items.iter().len()-1 {
-        let item = &items[i]["backstagePostThreadRenderer"]["post"]["backstagePostRenderer"];
-        tab.content.push(PostCommunity(CommunityPost{
+        }
+    }
+    ChannelTab{
+        title,
+        selected: true,
+        content,
+        continuation,
+    }
+}
+fn backstage_post_thread_renderer(item: &Value, name: &str) -> CommunityPost {
+    CommunityPost{
             content_text: unwrap_to_string(item["contentText"].as_str()),
             content_attachment: unwrap_to_string(item["backstageAttachment"]["backstageImageRenderer"]["image"]["thumbnails"][0]["url"].as_str()) ,
-            author_name:  name.to_owned(),
+            author_name: name.to_owned(),
             author_thumbnail:  unwrap_to_string(item["authorThumbnail"]["thumbnails"][0]["url"].as_str()),
             vote_count:  unwrap_to_i64(item["voteCount"]["simpleText"].as_i64()),
             published_time_text:  unwrap_to_string(item["publishedTimeText"]["runs"][0]["text"].as_str()),
@@ -129,95 +170,49 @@ fn extract_community_tab(json: &Value, name: &str) -> ChannelTab {
                 params: String::from(""),
             }
         }
-        ))
-    } 
-    return tab
 }
-/// Playlist are either in a gridRenderer or multiple shelfRenderer.
-/// Which makes parsing a bit more complicated
-fn extract_playlists_tab(json: &Value, name: &str) -> ChannelTab {
-    let mut tab = ChannelTab{ 
-        title: unwrap_to_string(json["tabs"][2]["tabRenderer"]["title"].as_str()), 
-        selected: true, 
-        content: Vec::with_capacity(29), // Youtube provides always 30 items, -1 due to the continuation token. 
-        continuation: String::from(""),
-    };
-    // Should never be None
-    let items = &json["tabs"][2]["tabRenderer"]["content"]["sectionListRenderer"]["contents"][0]["itemSectionRenderer"]["contents"].as_array().unwrap();
-    // go through the items and match against gridRenderer and shelfRenderer
-    for item in items.iter() {
-        for (section, value) in item.as_object().unwrap(){
-            match  section.as_str(){
-                "gridRenderer" => {
-                    tab.continuation = unwrap_to_string(value["items"].as_array().unwrap().last().unwrap()["continuationItemRenderer"]["continuationEndpoint"]["continuationCommand"]["token"].as_str());
-                    grid_playlist_renderer(&mut tab, &value, name)
-                },
-                "shelfRenderer" => {
-                    // In the case we don't have a continuation token for whatever reason
-                    tab.continuation = String::from("");
-                    grid_playlist_renderer(&mut tab, &value["content"]["horizontalListRenderer"], name)
-                },
-                _ => println!("Unsupported value: {} Consider reporting a bug", section)
-            };
-        }
+
+fn grid_playlist_renderer(playlist: &Value, name: &str) -> SearchPlaylist{
+    SearchPlaylist{
+        title: unwrap_to_string(playlist["title"]["runs"][0]["text"].as_str()),
+        id:  unwrap_to_string(playlist["playlistId"].as_str()),
+        author: name.to_string(),
+        ucid: String::from(""),
+        video_count: unwrap_to_i64( playlist["videoCountShortText"]["simpleText"].as_i64()),
+        thumbnail: unwrap_to_string(playlist["thumbnail"]["thumbnails"][0]["url"].as_str()),
+        author_verified: is_author_verified(&playlist["ownerBadges"][0]),
+        play_endpoint: EndpointWatch{
+            url: unwrap_to_string(playlist["navigationEndpoint"]["commandMetadata"]["webCommandMetadata"]["url"].as_str()),
+            video_id: unwrap_to_string(playlist["navigationEndpoint"]["watchEndpoint"]["videoId"].as_str()),
+            playlist_id: unwrap_to_string(playlist["navigationEndpoint"]["watchEndpoint"]["playlistId"].as_str()),
+            params: unwrap_to_string(playlist["navigationEndpoint"]["watchEndpoint"]["params"].as_str()),
+        },
+        browse_endpoint: EndpointBrowse { 
+            url: unwrap_to_string(playlist["viewPlaylistText"]["runs"][0]["navigationEndpoint"]["commandMetadata"]["webCommandMetadata"]["url"].as_str()), 
+            browse_id:unwrap_to_string(playlist["viewPlaylistText"]["runs"][0]["navigationEndpoint"]["browseEndpoint"]["browseId"].as_str()), 
+            params: String::from(""),
+        },
     }
-    return tab;
+
 }
-fn grid_playlist_renderer(tab: &mut ChannelTab, value: &Value, name: &str){
-    for i in 0..value["items"].as_array().unwrap().len()-1{
-        let playlist = &value["items"][i]["gridPlaylistRenderer"];
-        tab.content.push(SearchPlaylist(
-            SearchPlaylist{
-                title: unwrap_to_string(playlist["title"]["runs"][0]["text"].as_str()),
-                id:  unwrap_to_string(playlist["playlistId"].as_str()),
-                author: name.to_string(),
-                ucid: String::from(""),
-                video_count: unwrap_to_i64(playlist["videoCountShortText"]["simpleText"].as_i64()),
-                thumbnail: unwrap_to_string(playlist["thumbnail"]["thumbnails"][0]["url"].as_str()),
-                author_verified: is_author_verified(&playlist["ownerBadges"][0]),
-                play_endpoint: EndpointWatch{
-                    url: unwrap_to_string(playlist["navigationEndpoint"]["commandMetadata"]["webCommandMetadata"]["url"].as_str()),
-                    video_id: unwrap_to_string(playlist["navigationEndpoint"]["watchEndpoint"]["videoId"].as_str()),
-                    playlist_id: unwrap_to_string(playlist["navigationEndpoint"]["watchEndpoint"]["playlistId"].as_str()),
-                    params: unwrap_to_string(playlist["navigationEndpoint"]["watchEndpoint"]["params"].as_str()),
-                },
-                browse_endpoint: EndpointBrowse { 
-                    url: unwrap_to_string(playlist["viewPlaylistText"]["runs"][0]["navigationEndpoint"]["commandMetadata"]["webCommandMetadata"]["url"].as_str()), 
-                    browse_id:unwrap_to_string(playlist["viewPlaylistText"]["runs"][0]["navigationEndpoint"]["browseEndpoint"]["browseId"].as_str()), 
-                    params: String::from(""),
-                },
-            }
-        ))
-    }
-}
-fn extract_videos_tab(json: &Value, channel_name:&str) -> ChannelTab{
-    let mut tab = ChannelTab{ 
-        title: unwrap_to_string(json["tabs"][1]["tabRenderer"]["title"].as_str()), 
-        selected: true, 
-        content: Vec::with_capacity(29), // Youtube provides always 30 items, -1 due to the continuation token. 
-        continuation: unwrap_to_string(json["tabs"][1]["tabRenderer"]["content"]["sectionListRenderer"]["contents"][0]["itemSectionRenderer"]["contents"][0]["gridRenderer"]["items"][30]["continuationItemRenderer"]["continuationEndpoint"]["continuationCommand"]["token"].as_str())
-    };
-    let items = &json["tabs"][1]["tabRenderer"]["content"]["sectionListRenderer"]["contents"][0]["itemSectionRenderer"]["contents"][0]["gridRenderer"]["items"];
-    for item in 0..items.as_array().unwrap().len()-1{
-        tab.content.push(Video( ChannelVideo{
-            title:  unwrap_to_string(items[item]["gridVideoRenderer"]["title"]["runs"][0]["text"].as_str()), 
-            id: unwrap_to_string(items[item]["gridVideoRenderer"]["videoId"].as_str()), 
-            published_text:  unwrap_to_string(items[item]["gridVideoRenderer"]["publishedTimeText"]["simpleText"].as_str()), 
+fn grid_video_renderer(video: &Value, channel_name:&str) -> ChannelVideo{
+        ChannelVideo{
+            title:  unwrap_to_string(video["title"]["runs"][0]["text"].as_str()), 
+            id: unwrap_to_string(video["videoId"].as_str()), 
+            published_text:  unwrap_to_string(video["publishedTimeText"]["simpleText"].as_str()), 
             author: channel_name.to_string(), 
-            author_verified: is_author_verified(&items[item]["gridVideoRenderer"]["ownerBadges"][0]), 
-            thumbnail: unwrap_to_string(items[item]["gridVideoRenderer"]["thumbnail"]["thumbnails"][0]["url"].as_str()),
-            view_count_text:  unwrap_to_string(items[item]["gridVideoRenderer"]["viewCountText"]["simpleText"].as_str()), 
-            length_text:  unwrap_to_string(items[item]["gridVideoRenderer"]["thumbnailOverlays"][0]["thumbnailOverlayTimeStatusRenderer"]["text"]["simpleText"].as_str()),
+            author_verified: is_author_verified(&video["ownerBadges"][0]), 
+            thumbnail: unwrap_to_string(video["thumbnail"]["thumbnails"][0]["url"].as_str()),
+            view_count_text:  unwrap_to_string(video["viewCountText"]["simpleText"].as_str()), 
+            length_text:  unwrap_to_string(video["thumbnailOverlays"][0]["thumbnailOverlayTimeStatusRenderer"]["text"]["simpleText"].as_str()),
             channel_thumbnail: String::from(""), 
             endpoint: EndpointWatch{
-                url: unwrap_to_string(items[item]["gridVideoRenderer"]["navigationEndpoint"]["commandMetadata"]["webCommandMetadata"]["url"].as_str()),
-                video_id: unwrap_to_string(items[item]["gridVideoRenderer"]["videoId"].as_str()),
+                url: unwrap_to_string(video["navigationEndpoint"]["commandMetadata"]["webCommandMetadata"]["url"].as_str()),
+                video_id: unwrap_to_string(video["videoId"].as_str()),
                 playlist_id: String::from(""),
                 params: String::from(""),
             },
-        }));
-    }
-    return tab;
+        }
 }
 /*
 endregion channel_extraction
@@ -317,4 +312,13 @@ fn playlist_renderer(playlist_renderer:&Value) -> SearchPlaylist{
             params: String::from(""),
         },
     }
+}
+/*
+endregion search_extraction
+*/
+/*
+region helper functions
+*/
+fn extract_continuation_token(continuation_item_render: &Value) -> String{
+    return unwrap_to_string(continuation_item_render["continuationEndpoint"]["continuationCommand"]["token"].as_str());
 }
