@@ -1,5 +1,5 @@
 use serde_json::Value;
-use crate::{types::{endpoints::{EndpointBrowse, EndpointWatch}, query_results::{VideoQuery, SearchQuery,SearchResult}, video::{Video,SearchVideo,ChannelVideo,VideoPlayer, Format}, channel::{Channel,ChannelTab, SearchChannel,CommunityPost,TabTypes::*,TabTypes}, playlist::SearchPlaylist}, utils::{is_author_verified, unwrap_to_string, unwrap_to_i64, is_auto_generated}};
+use crate::{types::{endpoints::{EndpointBrowse, EndpointWatch}, query_results::{VideoQuery, SearchQuery,SearchResult}, video::{Video,SearchVideo,ChannelVideo,VideoPlayer, Format, PlaylistVideo}, channel::{Channel,ChannelTab, SearchChannel,CommunityPost,TabTypes::*,TabTypes, Author}, playlist::{SearchPlaylist, Playlist, ChannelPlaylist}}, utils::{is_author_verified, unwrap_to_string, unwrap_to_i64, is_auto_generated}};
 /*
 region video_extraction
 */
@@ -7,7 +7,7 @@ pub fn video_from_next_and_player(player_video_details: &Value, next_video_detai
     Video { 
         title: unwrap_to_string(player_video_details["title"].as_str()), 
         id: unwrap_to_string(player_video_details["videoId"].as_str()), 
-        author: unwrap_to_string(player_video_details["author"].as_str()), 
+        author: extract_author(&next_video_details[0]["videoSecondaryInfoRenderer"]["owner"]["videoOwnerRenderer"]["title"]["runs"],Some(&next_video_details[0]["videoSecondaryInfoRenderer"]["owner"]["videoOwnerRenderer"]["badges"])), 
         ucid: unwrap_to_string(player_video_details["channelId"].as_str()), 
         published: unwrap_to_string(next_video_details[0]["videoPrimaryInfoRenderer"]["dateText"]["simpleText"].as_str()), 
         views:unwrap_to_string(next_video_details[0]["videoPrimaryInfoRenderer"]["viewCount"]["videoViewCountRenderer"]["viewCount"]["simpleText"].as_str()), 
@@ -15,7 +15,6 @@ pub fn video_from_next_and_player(player_video_details: &Value, next_video_detai
         length_seconds: unwrap_to_i64( player_video_details["lengthSeconds"].as_i64()), 
         live_now: player_video_details["isLiveContent"].as_bool().unwrap(), 
         premiere_timestamp: "".to_string(), 
-        author_verified: is_author_verified(&next_video_details[1]["videoSecondaryInfoRenderer"]["owner"]["videoOwnerRenderer"]["badges"][0]), 
         video_player,
         thumbnail: unwrap_to_string(player_video_details["thumbnail"]["thumbnails"][0]["url"].as_str()),
         channel_thumbnail: unwrap_to_string(next_video_details[1]["videoSecondaryInfoRenderer"]["owner"]["videoOwnerRenderer"]["thumbnail"]["thumbnails"][0]["url"].as_str())
@@ -73,8 +72,7 @@ fn compact_video_renderer(video: &Value)-> SearchVideo{
         title: unwrap_to_string(video["title"]["simpleText"].as_str()), 
         id: unwrap_to_string(video["videoId"].as_str()), 
         channel_name: unwrap_to_string(video["longBylineText"]["runs"][0]["text"].as_str()), 
-        author: unwrap_to_string(video["longBylineText"]["runs"][0]["navigationEndpoint"]["browseEndpoint"]["canonicalBaseUrl"].as_str()), 
-        author_verified: is_author_verified(&video["ownerBadges"][0]), 
+        author: extract_author(&video["longBylineText"]["runs"], Some(&video["ownerBadges"])), 
         channel_thumbnail: unwrap_to_string(video["channelThumbnail"]["thumbnails"][0]["url"].as_str()), 
         view_count_text: unwrap_to_string(video["viewCountText"]["simpleText"].as_str()), 
         length_text: unwrap_to_string(video["lengthText"]["simpleText"].as_str()), 
@@ -173,15 +171,14 @@ fn backstage_post_thread_renderer(item: &Value, name: &str) -> CommunityPost {
         }
 }
 
-fn grid_playlist_renderer(playlist: &Value, name: &str) -> SearchPlaylist{
-    SearchPlaylist{
+fn grid_playlist_renderer(playlist: &Value, name: &str) -> ChannelPlaylist{
+    ChannelPlaylist{
         title: unwrap_to_string(playlist["title"]["runs"][0]["text"].as_str()),
         id:  unwrap_to_string(playlist["playlistId"].as_str()),
-        author: name.to_string(),
+        author_name: name.to_string(),
         ucid: String::from(""),
         video_count: unwrap_to_string( playlist["videoCountShortText"]["simpleText"].as_str()),
         thumbnail: unwrap_to_string(playlist["thumbnail"]["thumbnails"][0]["url"].as_str()),
-        author_verified: is_author_verified(&playlist["ownerBadges"][0]),
         play_endpoint: extract_watch_endpoint(&playlist["navigationEndpoint"]),
         browse_endpoint:extract_browse_endpoint(&playlist["viewPlaylistText"]["runs"][0]["navigationEndpoint"])
     }
@@ -192,8 +189,7 @@ fn grid_video_renderer(video: &Value, channel_name:&str) -> ChannelVideo{
             title:  unwrap_to_string(video["title"]["runs"][0]["text"].as_str()), 
             id: unwrap_to_string(video["videoId"].as_str()), 
             published_text:  unwrap_to_string(video["publishedTimeText"]["simpleText"].as_str()), 
-            author: channel_name.to_string(), 
-            author_verified: is_author_verified(&video["ownerBadges"][0]), 
+            author_name: channel_name.to_string(), 
             thumbnail: unwrap_to_string(video["thumbnail"]["thumbnails"][0]["url"].as_str()),
             view_count_text:  unwrap_to_string(video["viewCountText"]["simpleText"].as_str()), 
             length_text:  unwrap_to_string(video["thumbnailOverlays"][0]["thumbnailOverlayTimeStatusRenderer"]["text"]["simpleText"].as_str()),
@@ -237,14 +233,13 @@ pub fn extract_search_results(json: &Value, continuation: bool)-> SearchQuery{
 
 fn channel_renderer(channel_renderer:&Value) -> SearchChannel{
    return SearchChannel{
-    author: unwrap_to_string(channel_renderer["title"]["simpleText"].as_str()),
+    author: extract_author(&channel_renderer["shortBylineText"]["runs"], Some(&channel_renderer["ownerBadges"])),
     ucid: unwrap_to_string(channel_renderer["channelId"].as_str()),
     author_thumbnail: unwrap_to_string(channel_renderer["channelId"].as_str()),
     subscriber_count: unwrap_to_string(channel_renderer["subscriberCountText"]["simpleText"].as_str()),
     video_count:  channel_renderer["videoCountText"]["runs"][0]["text"].to_string()+ " videos",
     description_html: unwrap_to_string(channel_renderer["descriptionSnippet"]["runs"][0]["text"].as_str()),
     auto_generated: is_auto_generated(unwrap_to_string(channel_renderer["title"]["simpleText"].as_str())),
-    author_verified: is_author_verified(&channel_renderer["ownerBadges"][0]),
     endpoint:extract_browse_endpoint(&channel_renderer["navigationEndpoint"]),
 }
 }
@@ -254,8 +249,7 @@ fn video_renderer(video_renderer:&Value) -> SearchVideo{
         title: unwrap_to_string(video_renderer["title"]["runs"][0]["text"].as_str()),  
         id: unwrap_to_string(video_renderer["videoId"].as_str()), 
         channel_name: unwrap_to_string(video_renderer["longBylineText"]["runs"][0]["text"].as_str()), 
-        author: unwrap_to_string(video_renderer["longBylineText"]["runs"][0]["navigationEndpoint"]["browseEndpoint"]["canonicalBaseUrl"].as_str()), 
-        author_verified: is_author_verified(&video_renderer["ownerBadges"][0]), 
+        author: extract_author(&video_renderer["longBylineText"]["runs"][0],Some(&video_renderer["ownerBadges"])), 
         channel_thumbnail: unwrap_to_string(video_renderer["channelThumbnail"]["thumbnails"][0]["url"].as_str()), 
         view_count_text: unwrap_to_string(video_renderer["viewCountText"]["simpleText"].as_str()), 
         length_text: unwrap_to_string(video_renderer["lengthText"]["simpleText"].as_str()), 
@@ -269,17 +263,63 @@ fn playlist_renderer(playlist_renderer:&Value) -> SearchPlaylist{
     return SearchPlaylist{
         title: unwrap_to_string(playlist_renderer["title"]["simpleText"].as_str()),
         id:  unwrap_to_string(playlist_renderer["playlistId"].as_str()),
-        author: unwrap_to_string(playlist_renderer["shortBylineText"]["runs"][0]["text"].as_str()),
+        author: extract_author(&playlist_renderer["shortBylineText"]["runs"], Some(&playlist_renderer["ownerBadges"])),
         ucid: unwrap_to_string(playlist_renderer["shortBylineText"]["runs"][0]["navigationEndpoint"]["browseEndpoint"]["browseId"].as_str()),
         video_count: unwrap_to_string(playlist_renderer["videoCountText"]["runs"][0]["text"].as_str()),
         thumbnail: unwrap_to_string(playlist_renderer["playlistId"].as_str()),
-        author_verified: is_author_verified(&playlist_renderer["ownerBadges"][0]),
         play_endpoint: extract_watch_endpoint(&playlist_renderer["navigationEndpoint"]),
         browse_endpoint: extract_browse_endpoint(&playlist_renderer["navigationEndpoint"]),
     }
 }
 /*
 endregion search_extraction
+*/
+
+/*
+region playlist_extraction
+*/
+pub fn extract_playlist(json: &Value) -> Playlist{
+    let mut videos:Vec<PlaylistVideo> = Vec::new();
+    let items;
+    let mut continuation: String = String::from("");
+    let author =extract_author(&json["sidebar"]["playlistSidebarRenderer"]["items"][1]["playlistSidebarSecondaryInfoRenderer"]["videoOwner"]["videoOwnerRenderer"]["title"]["runs"][0],None);
+    let title =unwrap_to_string(json["sidebar"]["playlistSidebarRenderer"]["items"][0]["playlistSidebarPrimaryInfoRenderer"]["title"]["runs"][0]["text"].as_str());
+    let id = unwrap_to_string(json["sidebar"]["playlistSidebarRenderer"]["items"][0]["playlistSidebarPrimaryInfoRenderer"]["title"]["runs"][0]["navigationEndpoint"]["watchEndpoint"]["playlistId"].as_str());
+    let video_count = unwrap_to_string(json["sidebar"]["playlistSidebarRenderer"]["items"][0]["playlistSidebarPrimaryInfoRenderer"][0]["stats"]["runs"][0]["text"].as_str())+ " videos";
+    let updated_at =  "Last updated on ".to_string() + &unwrap_to_string(json["sidebar"]["playlistSidebarRenderer"]["items"][0]["playlistSidebarPrimaryInfoRenderer"]["stats"][2]["runs"][1]["text"].as_str());
+    if !json["onResponseReceivedActions"].is_null() {
+        items = &json["onResponseReceivedActions"][0]["appendContinuationItemsAction"]["continuationItems"]
+    }else{
+        items = &json["contents"]["twoColumnBrowseResultsRenderer"]["tabs"][0]["tabRenderer"]["content"]["sectionListRenderer"]["contents"][0]["itemSectionRenderer"]["contents"][0]["playlistVideoListRenderer"]["contents"];
+    }
+    for renderer in items.as_array().unwrap() {
+        // Since the object has only one key, we can just use the last method to get the key
+        match renderer.as_object().unwrap().keys().last().unwrap().as_str(){
+            "playlistVideoRenderer" => videos.push(PlaylistVideo{
+                title: unwrap_to_string(renderer["playlistVideoRenderer"]["title"]["runs"][0]["text"].as_str()),
+                id: unwrap_to_string(renderer["playlistVideoRenderer"]["videoId"].as_str()),
+                author: extract_author(&renderer["playlistVideoRenderer"]["shortBylineText"]["runs"],None),
+                thumbnail: unwrap_to_string(renderer["playlistVideoRenderer"]["thumbnail"]["thumbnails"][0]["url"].as_str()),
+                length_text: unwrap_to_string(renderer["playlistVideoRenderer"]["lengthText"]["simpleText"].as_str()),
+                index: unwrap_to_i64(renderer["playlistVideoRenderer"]["index"]["simpleText"].as_i64()),
+                endpoint: extract_watch_endpoint(&renderer["navigationEndpoint"]),
+            }),
+            "continuationItemRenderer" => continuation = extract_continuation_token(&renderer["continuationItemRenderer"]),
+            _ => break
+        }
+    }
+    Playlist { 
+        title, 
+        id, 
+        author, 
+        video_count, 
+        updated_at, 
+        videos,
+        continuation
+     }
+}
+/*
+endregion playlist_extraction
 */
 /*
 region helper functions
@@ -300,5 +340,19 @@ fn extract_watch_endpoint(navigation_endpoint: &Value) -> EndpointWatch{
         video_id: unwrap_to_string(navigation_endpoint["navigationEndpoint"]["watchEndpoint"]["videoId"].as_str()),
         playlist_id: unwrap_to_string(navigation_endpoint["navigationEndpoint"]["watchEndpoint"]["playlistId"].as_str()),
         params: unwrap_to_string(navigation_endpoint["navigationEndpoint"]["watchEndpoint"]["params"].as_str()),
+    }
+}
+// Runs means theres is a text field and an navigationEndpoint field 
+// Badges can be optinally supplied, they are used to determine is the author is verified
+fn extract_author(runs: &Value, bages: Option<&Value>) -> Author {
+    let mut verified: bool = false;
+    if bages.is_some() {
+        verified = is_author_verified(&bages.unwrap()[0]);
+    }
+    
+    Author{
+        name: unwrap_to_string(runs[0]["text"].as_str()),
+        verified,
+        browse_endpoint: extract_browse_endpoint(&runs[0]["navigationEndpoint"]),
     }
 }
