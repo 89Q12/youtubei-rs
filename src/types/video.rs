@@ -13,6 +13,11 @@ pub struct Video{
    pub video_player: VideoPlayer,
    pub channel_thumbnail: String,
    pub thumbnail: String,
+   pub whitelisted_regions: Vec<String>,
+   pub likes: i64,
+   pub gerne: String,
+   pub is_upcoming: bool,
+   pub is_family_safe: bool,
 }
 
 
