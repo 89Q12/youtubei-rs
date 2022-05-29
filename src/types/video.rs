@@ -71,6 +71,8 @@ pub struct Comment{
    pub comment_id: String,
    pub text: String,
    pub author: Author,
+   pub is_author_channel_owner: bool,
+   pub author_thumbnail: String,
    pub replies: i64,
    pub reply_continuation: String,
    pub published_time_text: String,
