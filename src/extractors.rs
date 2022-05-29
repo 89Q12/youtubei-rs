@@ -44,7 +44,7 @@ pub fn extract_video_player_formats(json: &Value) -> VideoPlayer {
         video_player.formats.push(Format{
             itag: unwrap_to_i64(json["formats"][i]["itag"].as_i64()),
             url: unwrap_to_string(json["formats"][i]["url"].as_str()),
-            mime_type: json["formats"][i]["mimeType"].to_string(),
+            mime_type: unwrap_to_string(json["formats"][i]["mimeType"].as_str()),
             bitrate: unwrap_to_i64(json["formats"][i]["bitrate"].as_i64()),
             quality:unwrap_to_string( json["formats"][i]["quality"].as_str()),
             fps: unwrap_to_i64(json["formats"][i]["fps"].as_i64()),
@@ -56,7 +56,7 @@ pub fn extract_video_player_formats(json: &Value) -> VideoPlayer {
         video_player.apdaptiveformts.push(Format{
             itag: unwrap_to_i64(json["adaptiveFormats"][i]["itag"].as_i64()),
             url: unwrap_to_string(json["adaptiveFormats"][i]["url"].as_str()),
-            mime_type: json["adaptiveFormats"][i]["mimeType"].to_string(),
+            mime_type: unwrap_to_string(json["adaptiveFormats"][i]["mimeType"].as_str()),
             bitrate: unwrap_to_i64(json["adaptiveFormats"][i]["bitrate"].as_i64()),
             quality:unwrap_to_string( json["adaptiveFormats"][i]["quality"].as_str()),
             fps: unwrap_to_i64(json["adaptiveFormats"][i]["fps"].as_i64()),
@@ -252,7 +252,7 @@ fn channel_renderer(channel_renderer:&Value) -> SearchChannel{
     ucid: unwrap_to_string(channel_renderer["channelId"].as_str()),
     author_thumbnail: unwrap_to_string(channel_renderer["channelId"].as_str()),
     subscriber_count: unwrap_to_string(channel_renderer["subscriberCountText"]["simpleText"].as_str()),
-    video_count:  channel_renderer["videoCountText"]["runs"][0]["text"].to_string()+ " videos",
+    video_count:  unwrap_to_string(channel_renderer["videoCountText"]["runs"][0]["text"].as_str())+ " videos",
     description_html: unwrap_to_string(channel_renderer["descriptionSnippet"]["runs"][0]["text"].as_str()),
     auto_generated: is_auto_generated(unwrap_to_string(channel_renderer["title"]["simpleText"].as_str())),
     endpoint:extract_browse_endpoint(&channel_renderer["navigationEndpoint"]),
