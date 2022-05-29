@@ -5,7 +5,7 @@ pub struct SearchPlaylist{
     pub id: String,
     pub author: String,
     pub ucid:String,
-    pub video_count: i64,
+    pub video_count: String,
     pub thumbnail: String,
     pub author_verified: bool,
     pub play_endpoint: EndpointWatch,
