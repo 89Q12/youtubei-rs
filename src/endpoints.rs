@@ -2,7 +2,7 @@ use serde_json::{json, Value};
 use crate::types::client::ClientConfig;
 use crate::utils::merge;
 
-pub async fn browse_continuation(continuation : &str, client_config : &ClientConfig) -> Value{
+pub(crate) async fn browse_continuation(continuation : &str, client_config : &ClientConfig) -> Value{
   
   let data = json!({
     "context"      : make_context(&client_config),
@@ -10,7 +10,7 @@ pub async fn browse_continuation(continuation : &str, client_config : &ClientCon
   });
   return post_json("/youtubei/v1/browse", data, client_config).await;
 }
-pub async fn browse_browseid(browse_id : &str, params:  &str, client_config : &ClientConfig) -> Value{
+pub(crate)  async fn browse_browseid(browse_id : &str, params:  &str, client_config : &ClientConfig) -> Value{
   
   let data = json!({
     "context"      : make_context(&client_config),
@@ -19,18 +19,18 @@ pub async fn browse_browseid(browse_id : &str, params:  &str, client_config : &C
   });
   return post_json("/youtubei/v1/browse", data, client_config).await;
 }
-pub async fn next(continuation : &str, client_config: &ClientConfig) -> Value{
+pub(crate)  async fn next(continuation : &str, client_config: &ClientConfig) -> Value{
   let data = json!({
     "context"      : make_context(&client_config),
     "continuation" : continuation,
   });
   return post_json("/youtubei/v1/next", data, &client_config).await;
 }
-pub async fn next_with_data(mut data: serde_json::Value, client_config: &ClientConfig) -> Value{
+pub(crate)  async fn next_with_data(mut data: serde_json::Value, client_config: &ClientConfig) -> Value{
   merge(&mut data, &json!({"context": make_context(client_config)}));
   return post_json("/youtubei/v1/next", data, &client_config).await;
 }
-pub async fn player(video_id: &str, params:  &str,client_config: &ClientConfig) -> Value{
+pub(crate)  async fn player(video_id: &str, params:  &str,client_config: &ClientConfig) -> Value{
   let data = json!({
     "videoId" : video_id,
     "context" : make_context(client_config),
@@ -39,7 +39,7 @@ pub async fn player(video_id: &str, params:  &str,client_config: &ClientConfig) 
   return post_json("/youtubei/v1/player", data, &client_config).await;
 }
 
-pub async fn resolve_url(url: &str, client_config: &ClientConfig) -> Value{
+pub(crate)  async fn resolve_url(url: &str, client_config: &ClientConfig) -> Value{
   let data = json!({
     "context" : make_context(&client_config),
     "url"     : url,
@@ -47,7 +47,7 @@ pub async fn resolve_url(url: &str, client_config: &ClientConfig) -> Value{
   return post_json("/youtubei/v1/navigation/resolve_url", data, &client_config).await;
 }
 
-pub async fn search(search_query: &str, params:  &str, client_config: &ClientConfig) -> Value{
+pub(crate)  async fn search(search_query: &str, params:  &str, client_config: &ClientConfig) -> Value{
   let data = json!({
     "query"   : search_query,
     "context" : make_context(&client_config),
@@ -55,7 +55,7 @@ pub async fn search(search_query: &str, params:  &str, client_config: &ClientCon
   });
   return post_json("/youtubei/v1/search", data, client_config).await;
 }
-pub async fn search_continuation(continuation : &str, client_config: &ClientConfig) -> Value{
+pub(crate)  async fn search_continuation(continuation : &str, client_config: &ClientConfig) -> Value{
   let data = json!({
     "context"      : make_context(&client_config),
     "continuation" : continuation,
