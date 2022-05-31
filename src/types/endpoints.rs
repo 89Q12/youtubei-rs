@@ -13,7 +13,3 @@ pub struct EndpointBrowse{
     pub browse_id: String,
     pub params: String,
 }
-pub struct EndpointNext{
-    pub url:String,
-    pub continuation: String,
-}
