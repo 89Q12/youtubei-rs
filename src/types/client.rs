@@ -1,7 +1,19 @@
 use serde::{Deserialize, Serialize};
 use reqwest::Client;
 use reqwest::header;
-
+/// Represents the client that is used in requests to the api.
+/// For example the following represent the web client:
+/// Note that gl and hl are added a later point as they depend on other information
+/// ```not_rust
+///
+///  "client": {
+///  "clientName": "WEB",
+///  "clientScreen": "WATCH_FULL_SCREEN",
+///  "clientVersion": "2.20210721.00.00",
+///   "gl": "US", 
+///   "hl": "en"
+/// },
+/// ```
 #[derive(Serialize, Deserialize)]
 pub struct ClientType{
    pub  name: String,
@@ -10,7 +22,7 @@ pub struct ClientType{
    pub  screen: String,
  }
  #[derive(Serialize, Deserialize)]
- pub  enum ClientTypes{
+ pub enum ClientTypes{
     Web,
     WebEmbeddedPlayer,
     WebMobile,
@@ -22,6 +34,12 @@ pub struct ClientType{
 }
 
 impl ClientTypes {
+/// Returns the client type based on the enum value
+/// ```
+///  use youtubei_rs::types::client::ClientTypes;
+///  let client = ClientTypes::Web;
+///  assert_eq!(client.get_client_type().name, "WEB");
+/// ```
  pub fn get_client_type(&self) -> ClientType{
     match self {
         ClientTypes::Web =>  ClientType{
@@ -75,6 +93,9 @@ impl ClientTypes {
     }
  }
 }
+/// Represents the client_config used by the endpoint functions
+/// to determine gl and hl params in the request context. 
+/// Will later be used to choose a appropriate proxy.
 pub struct ClientConfig{
    pub client_type: ClientTypes,
    pub region: String,
@@ -83,7 +104,7 @@ pub struct ClientConfig{
 }
 
 impl ClientConfig {
-    // Constructs a new ClientConfig with the client and all required headers
+    /// Constructs a new ClientConfig with the client and all required headers
     pub fn new(client_type: ClientTypes, region: String, proxy_region: String) -> Self {
         let mut headers = header::HeaderMap::new();
         headers.insert("Content-Type", header::HeaderValue::from_static("application/json; charset=UTF-8"));
