@@ -10,7 +10,6 @@ Using tokio,reqwest, serde and serde_json.
 
 # Roadmap
 - query: load more videos from a playlist
-- documentation
 - propper error handling
 - implementing proxy support
 - removing panics
