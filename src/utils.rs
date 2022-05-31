@@ -25,7 +25,7 @@ pub fn merge(a: &mut Value, b: &Value) {
     }
 }
 /// Utility function to check if a channel is verified
-/// Takes &Value with index "ownerBadges[0]" or "badges"
+/// Takes &Value with index "ownerBadges`\[`0`\]`" or "badges"
 /// returns true if channel is verified else false
 pub fn is_author_verified(json: &Value) -> bool {
     let badge = &json["metadataBadgeRenderer"]["tooltip"];
