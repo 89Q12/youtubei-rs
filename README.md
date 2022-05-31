@@ -40,3 +40,17 @@ The most structs have common fields such as thumbnail and others.
 
 - thumbnail represent the url of the thumbnail
 - views/view_count/view_count are all taken from the innertube data and they are in readable format eg 103K views might be the value of this field where views is always there
+
+# Example
+```
+use youtube_rs::query::get_video;
+#[tokio::main]
+async fn main() {
+    // create default client_config with WEB client
+    let client_config = &default_client_config();
+    //  get video with id gC6dQrScmHE
+    let video_query = get_video(String::from("gC6dQrScmHE"),String::from(""),&client_config).await.unwrap();
+    println!("{}",video_query.video.title); // video title
+}
+
+```
