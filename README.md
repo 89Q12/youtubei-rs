@@ -33,4 +33,10 @@ Using tokio,reqwest, serde and serde_json.
 - load_related_videos: Loads more related videos
 - get_playlist: Loads a playlist
 
-For more in depth infos take a look at [query.rs](https://github.com/11Tuvork28/youtubei-rs/blob/main/src/query.rs)
+For more in depth infos take a look at [query.rs](https://github.com/11Tuvork28/youtubei-rs/blob/main/src/query.rs) and [tests.rs](https://github.com/11Tuvork28/youtubei-rs/blob/master/src/tests.rc)
+
+# General information
+The most structs have common fields such as thumbnail and others.
+
+- thumbnail represent the url of the thumbnail
+- views/view_count/view_count are all taken from the innertube data and they are in readable format eg 103K views might be the value of this field where views is always there
