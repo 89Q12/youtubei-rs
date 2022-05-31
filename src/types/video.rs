@@ -1,5 +1,7 @@
 use serde_json::Value;
 use super::{endpoints::{EndpointWatch, EndpointBrowse}, channel::Author};
+
+/// Represents a video with all the information aviable except for captions und storyboards
 pub struct Video{
    pub title: String,
    pub id: String,
@@ -14,19 +16,20 @@ pub struct Video{
    pub video_player: VideoPlayer,
    pub channel_thumbnail: String,
    pub thumbnail: String,
-   pub whitelisted_regions: Vec<Value>,
+   pub whitelisted_regions: Vec<Value>, // TODO: remove Value and move to correct type
    pub likes: String,
    pub gerne: String,
    pub is_upcoming: bool,
    pub is_family_safe: bool,
 }
 
-
+/// Represents all formats aviable for the current video
 pub struct VideoPlayer{
    pub formats: Vec<Format>,
    pub apdaptiveformts: Vec<Format>,
 }
 
+// Represents a format
 pub struct Format{
    pub itag: i64,
    pub url: String,
@@ -38,7 +41,7 @@ pub struct Format{
    pub audio_quality: String,
 }
 
-
+/// Represents a video found by search query
 pub struct SearchVideo{
     pub title: String,
     pub id: String,
@@ -52,7 +55,7 @@ pub struct SearchVideo{
     pub endpoint: EndpointWatch,
     pub browse_channel: EndpointBrowse,
 }
-
+/// Represents a video shown in a channel
 pub struct ChannelVideo{
     pub title: String, 
     pub id: String, 
@@ -64,6 +67,7 @@ pub struct ChannelVideo{
     pub channel_thumbnail: String, 
     pub endpoint: EndpointWatch
 }
+// Represents a video in a playlist
 pub struct PlaylistVideo{
    pub title: String, 
    pub id: String, 
@@ -73,6 +77,7 @@ pub struct PlaylistVideo{
    pub index: i64,
    pub endpoint: EndpointWatch
 }
+// Represents a comment under a video
 pub struct Comment{
    pub comment_id: String,
    pub text: String,
