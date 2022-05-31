@@ -43,7 +43,7 @@ The most structs have common fields such as thumbnail and others.
 
 # Example
 ```
-use youtube_rs::query::get_video;
+use youtubei_rs::{query::get_video, utils::default_client_config};
 #[tokio::main]
 async fn main() {
     // create default client_config with WEB client
