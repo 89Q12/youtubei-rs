@@ -2,7 +2,7 @@
 name = "youtubei-rs"
 version = "0.1.0"
 edition = "2021"
-license = "AGPL-3.0 license"
+license = "AGPL-3.0-only"
 keywords = ["api", "youtube","innertube", "wrapper"]
 repository = "https://github.com/11tuvork28/youtubei-rs"
 readme = "README.md"
