@@ -1,5 +1,6 @@
 use super::{video::ChannelVideo, playlist::{ChannelPlaylist}, endpoints::EndpointBrowse};
 
+/// Represents a channel info that is returned by the api when quering the channel.
 pub struct Channel{
     pub name: String,
     pub id: String,
@@ -7,6 +8,7 @@ pub struct Channel{
     pub avatar: String,
     pub description: String,
 }
+/// Represents a post in the community section of a channel.
 pub struct CommunityPost {
     pub content_text: String,
     pub content_attachment: String,
@@ -16,6 +18,8 @@ pub struct CommunityPost {
     pub published_time_text: String,
     pub browse_endpoint: EndpointBrowse,
 }
+
+/// Represents a channel that is found in search results.
 pub struct SearchChannel{
     pub author: Author,
     pub ucid: String,
@@ -26,7 +30,7 @@ pub struct SearchChannel{
     pub auto_generated: bool,
     pub endpoint: EndpointBrowse,
  }
- 
+ /// Represents a channel tab e.g. videos.
 pub struct ChannelTab{
     pub title: String,
     pub selected: bool,
@@ -38,17 +42,27 @@ pub struct Author{
     pub verified: bool,
     pub browse_endpoint: EndpointBrowse,
 }
+/// Represents a the type a tab has.
 pub enum TabTypes{
     Videos(ChannelVideo),
     Playlists(ChannelPlaylist),
     Community(CommunityPost)
 }
+// Basically the same but without types associated to the enum values.
 pub enum Tab{
     Videos,
     Playlists,
     Community
 }
 impl Tab {
+    /// Used to determine which tab is active by extractors
+    /// ```
+    ///  use youtubei_rs::types::channel::Tab;
+    ///  let tab = Tab::Videos;
+    ///  assert_eq!(tab.get_name(), "videos");
+    ///  assert_eq!(tab.get_index(), 1);
+    /// 
+    /// ```
     pub fn get_name(&self) -> &str {
         match *self {
             Tab::Videos => "videos",
