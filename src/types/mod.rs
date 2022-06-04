@@ -10,3 +10,5 @@ pub mod endpoints;
 pub mod query_results;
 /// Channel related structs and enums
 pub mod channel;
+/// Errors that can occur
+pub mod error;
