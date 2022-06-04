@@ -42,7 +42,7 @@ The most structs have common fields such as thumbnail and others.
 - views/view_count/view_count are all taken from the innertube data and they are in readable format eg 103K views might be the value of this field where views is always there
 
 # Example
-```
+```rust
 use youtubei_rs::{query::get_video, utils::default_client_config};
 #[tokio::main]
 async fn main() {
