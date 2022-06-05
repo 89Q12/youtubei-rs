@@ -10,6 +10,7 @@ use crate::types::error::RequestError;
 use crate::utils::unwrap_to_string;
 
 pub async fn search(query: String,client_config: &ClientConfig) -> Result<SearchQuery, RequestError>{
+    tracing::trace!("Searching with query {}",query);
     let json = endpoints::search(&query, "", &client_config).await;
     match json {
         Ok(result) => Ok(extract_search_results(&result, false)),
@@ -18,6 +19,7 @@ pub async fn search(query: String,client_config: &ClientConfig) -> Result<Search
 }
 
 pub async fn load_search(continuation:String,client_config: &ClientConfig) ->Result<SearchQuery, RequestError>{
+    tracing::trace!("Continuing search with continuation {}",continuation);
     let json = endpoints::search_continuation(&continuation, &client_config).await;
     match json {
         Ok(result) => Ok(extract_search_results(&result, true)),
@@ -25,6 +27,7 @@ pub async fn load_search(continuation:String,client_config: &ClientConfig) ->Res
     }
 }
 pub async fn load_related_videos(continuation:String,client_config: &ClientConfig) -> Result<Vec<SearchVideo>, RequestError>{
+    tracing::trace!("Loading releated videos with continuation {}",continuation);
     let json = next(&continuation, &client_config).await;
     match json {
         Ok(result) => Ok(load_related(&result)),
@@ -33,6 +36,7 @@ pub async fn load_related_videos(continuation:String,client_config: &ClientConfi
 }
 
 pub async fn get_comments(continuation:String,client_config: &ClientConfig) ->Result<CommentsQuery,  RequestError>{
+    tracing::trace!("Loading comments with continuation {}",continuation);
     let comments_json = next(&continuation, client_config).await;
     match comments_json {
         Ok(result) => Ok(extract_comments(&result)),
@@ -41,6 +45,7 @@ pub async fn get_comments(continuation:String,client_config: &ClientConfig) ->Re
 }
 
 pub async fn get_video(video_id:String, params: String,client_config: &ClientConfig) ->Result<VideoQuery,  RequestError>{
+    tracing::trace!("Loading video with id {}",video_id);
     let player_json = player(&video_id, &params, &client_config).await;
     /*
     Error handling
@@ -68,6 +73,7 @@ pub async fn get_video(video_id:String, params: String,client_config: &ClientCon
 }
 
 pub async fn get_channel_info(url:String,client_config: &ClientConfig) -> Result<ChannelQuery,  RequestError>{
+    tracing::trace!("Loading channel info for url: {}", url);
     let complete_url = url.to_string()+"/about"; 
     let resolved_url = resolve_url(&complete_url,&client_config ).await;
     let res = match resolved_url {
@@ -87,6 +93,7 @@ pub async fn get_channel_info(url:String,client_config: &ClientConfig) -> Result
     }
 }
 pub async fn get_channel_tab_url(url:String,tab: Tab, client_config: &ClientConfig) -> Result<ChannelTab, RequestError>{
+    tracing::trace!("Loading channel tab: {} for url: {}", tab.get_name(),url);
     let index = tab.get_index();
     let complete_url = url + "/"+ tab.get_name();
     let resolved_url = resolve_url(&complete_url,&client_config).await;
@@ -105,6 +112,7 @@ pub async fn get_channel_tab_url(url:String,tab: Tab, client_config: &ClientConf
     }
 }
 pub async fn get_channel_tab_continuation(continuation:String,tab: Tab, client_config: &ClientConfig) -> Result<ChannelTab, RequestError>{
+    tracing::trace!("Loading channel tab: {}, with continuation: {}", tab.get_name(),continuation);
     let index = tab.get_index();
     let channel_json = browse_continuation(&continuation,&client_config).await;
     match channel_json {
@@ -113,6 +121,7 @@ pub async fn get_channel_tab_continuation(continuation:String,tab: Tab, client_c
     }
 }
 pub async fn get_playlist(playlist_id: String,client_config: &ClientConfig)-> Result<Playlist, RequestError>{
+    tracing::trace!("Loading playlist with id: {}",playlist_id);
     let complete_url = "https://www.youtube.com/playlist?list=".to_owned()+ &playlist_id;
     let resolved_url = resolve_url(&complete_url,&client_config).await;
     let res = match resolved_url {
