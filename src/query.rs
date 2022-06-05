@@ -74,9 +74,9 @@ pub async fn get_video(video_id:String, params: String,client_config: &ClientCon
     }))
 }
 
-pub async fn get_channel_info(url:String,client_config: &ClientConfig) -> Result<ChannelQuery,  RequestError>{
-    tracing::event!(target: "youtubei_rs",Level::DEBUG,"Loading channel info for url: {}", url);
-    let complete_url = url.to_string()+"/about"; 
+pub async fn get_channel_info(channel_id:String,client_config: &ClientConfig) -> Result<ChannelQuery,  RequestError>{
+    tracing::event!(target: "youtubei_rs",Level::DEBUG,"Loading channel info for channel: {}", channel_id);
+    let complete_url = "https://www.youtube.com/".to_owned() + &channel_id +"/about"; 
     let resolved_url = resolve_url(&complete_url,&client_config ).await;
     let res = match resolved_url {
         Ok(result) => result,
@@ -94,10 +94,10 @@ pub async fn get_channel_info(url:String,client_config: &ClientConfig) -> Result
         Err(err) => return Err(err),
     }
 }
-pub async fn get_channel_tab_url(url:String,tab: Tab, client_config: &ClientConfig) -> Result<ChannelTab, RequestError>{
-    tracing::event!(target: "youtubei_rs",Level::DEBUG,"Loading channel tab: {} for url: {}", tab.get_name(),url);
+pub async fn get_channel_tab_url(channel_id:String,tab: Tab, client_config: &ClientConfig) -> Result<ChannelTab, RequestError>{
+    tracing::event!(target: "youtubei_rs",Level::DEBUG,"Loading channel tab: {} for channel: {}", tab.get_name(),channel_id);
     let index = tab.get_index();
-    let complete_url = url + "/"+ tab.get_name();
+    let complete_url = "https://www.youtube.com/".to_owned() + &channel_id +"/about"; 
     let resolved_url = resolve_url(&complete_url,&client_config).await;
     let res = match resolved_url {
         Ok(result) => result,
