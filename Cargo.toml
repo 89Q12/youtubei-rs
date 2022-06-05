@@ -21,3 +21,4 @@ serde_json = "1.0.81"
 serde = { version = "1.0", features = ["derive"] }
 reqwest = { version = "0.11", features = ["json","gzip"] }
 tokio = { version = "1", features = ["full"] }
+tracing = "0.1"
