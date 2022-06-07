@@ -16,7 +16,7 @@ mod tests{
     use serde_json::json;
 
     use crate::{query::{get_comments, load_related_videos, get_playlist,get_video},utils::default_client_config, types::{video::VideoRenderer, query_results::{NextResult, BrowseResult, PlayerResult, SearchResult}}, endpoints};
-    use crate::{extractors, types::{channel::*, video::{VideoPrimaryInfoRenderer, VideoSecondaryInfoRenderer, CompactVideoRenderer}}};
+    use crate::{types::{channel::*, video::{VideoPrimaryInfoRenderer, VideoSecondaryInfoRenderer, CompactVideoRenderer}}};
 
 
 #[tokio::test]
