@@ -1,5 +1,5 @@
 use serde_json::Value;
-use crate::{types::{endpoints::{EndpointBrowse, EndpointWatch}, query_results::{VideoQuery, SearchQuery,SearchResult, CommentsQuery}, video::{Video,SearchVideo,ChannelVideo,VideoPlayer, Format, PlaylistVideo, Comment}, channel::{Channel,ChannelTab, SearchChannel,CommunityPost,TabTypes::*,TabTypes, Author}, playlist::{SearchPlaylist, Playlist, ChannelPlaylist}}, utils::{is_author_verified, unwrap_to_string, unwrap_to_i64, is_auto_generated}};
+use crate::{types::{endpoints::{EndpointBrowse, EndpointWatch}, query_results::{VideoQuery, SearchQuery,SearchResultEnum, CommentsQuery}, video::{Video,SearchVideo,ChannelVideo,VideoPlayer, Format, PlaylistVideo, Comment}, channel::{Channel,ChannelTab, SearchChannel,CommunityPost,TabTypes::*,TabTypes, Author}, playlist::{SearchPlaylist, Playlist, ChannelPlaylist}}, utils::{is_author_verified, unwrap_to_string, unwrap_to_i64, is_auto_generated}};
 /*
 region video_extraction
 */
@@ -233,11 +233,11 @@ pub fn extract_search_results(json: &Value, continuation: bool)-> SearchQuery{
     for renderer in content[0]["itemSectionRenderer"]["contents"].as_array().unwrap().iter() {
         for (key, item) in renderer.as_object().unwrap() {
             match key.as_str(){
-                "videoRenderer" => search_query.results.push(SearchResult::VideoRenderer(video_renderer(&item))),
-                "channelRenderer" => search_query.results.push(SearchResult::SearchChannel(channel_renderer(&item))),
-                "playlistRenderer" => search_query.results.push(SearchResult::PlaylistRenderer(playlist_renderer(&item))),
+                "videoRenderer" => search_query.results.push(SearchResultEnum::VideoRenderer(video_renderer(&item))),
+                "channelRenderer" => search_query.results.push(SearchResultEnum::SearchChannel(channel_renderer(&item))),
+                "playlistRenderer" => search_query.results.push(SearchResultEnum::PlaylistRenderer(playlist_renderer(&item))),
                 "shelfRenderer" => for i  in 0..item["content"]["verticalListRenderer"]["items"].as_array().unwrap().len(){
-                    search_query.results.push(SearchResult::VideoRenderer(video_renderer(&item["content"]["verticalListRenderer"]["items"][i]["videoRenderer"])));
+                    search_query.results.push(SearchResultEnum::VideoRenderer(video_renderer(&item["content"]["verticalListRenderer"]["items"][i]["videoRenderer"])));
                 }
                 _ => break
             }
