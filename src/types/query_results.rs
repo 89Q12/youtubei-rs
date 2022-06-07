@@ -64,3 +64,10 @@ pub struct BrowseResult{
 pub struct ResolveResult{
     pub endpoint: BrowseEndpoint
 }
+
+/// Represents a result from a arbitrary search query
+#[derive(Debug, Clone, Deserialize)]
+pub struct SearchResult{
+    pub refinements: Vec<String>,
+    pub contents: TwoColumnWrapper,
+}
