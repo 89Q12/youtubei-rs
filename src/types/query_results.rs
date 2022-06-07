@@ -1,4 +1,6 @@
-use super::{video::SearchVideo, playlist::SearchPlaylist, channel::SearchChannel, video::{Video, Comment}, channel::Channel};
+use serde::Deserialize;
+
+use super::{video::SearchVideo, playlist::SearchPlaylist, channel::{SearchChannel, ChannelMetadataRenderer}, video::{Video, Comment}, channel::Channel, misc::*};
 /// Enum that represents search results.
 pub enum SearchResult {
     VideoRenderer(SearchVideo),
@@ -27,3 +29,13 @@ pub struct VideoQuery{
 pub struct ChannelQuery{
     pub channel: Channel,
 }
+
+
+/// Represents a result from a arbitrary next query
+#[derive(Debug, Clone, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct NextResult{
+   pub contents: TwoColumnWrapper,
+   pub player_overlays:  PlayerOverlayRendererWrapper,
+}
+
