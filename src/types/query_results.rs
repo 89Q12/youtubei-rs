@@ -51,3 +51,11 @@ pub struct PlayerResult{
    pub captions: PlayerCaptionsTracklistRenderer
 }
 
+
+/// Represents a result from a arbitrary browse query
+#[derive(Debug, Clone, Deserialize)]
+pub struct BrowseResult{
+    pub contents: TwoColumnWrapper,
+    pub header: C4TabbedHeaderRenderer,
+    pub metadata: ChannelMetadataRenderer
+}
