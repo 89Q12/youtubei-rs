@@ -3,18 +3,18 @@ use tracing::Level;
 use crate::types::client::ClientConfig;
 use crate::types::error::RequestError;
 use crate::utils::merge;
-/// Prepears the data and makes a post request to the browse endpoint
+/// Prepares the data and makes a post request to the browse endpoint
 pub(crate) async fn browse_continuation(continuation : &str, client_config : &ClientConfig) ->  Result<Value, RequestError> {
-    tracing::event!(target:"youtubei_rs",Level::TRACE,"Requsting browse results for continuation: {}",continuation); 
+    tracing::event!(target:"youtubei_rs",Level::TRACE,"Requesting browse results for continuation: {}",continuation); 
   let data = json!({
     "context"      : make_context(&client_config),
     "continuation" : continuation,
   });
   return post_json("/youtubei/v1/browse", data, client_config).await;
 }
-/// Prepears the data and makes a post request to the browse endpoint
-pub(crate)  async fn browse_browseid(browse_id : &str, params:  &str, client_config : &ClientConfig) ->  Result<Value, RequestError> {
-    tracing::event!(target:"youtubei_rs",Level::TRACE,"Requsting browse results for browseId: {}",browse_id); 
+/// Prepares the data and makes a post request to the browse endpoint
+pub(crate) async fn browse_browseid(browse_id : &str, params:  &str, client_config : &ClientConfig) ->  Result<Value, RequestError> {
+    tracing::event!(target:"youtubei_rs",Level::TRACE,"Requesting browse results for browseId: {}",browse_id); 
   let data = json!({
     "context"      : make_context(&client_config),
     "browseId"     : browse_id,
@@ -22,24 +22,24 @@ pub(crate)  async fn browse_browseid(browse_id : &str, params:  &str, client_con
   });
   return post_json("/youtubei/v1/browse", data, client_config).await;
 }
-/// Prepears the data and makes a post request to the next endpoint
-pub(crate)  async fn next(continuation : &str, client_config: &ClientConfig) ->  Result<Value, RequestError> {
-    tracing::event!(target:"youtubei_rs",Level::TRACE,"Requsting next results for continuation: {}",continuation); 
+/// Prepares the data and makes a post request to the next endpoint
+pub(crate) async fn next(continuation : &str, client_config: &ClientConfig) ->  Result<Value, RequestError> {
+    tracing::event!(target:"youtubei_rs",Level::TRACE,"Requesting next results for continuation: {}",continuation); 
   let data = json!({
     "context"      : make_context(&client_config),
     "continuation" : continuation,
   });
   return post_json("/youtubei/v1/next", data, &client_config).await;
 }
-/// Prepears the data and makes a post request to the next endpoint
-pub(crate) async fn next_with_data(mut data: serde_json::Value, client_config: &ClientConfig) ->  Result<Value, RequestError> {
-  tracing::trace!("Requsting next results for with: {}",data); 
+/// Prepares the data and makes a post request to the next endpoint
+pub(crate)async fn next_with_data(mut data: serde_json::Value, client_config: &ClientConfig) ->  Result<Value, RequestError> {
+  tracing::trace!("Requesting next results for with: {}",data); 
   merge(&mut data, &json!({"context": make_context(client_config)}));
   return post_json("/youtubei/v1/next", data, &client_config).await;
 }
-/// Prepears the data and makes a post request to the player endpoint
-pub(crate)  async fn player(video_id: &str, params:  &str,client_config: &ClientConfig) ->  Result<Value, RequestError> {
-    tracing::event!(target:"youtubei_rs",Level::TRACE,"Requsting player results for videoId: {}",video_id); 
+/// Prepares the data and makes a post request to the player endpoint
+pub(crate) async fn player(video_id: &str, params:  &str,client_config: &ClientConfig) ->  Result<Value, RequestError> {
+    tracing::event!(target:"youtubei_rs",Level::TRACE,"Requesting player results for videoId: {}",video_id); 
   let data = json!({
     "videoId" : video_id,
     "context" : make_context(client_config),
@@ -47,7 +47,7 @@ pub(crate)  async fn player(video_id: &str, params:  &str,client_config: &Client
   });
   return post_json("/youtubei/v1/player", data, &client_config).await;
 }
-/// Prepears the data and makes a post request to the resolve_url endpoint,
+/// Prepares the data and makes a post request to the resolve_url endpoint,
 /// which returns another endpoint to query
 pub(crate)  async fn resolve_url(url: &str, client_config: &ClientConfig) ->  Result<Value, RequestError> {
     tracing::event!(target:"youtubei_rs",Level::TRACE,"Resolving url: {}", url); 
@@ -57,9 +57,9 @@ pub(crate)  async fn resolve_url(url: &str, client_config: &ClientConfig) ->  Re
   });
   return post_json("/youtubei/v1/navigation/resolve_url", data, &client_config).await;
 }
-/// Prepears the data and makes a post request to the search endpoint
-pub(crate)  async fn search(search_query: &str, params:  &str, client_config: &ClientConfig) ->  Result<Value, RequestError> {
-    tracing::event!(target:"youtubei_rs",Level::TRACE,"Requsting search results for query: {}",search_query); 
+/// Prepares the data and makes a post request to the search endpoint
+pub(crate) async fn search(search_query: &str, params:  &str, client_config: &ClientConfig) ->  Result<Value, RequestError> {
+    tracing::event!(target:"youtubei_rs",Level::TRACE,"Requesting search results for query: {}",search_query); 
   let data = json!({
     "query"   : search_query,
     "context" : make_context(&client_config),
@@ -67,9 +67,9 @@ pub(crate)  async fn search(search_query: &str, params:  &str, client_config: &C
   });
   return post_json("/youtubei/v1/search", data, client_config).await;
 }
-/// Prepears the data and makes a post request to the search endpoint
-pub(crate)  async fn search_continuation(continuation : &str, client_config: &ClientConfig) ->  Result<Value, RequestError> {
-    tracing::event!(target:"youtubei_rs",Level::TRACE,"Requsting search results for continuation: {}",continuation); 
+/// Prepares the data and makes a post request to the search endpoint
+pub(crate) async fn search_continuation(continuation : &str, client_config: &ClientConfig) ->  Result<Value, RequestError> {
+    tracing::event!(target:"youtubei_rs",Level::TRACE,"Requesting search results for continuation: {}",continuation); 
   let data = json!({
     "context"      : make_context(&client_config),
     "continuation" : continuation,
@@ -98,7 +98,7 @@ async fn post_json(endpoint: &str, data: Value, client_config : &ClientConfig) -
   let url = endpoint.to_owned()+"?key="+ &client_config.client_type.get_client_type().api_key.to_owned() +"&prettyPrint=false";
   let wrapped_response=  client_config.http_client
   .post("https://www.youtube.com".to_owned() +&url)
-  .json(&data )
+  .json(&data)
   .send().await;
   return match wrapped_response{
       Ok(t) => match t.json().await{

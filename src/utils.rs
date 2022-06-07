@@ -36,13 +36,11 @@ pub fn is_author_verified(json: &Value) -> bool {
     }
     return false;
 }
+
 pub fn is_auto_generated(author: String) -> bool{
-    if author.ends_with(" - Topic") ||  ["Popular on YouTube", "Music", "Sports", "Gaming"].contains(&author.as_str()){
-        return true
-    }else{
-        return false
-    }
+    return author.ends_with(" - Topic") || ["Popular on YouTube", "Music", "Sports", "Gaming"].contains(&author.as_str());
 }
+
 pub fn unwrap_to_string(input: Option<&str>) -> String{
     match input{
         Some(s) => s.to_string(),

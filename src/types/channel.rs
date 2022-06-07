@@ -2,7 +2,7 @@ use serde::Deserialize;
 
 use super::{video::ChannelVideo, playlist::{ChannelPlaylist}, endpoints::EndpointBrowse, misc::*};
 
-/// Represents a channel info that is returned by the api when quering the channel.
+/// Represents a channel info that is returned by the api when querying the channel.
 pub struct Channel{
     pub name: String,
     pub id: String,
@@ -44,7 +44,7 @@ pub struct Author{
     pub verified: bool,
     pub browse_endpoint: EndpointBrowse,
 }
-/// Represents a the type a tab has.
+/// Represents the type a tab has.
 pub enum TabTypes{
     Videos(ChannelVideo),
     Playlists(ChannelPlaylist),
