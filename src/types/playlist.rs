@@ -1,4 +1,6 @@
-use super::{endpoints::{EndpointBrowse, EndpointWatch}, video::PlaylistVideo, channel::Author};
+use serde::Deserialize;
+
+use super::{endpoints::{EndpointBrowse, EndpointWatch}, video::PlaylistVideo, channel::Author, misc::*};
 ///  Represents a playlist found in search results.
 pub struct SearchPlaylist{
     pub title:String,
@@ -30,4 +32,28 @@ pub struct ChannelPlaylist{
     pub thumbnail: String,
     pub play_endpoint: EndpointWatch,
     pub browse_endpoint: EndpointBrowse,
+}
+#[derive(Debug, Clone, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct PlaylistRenderer{
+    pub playlist_id: String,
+    pub title: SimpleText,
+    pub thumbnail: Thumbnails,
+    pub video_count: i16,
+    pub view_playlist_text: Runs,
+    pub short_byline_text: Runs,
+}
+
+#[derive(Debug, Clone, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct GridPlaylistRenderer{
+    pub playlist_id: String,
+    pub title: Title,
+    pub thumbnail: Thumbnails,
+    pub video_count_text: Runs,
+    pub video_count_short_text: SimpleText,
+    pub view_playlist_text: Runs,
+    pub published_time_text: SimpleText,
+    pub owner_badges:Option<Vec<BadgeRendererVec>>,
+    pub navigation_endpoint: NavigationEndpoint,
 }
