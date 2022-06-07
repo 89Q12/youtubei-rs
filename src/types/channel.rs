@@ -101,7 +101,7 @@ pub struct TabRenderer{
     pub endpoint: BrowseEndpoint,
     pub title: String,
     pub selected: bool,
-    pub content: Option<SectionListRenderer>
+    pub content: Option<SectionListRendererWrapper>
 }
 
 #[derive(Debug, Clone, Deserialize)]
