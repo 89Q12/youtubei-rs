@@ -866,6 +866,5 @@ async fn test_search_query_different_query(){
   let j: serde_json::Value = endpoints::search("sdjfjds","",client_config).await.unwrap();
   let result: SearchResult = serde_json::from_value(j).unwrap();
   assert_ne!(result.contents.two_column_search_results_renderer.unwrap().primary_contents.section_list_renderer.contents.len(), 0);
-  assert_eq!(result.refinements.is_none(), true);
 }
 }
