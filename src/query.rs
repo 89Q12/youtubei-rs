@@ -29,7 +29,7 @@ pub async fn load_search(continuation:String,client_config: &ClientConfig) ->Res
     }
 }
 pub async fn load_related_videos(continuation:String,client_config: &ClientConfig) -> Result<Vec<SearchVideo>, RequestError>{
-    tracing::event!(target: "youtubei_rs",Level::DEBUG,"Loading releated videos with continuation {}",continuation);
+    tracing::event!(target: "youtubei_rs",Level::DEBUG,"Loading related videos with continuation {}",continuation);
     let json = next(&continuation, &client_config).await;
     match json {
         Ok(result) => Ok(load_related(&result)),

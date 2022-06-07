@@ -297,8 +297,8 @@ pub fn extract_playlist(json: &Value) -> Playlist{
     let mut videos:Vec<PlaylistVideo> = Vec::new();
     let items;
     let mut continuation: String = String::from("");
-    let author =extract_author(&json["sidebar"]["playlistSidebarRenderer"]["items"][1]["playlistSidebarSecondaryInfoRenderer"]["videoOwner"]["videoOwnerRenderer"]["title"]["runs"],None);
-    let title =unwrap_to_string(json["sidebar"]["playlistSidebarRenderer"]["items"][0]["playlistSidebarPrimaryInfoRenderer"]["title"]["runs"][0]["text"].as_str());
+    let author = extract_author(&json["sidebar"]["playlistSidebarRenderer"]["items"][1]["playlistSidebarSecondaryInfoRenderer"]["videoOwner"]["videoOwnerRenderer"]["title"]["runs"],None);
+    let title = unwrap_to_string(json["sidebar"]["playlistSidebarRenderer"]["items"][0]["playlistSidebarPrimaryInfoRenderer"]["title"]["runs"][0]["text"].as_str());
     let id = unwrap_to_string(json["sidebar"]["playlistSidebarRenderer"]["items"][0]["playlistSidebarPrimaryInfoRenderer"]["title"]["runs"][0]["navigationEndpoint"]["watchEndpoint"]["playlistId"].as_str());
     let video_count = unwrap_to_string(json["sidebar"]["playlistSidebarRenderer"]["items"][0]["playlistSidebarPrimaryInfoRenderer"]["stats"][0]["runs"][0]["text"].as_str())+ " videos";
     let updated_at =  "Last updated on ".to_string() + &unwrap_to_string(json["sidebar"]["playlistSidebarRenderer"]["items"][0]["playlistSidebarPrimaryInfoRenderer"]["stats"][2]["runs"][1]["text"].as_str());
@@ -352,7 +352,7 @@ pub fn extract_comments(json: &Value) -> CommentsQuery{
                                              verified: !comment["commentThreadRenderer"]["comment"]["commentRenderer"]["authorCommentBadge"].is_null(), 
                                              browse_endpoint: extract_browse_endpoint(&comment["commentThreadRenderer"]["comment"]["authorEndpoint"])
                                         }, 
-                                        // this filed is always there so we can safely unwrap inline
+                                        // this field is always there so we can safely unwrap inline
                                         is_author_channel_owner: comment["commentThreadRenderer"]["comment"]["commentRenderer"]["authorIsChannelOwner"].as_bool().unwrap(),
                                         author_thumbnail: unwrap_to_string(comment["commentThreadRenderer"]["comment"]["commentRenderer"]["authorThumbnail"]["thumbnails"][0]["url"].as_str()), 
                                         replies: unwrap_to_i64(comment["commentThreadRenderer"]["comment"]["commentRenderer"]["replyCount"].as_i64()), 
@@ -360,7 +360,7 @@ pub fn extract_comments(json: &Value) -> CommentsQuery{
                                         published_time_text: unwrap_to_string(comment["commentThreadRenderer"]["comment"]["commentRenderer"]["publishedTimeText"]["runs"][0]["text"].as_str()),
                                         vote_count: unwrap_to_string(comment["commentThreadRenderer"]["comment"]["commentRenderer"]["voteCount"]["simpleText"].as_str()),
                                     }),
-            "continuationItemRenderer" => continuation= extract_continuation_token(&comment["continuationItemRenderer"]),
+            "continuationItemRenderer" => continuation = extract_continuation_token(&comment["continuationItemRenderer"]),
             _ => break
         }
     }
@@ -393,15 +393,15 @@ fn extract_watch_endpoint(navigation_endpoint: &Value) -> EndpointWatch{
         params: unwrap_to_string(navigation_endpoint["watchEndpoint"]["params"].as_str()),
     }
 }
-// Runs means theres is a text field and an navigationEndpoint field 
-// Badges can be optinally supplied, they are used to determine is the author is verified
-fn extract_author(runs: &Value, bages: Option<&Value>) -> Author {
+// Runs means there is a text field and an navigationEndpoint field 
+// Badges can be optionally supplied, they are used to determine is the author is verified
+fn extract_author(runs: &Value, badges: Option<&Value>) -> Author {
     let mut verified: bool = false;
-    if bages.is_some() {
-        verified = is_author_verified(&bages.unwrap()[0]);
+    if badges.is_some() {
+        verified = is_author_verified(&badges.unwrap()[0]);
     }
     
-    Author{
+    Author {
         name: unwrap_to_string(runs[0]["text"].as_str()),
         verified,
         browse_endpoint: extract_browse_endpoint(&runs[0]["navigationEndpoint"]),
