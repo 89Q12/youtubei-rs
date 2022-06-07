@@ -38,8 +38,8 @@ pub struct ChannelPlaylist{
 pub struct PlaylistRenderer{
     pub playlist_id: String,
     pub title: SimpleText,
-    pub thumbnail: Thumbnails,
-    pub video_count: i16,
+    pub thumbnails: Vec<Thumbnails>,
+    pub video_count: String,
     pub view_playlist_text: Runs,
     pub short_byline_text: Runs,
 }
