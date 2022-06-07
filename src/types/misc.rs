@@ -1,7 +1,7 @@
 use serde::Deserialize;
 use serde_json::Value;
 
-use super::{video::{VideoRenderer, VideoPrimaryInfoRenderer, VideoSecondaryInfoRenderer, CompactVideoRenderer, GridVideoRenderer}, playlist::{GridPlaylistRenderer, PlaylistRenderer}, channel::{BackstagePostThreadRenderer, TabRenderer, ChannelRenderer}};
+use super::{video::{VideoRenderer, VideoPrimaryInfoRenderer, VideoSecondaryInfoRenderer, CompactVideoRenderer, GridVideoRenderer, CommentThreadRenderer}, playlist::{GridPlaylistRenderer, PlaylistRenderer}, channel::{BackstagePostThreadRenderer, TabRenderer, ChannelRenderer}};
 
 #[derive(Debug, Clone, Deserialize)]
 pub struct Thumbnails{
@@ -572,4 +572,20 @@ pub struct C4TabbedHeaderRenderer{
     pub badges: Option<Vec<BadgeRendererVec>>,
     pub subscriber_count_text: AccessibilitySimpleText,
    
+}
+#[derive(Debug, Clone, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct OnResponseReceivedEndpoints{
+    pub reload_continuation_items_command: Option<ReloadContinuationItemsCommand>,
+}
+#[derive(Debug, Clone, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct ReloadContinuationItemsCommand{
+    pub continuation_items: Vec<ContinuationItems>
+}
+#[derive(Debug, Clone, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub enum ContinuationItems{
+    CommentRenderer(CommentRenderer),
+    CommentThreadRenderer(CommentThreadRenderer)
 }
