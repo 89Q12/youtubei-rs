@@ -58,6 +58,7 @@ pub struct AccessibilityData {
 pub struct NavigationEndpoint {
     pub browse_endpoint: Option<BrowseEndpoint>,
     pub watch_endpoint: Option<WatchEndpoint>,
+    pub continuation_endpoint: Option<ContinuationEndpoint>,
 }
 
 #[derive(Debug, Clone, Deserialize)]
@@ -162,7 +163,7 @@ pub struct GetTranscriptEndpoint{
 #[derive(Debug, Clone, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct ContinuationItemRenderer{
-    pub continuation_endpoint:ContinuationEndpoint
+    pub continuation_item_renderer:NavigationEndpoint
 }
 #[derive(Debug, Clone, Deserialize)]
 #[serde(rename_all = "camelCase")]
@@ -277,27 +278,32 @@ pub enum ProjectionType {
 }
 #[derive(Debug, Clone, Deserialize)]
 #[serde(rename_all = "camelCase")]
-pub struct Comment{
-
+pub struct CommentRendererWrapper{
+    pub comment_renderer: CommentRenderer,
 }
 #[derive(Debug, Clone, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct CommentRenderer{
     pub author_text: SimpleText,
     pub author_thumbnail: Thumbnails,
-    pub author_endpoint: BrowseEndpoint,
+    pub author_endpoint: NavigationEndpoint,
     pub content_text: Runs,
     pub published_time_text: Runs,
     pub comment_id: String,
     pub vote_count: AccessibilitySimpleText,
     pub reply_count: i16,
-    pub author_comment_badge: AuthorCommentBadgeRenderer
+    pub author_comment_badge: Option<AuthorCommentBadgeRenderer>
 }
 #[derive(Debug, Clone, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct AuthorCommentBadgeRenderer{
     pub icon: IconType,
     pub icon_tooltip: String,
+}
+#[derive(Debug, Clone, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct CommentRepliesRendererWrapper{
+    pub comment_replies_renderer: CommentRepliesRenderer
 }
 #[derive(Debug, Clone, Deserialize)]
 pub struct CommentRepliesRenderer{
@@ -341,7 +347,10 @@ pub enum  ItemSectionRendererContents{
     VideoPrimaryInfoRenderer(VideoPrimaryInfoRenderer),
     VideoSecondaryInfoRenderer(VideoSecondaryInfoRenderer),
     CompactVideoRenderer(CompactVideoRenderer),
-    CommentsEntryPointHeaderRenderer(Value)
+    CommentsEntryPointHeaderRenderer(Value),
+    CommentRenderer(CommentRenderer),
+    CommentThreadRenderer(CommentThreadRenderer),
+    CommentsHeaderRenderer(Value)
 }
 #[derive(Debug, Clone, Deserialize)]
 #[serde(rename_all = "camelCase")]
@@ -611,11 +620,15 @@ pub struct OnResponseReceivedEndpoints{
 #[derive(Debug, Clone, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct ReloadContinuationItemsCommand{
-    pub continuation_items: Vec<ContinuationItems>
+    pub continuation_items: Vec<ItemSectionRendererContents>
 }
 #[derive(Debug, Clone, Deserialize)]
 #[serde(rename_all = "camelCase")]
-pub enum ContinuationItems{
-    CommentRenderer(CommentRenderer),
-    CommentThreadRenderer(CommentThreadRenderer)
+pub struct OnResponseReceivedActions{
+    pub append_continuation_items_action: AppendContinuationItemsAction
+}
+#[derive(Debug, Clone, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct AppendContinuationItemsAction{
+    pub continuation_items: Vec<ItemSectionRendererContents>,
 }
