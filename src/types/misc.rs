@@ -336,6 +336,7 @@ pub enum  ItemSectionRendererContents{
     VideoPrimaryInfoRenderer(VideoPrimaryInfoRenderer),
     VideoSecondaryInfoRenderer(VideoSecondaryInfoRenderer),
     CompactVideoRenderer(CompactVideoRenderer),
+    CommentsEntryPointHeaderRenderer(Value)
 }
 #[derive(Debug, Clone, Deserialize)]
 #[serde(rename_all = "camelCase")]
@@ -374,6 +375,7 @@ pub struct CommunityPostAttachmentImage{
     pub command: BrowseEndpoint,
 }
 #[derive(Debug, Clone, Deserialize)]
+#[serde(rename_all = "camelCase")]
 pub struct TwoColumnWatchNextResults{
     pub results: ResultsWrapper,
     pub secondary_results: ResultsWrapper
