@@ -35,8 +35,8 @@ pub struct ChannelQuery{
 #[derive(Debug, Clone, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct NextResult{
-   pub contents: TwoColumnWrapper,
-   pub player_overlays:  PlayerOverlayRendererWrapper,
+   pub contents: Option<TwoColumnWrapper>,
+   pub player_overlays:  Option<PlayerOverlayRendererWrapper>,
    pub on_response_received_endpoints: Vec<OnResponseReceivedEndpoints>
 }
 
@@ -55,10 +55,12 @@ pub struct PlayerResult{
 
 /// Represents a result from a arbitrary browse query
 #[derive(Debug, Clone, Deserialize)]
+#[serde(rename_all = "camelCase")]
 pub struct BrowseResult{
-    pub contents: TwoColumnWrapper,
-    pub header: C4TabbedHeaderRendererWrapper,
-    pub metadata: ChannelMetadataRendererWrapper
+    pub contents: Option<TwoColumnWrapper>,
+    pub header: Option<C4TabbedHeaderRendererWrapper>,
+    pub metadata: ChannelMetadataRendererWrapper,
+    pub on_response_received_actions: Option<Vec<OnResponseReceivedActions>>,
 }
 /// Represents a result from a arbitrary resolve_url query
 #[derive(Debug, Clone, Deserialize)]
@@ -69,6 +71,6 @@ pub struct ResolveResult{
 /// Represents a result from a arbitrary search query
 #[derive(Debug, Clone, Deserialize)]
 pub struct SearchResult{
-    pub refinements: Vec<String>,
+    pub refinements: Option<Vec<String>>,
     pub contents: TwoColumnWrapper,
 }

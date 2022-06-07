@@ -155,6 +155,6 @@ pub struct VideoSecondaryInfoRenderer{
 
 #[derive(Debug, Clone, Deserialize)]
 pub struct CommentThreadRenderer{
-    pub comment: CommentRenderer,
-    pub replies: CommentRepliesRenderer
+    pub comment: CommentRendererWrapper,
+    pub replies: Option<CommentRepliesRendererWrapper>
 }

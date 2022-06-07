@@ -162,8 +162,13 @@ pub struct GetTranscriptEndpoint{
 }
 #[derive(Debug, Clone, Deserialize)]
 #[serde(rename_all = "camelCase")]
-pub struct ContinuationItemRenderer{
+pub struct ContinuationItemRendererWrapper{
     pub continuation_item_renderer:NavigationEndpoint
+}
+#[derive(Debug, Clone, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct ContinuationItemRenderer{
+    pub continuation_endpoint:ContinuationEndpoint,
 }
 #[derive(Debug, Clone, Deserialize)]
 #[serde(rename_all = "camelCase")]
@@ -176,13 +181,13 @@ pub struct PlayerMicroformat{
     pub thumbnail: Thumbnails,
     pub title: SimpleText,
     pub description: SimpleText,
-    pub external_channel_:String,
+    pub external_channel_id:String,
     pub is_family_safe: bool,
-    pub view_count: i64,
+    pub view_count: String,
     pub category: String,
     pub publish_date: String,
     pub owner_channel_name: String,
-    pub available_countrie: Vec<String>,
+    pub available_countries: Vec<String>,
     pub live_broadcast_details: Option<LiveBroadcastDetails>,
     pub upload_date: String,
 
@@ -291,8 +296,13 @@ pub struct CommentRenderer{
     pub published_time_text: Runs,
     pub comment_id: String,
     pub vote_count: AccessibilitySimpleText,
-    pub reply_count: i16,
-    pub author_comment_badge: Option<AuthorCommentBadgeRenderer>
+    pub reply_count: Option<i16>,
+    pub author_comment_badge: Option<AuthorCommentBadgeRendererWrapper>
+}
+#[derive(Debug, Clone, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct AuthorCommentBadgeRendererWrapper{
+    pub author_comment_badge_renderer: AuthorCommentBadgeRenderer,
 }
 #[derive(Debug, Clone, Deserialize)]
 #[serde(rename_all = "camelCase")]
@@ -307,7 +317,7 @@ pub struct CommentRepliesRendererWrapper{
 }
 #[derive(Debug, Clone, Deserialize)]
 pub struct CommentRepliesRenderer{
-    pub contents: Vec<ContinuationItemRenderer>
+    pub contents: Vec<ContinuationItemRendererWrapper>
 }
 #[derive(Debug, Clone, Deserialize)]
 #[serde(rename_all = "camelCase")]
@@ -330,7 +340,7 @@ pub struct SectionListRendererWrapper{
 #[derive(Debug, Clone, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct SectionListRenderer{
-    pub contents: Vec<ItemSectionRendererWrapper>
+    pub contents: Vec<ItemSectionRendererContents>
 }
 #[derive(Debug, Clone, Deserialize)]
 #[serde(rename_all = "camelCase")]
@@ -350,7 +360,9 @@ pub enum  ItemSectionRendererContents{
     CommentsEntryPointHeaderRenderer(Value),
     CommentRenderer(CommentRenderer),
     CommentThreadRenderer(CommentThreadRenderer),
-    CommentsHeaderRenderer(Value)
+    CommentsHeaderRenderer(Value),
+    ShelfRenderer(ShelfRenderer),
+    RadioRenderer(Value), // TODO FIND OUT WHAT THAT IS
 }
 #[derive(Debug, Clone, Deserialize)]
 #[serde(rename_all = "camelCase")]
@@ -430,7 +442,7 @@ pub struct TabRendererWrapper{
 #[derive(Debug, Clone, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct TwoColumnSearchResultsRenderer{
-    pub primary_contents: SectionListRenderer,
+    pub primary_contents: SectionListRendererWrapper,
 }
 
 #[derive(Debug, Clone, Deserialize)]
@@ -558,12 +570,13 @@ pub struct PlayerCaptionsTracklistRenderer{
 #[derive(Debug, Clone, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct  PlayerCaptionsTracklist{
-    pub caption_track: Vec<CaptionTrack>,
+    pub caption_tracks: Vec<CaptionTrack>,
     pub audio_tracks: Vec<AudioTrack>,
     pub translation_languages: Vec<TranslationLanguages>,
     pub default_audio_track_index: u16
 }
 #[derive(Debug, Clone, Deserialize)]
+#[serde(rename_all = "camelCase")]
 pub struct CaptionTrack{
     pub base_url: String,
     pub name: SimpleText,
@@ -573,10 +586,12 @@ pub struct CaptionTrack{
     pub is_translatable: bool
 }
 #[derive(Debug, Clone, Deserialize)]
+#[serde(rename_all = "camelCase")]
 pub struct AudioTrack{
     pub caption_track_indices: Vec<u16>
 }
 #[derive(Debug, Clone, Deserialize)]
+#[serde(rename_all = "camelCase")]
 pub struct TranslationLanguages{
     pub language_code: String,
     pub language_name: SimpleText,
