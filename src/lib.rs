@@ -12,10 +12,12 @@ pub(crate) mod extractors;
 pub mod query;
 /// Contains test functions
 mod tests{
-  #[cfg(test)]
+  use std::f32::consts::E;
+
+#[cfg(test)]
     use serde_json::json;
 
-    use crate::{query::{get_comments, load_related_videos, get_playlist,get_video},utils::default_client_config, types::video::VideoRenderer};
+    use crate::{query::{get_comments, load_related_videos, get_playlist,get_video},utils::default_client_config, types::{video::VideoRenderer, query_results::{NextResult, BrowseResult, PlayerResult, SearchResult}}, endpoints};
     use crate::{extractors, types::{channel::*, video::{VideoPrimaryInfoRenderer, VideoSecondaryInfoRenderer, CompactVideoRenderer}}};
 
 
@@ -802,5 +804,70 @@ async fn test_video_renderer(){
   });
   let u: VideoRenderer = serde_json::from_value(j).unwrap();
   assert_eq!(u.title.runs.get(0).unwrap().text, "Dream has Too Much Money")
+}
+#[tokio::test]
+async fn test_next_query(){
+  let client_config = &default_client_config();
+  let j: serde_json::Value = endpoints::next_with_data(json!({
+    "videoId": "td6zO4r2ogI"
+  }),client_config).await.unwrap();
+  let result: NextResult = serde_json::from_value(j).unwrap();
+  assert_ne!(result.contents.unwrap().two_column_watch_next_results.unwrap().results.results.contents.len(),0)
+}
+#[tokio::test]
+async fn test_next_query_continuation(){
+  let client_config = &default_client_config();
+  let j: serde_json::Value = endpoints::next("Eg0SC2dDNmRRclNjbUhFGAYyVSIuIgtnQzZkUXJTY21IRTAAeAKqAhpVZ3d1eFlpV0dWYlV2SVRVdUZSNEFhQUJBZzABQiFlbmdhZ2VtZW50LXBhbmVsLWNvbW1lbnRzLXNlY3Rpb24%3D",client_config).await.unwrap();
+  let result: NextResult = serde_json::from_value(j).unwrap();
+  assert_eq!(result.contents.is_none(),true)
+}
+#[tokio::test]
+async fn test_browse_query_browse_id(){
+  let client_config = &default_client_config();
+  let j: serde_json::Value = endpoints::browse_browseid("UCXuqSBlHAE6Xw-yeJA0Tunw","EgZ2aWRlb3O4AQA%3D",client_config).await.unwrap();
+  let result: BrowseResult = serde_json::from_value(j).unwrap();
+  assert_eq!(result.contents.unwrap().two_column_browse_results_renderer.is_some(),true);
+  assert_eq!(result.metadata.channel_metadata_renderer.title, "Linus Tech Tips");
+}
+#[tokio::test]
+async fn test_browse_query_continuation(){
+  let client_config = &default_client_config();
+  let j: serde_json::Value = endpoints::browse_continuation("4qmFsgJ_EhhVQ1h1cVNCbEhBRTZYdy15ZUpBMFR1bncaNEVnWjJhV1JsYjNNWUF5QUFNQUU0QWVvREZFVm5jMGx5WDBOQmJWcExWQzFpZG1aQlUyZDWaAixicm93c2UtZmVlZFVDWHVxU0JsSEFFNlh3LXllSkEwVHVud3ZpZGVvczEwMg%3D%3D",client_config).await.unwrap();
+  let result: BrowseResult = serde_json::from_value(j).unwrap();
+  assert_eq!(result.contents.is_none(),true);
+  assert_eq!(result.on_response_received_actions.is_some(), true);
+  assert_eq!(result.metadata.channel_metadata_renderer.title, "Linus Tech Tips");
+}
+
+#[tokio::test]
+async fn test_player_query(){
+  let client_config = &default_client_config();
+  let j: serde_json::Value = endpoints::player("nr1JnAmy5BA","",client_config).await.unwrap();
+  let result: PlayerResult = serde_json::from_value(j).unwrap();
+  assert_eq!(result.playability_status.status, "OK");
+}
+#[tokio::test]
+async fn test_search_query(){
+  let client_config = &default_client_config();
+  let j: serde_json::Value = endpoints::search("ltt","",client_config).await.unwrap();
+  let result: SearchResult = serde_json::from_value(j).unwrap();
+  assert_ne!(result.contents.two_column_search_results_renderer.unwrap().primary_contents.section_list_renderer.contents.len(), 0);
+  assert_eq!(result.refinements.is_none(), true);
+}
+#[tokio::test]
+async fn test_search_query_with_refinements(){
+  let client_config = &default_client_config();
+  let j: serde_json::Value = endpoints::search("ltt playlist","",client_config).await.unwrap();
+  let result: SearchResult = serde_json::from_value(j).unwrap();
+  assert_ne!(result.contents.two_column_search_results_renderer.unwrap().primary_contents.section_list_renderer.contents.len(), 0);
+  assert_eq!(result.refinements.is_none(), false);
+}
+#[tokio::test]
+async fn test_search_query_different_query(){
+  let client_config = &default_client_config();
+  let j: serde_json::Value = endpoints::search("sdjfjds","",client_config).await.unwrap();
+  let result: SearchResult = serde_json::from_value(j).unwrap();
+  assert_ne!(result.contents.two_column_search_results_renderer.unwrap().primary_contents.section_list_renderer.contents.len(), 0);
+  assert_eq!(result.refinements.is_none(), true);
 }
 }
