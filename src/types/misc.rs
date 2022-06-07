@@ -363,6 +363,7 @@ pub enum  ItemSectionRendererContents{
     CommentsHeaderRenderer(Value),
     ShelfRenderer(ShelfRenderer),
     RadioRenderer(Value), // TODO FIND OUT WHAT THAT IS
+    CompactRadioRenderer(Value) // TODO FIND OUT WHAT THAT IS
 }
 #[derive(Debug, Clone, Deserialize)]
 #[serde(rename_all = "camelCase")]
