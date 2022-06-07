@@ -2,7 +2,7 @@ use serde::Deserialize;
 
 use super::{video::SearchVideo, playlist::SearchPlaylist, channel::{SearchChannel, ChannelMetadataRenderer}, video::{Video, Comment}, channel::Channel, misc::*};
 /// Enum that represents search results.
-pub enum SearchResult {
+pub enum SearchResultEnum {
     VideoRenderer(SearchVideo),
     PlaylistRenderer(SearchPlaylist),
     SearchChannel(SearchChannel)
@@ -10,7 +10,7 @@ pub enum SearchResult {
 /// Represents a search query.
 pub struct SearchQuery{
     pub continuation: String,
-    pub results: Vec<SearchResult>,
+    pub results: Vec<SearchResultEnum>,
 }
 /// Represents a comment query.
 pub struct CommentsQuery{
