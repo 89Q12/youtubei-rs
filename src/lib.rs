@@ -17,7 +17,7 @@ mod tests{
 
     #[cfg(test)]
     use crate::{query::{get_comments, load_related_videos, get_playlist,get_video},utils::default_client_config};
-    use crate::{extractors, types::{channel::*, video::VideoPrimaryInfoRenderer}};
+    use crate::{extractors, types::{channel::*, video::{VideoPrimaryInfoRenderer, VideoSecondaryInfoRenderer, CompactVideoRenderer}}};
 
 
 #[tokio::test]
@@ -78,6 +78,560 @@ async fn fetch_playlist_legacy() {
   // Assert that the videos vector has a len of 100
   assert_eq!(playlist.videos.len(), 100);
   
+}
+#[tokio::test]
+async fn test_channel_renderer(){
+  let j = json!({
+  "channelId": "UCXuqSBlHAE6Xw-yeJA0Tunw",
+  "title": {
+    "simpleText": "Linus Tech Tips"
+  },
+  "navigationEndpoint": {
+    "clickTrackingParams": "CJoFENowGAAiEwjF08Tq1Jb4AhWOglUKHQsmCTA=",
+    "commandMetadata": {
+      "webCommandMetadata": {
+        "url": "/c/LinusTechTips",
+        "webPageType": "WEB_PAGE_TYPE_CHANNEL",
+        "rootVe": 3611,
+        "apiUrl": "/youtubei/v1/browse"
+      }
+    },
+    "browseEndpoint": {
+      "browseId": "UCXuqSBlHAE6Xw-yeJA0Tunw",
+      "canonicalBaseUrl": "/c/LinusTechTips"
+    }
+  },
+  "thumbnail": {
+    "thumbnails": [
+      {
+        "url": "//yt3.ggpht.com/ytc/AKedOLSZnNA3eg_fDwUgsCxpqMnVWu3UGo-Rln4621ncIQ=s88-c-k-c0x00ffffff-no-rj-mo",
+        "width": 88,
+        "height": 88
+      },
+      {
+        "url": "//yt3.ggpht.com/ytc/AKedOLSZnNA3eg_fDwUgsCxpqMnVWu3UGo-Rln4621ncIQ=s176-c-k-c0x00ffffff-no-rj-mo",
+        "width": 176,
+        "height": 176
+      }
+    ]
+  },
+  "descriptionSnippet": {
+    "runs": [
+      {
+        "text": "Looking for a Tech YouTuber? Linus Tech Tips is a passionate team of \"professionally curious\" experts in consumer technology ..."
+      }
+    ]
+  },
+  "shortBylineText": {
+    "runs": [
+      {
+        "text": "Linus Tech Tips",
+        "navigationEndpoint": {
+          "clickTrackingParams": "CJoFENowGAAiEwjF08Tq1Jb4AhWOglUKHQsmCTA=",
+          "commandMetadata": {
+            "webCommandMetadata": {
+              "url": "/c/LinusTechTips",
+              "webPageType": "WEB_PAGE_TYPE_CHANNEL",
+              "rootVe": 3611,
+              "apiUrl": "/youtubei/v1/browse"
+            }
+          },
+          "browseEndpoint": {
+            "browseId": "UCXuqSBlHAE6Xw-yeJA0Tunw",
+            "canonicalBaseUrl": "/c/LinusTechTips"
+          }
+        }
+      }
+    ]
+  },
+  "videoCountText": {
+    "runs": [
+      {
+        "text": "5,776"
+      },
+      {
+        "text": " videos"
+      }
+    ]
+  },
+  "subscriptionButton": {
+    "subscribed": false
+  },
+  "ownerBadges": [
+    {
+      "metadataBadgeRenderer": {
+        "icon": {
+          "iconType": "CHECK_CIRCLE_THICK"
+        },
+        "style": "BADGE_STYLE_TYPE_VERIFIED",
+        "tooltip": "Verified",
+        "trackingParams": "CJoFENowGAAiEwjF08Tq1Jb4AhWOglUKHQsmCTA=",
+        "accessibilityData": {
+          "label": "Verified"
+        }
+      }
+    }
+  ],
+  "subscriberCountText": {
+    "accessibility": {
+      "accessibilityData": {
+        "label": "14.6 million subscribers"
+      }
+    },
+    "simpleText": "14.6M subscribers"
+  },
+  "subscribeButton": {
+    "buttonRenderer": {
+      "style": "STYLE_DESTRUCTIVE",
+      "size": "SIZE_DEFAULT",
+      "isDisabled": false,
+      "text": {
+        "runs": [
+          {
+            "text": "Subscribe"
+          }
+        ]
+      },
+      "navigationEndpoint": {
+        "clickTrackingParams": "CJsFEPBbIhMIxdPE6tSW-AIVjoJVCh0LJgkw",
+        "commandMetadata": {
+          "webCommandMetadata": {
+            "url": "https://accounts.google.com/ServiceLogin?service=youtube&uilel=3&passive=true&continue=https%3A%2F%2Fwww.youtube.com%2Fsignin%3Faction_handle_signin%3Dtrue%26app%3Ddesktop%26hl%3Den%26next%3D%252Fresults%253Fsearch_query%253Dltt%252Bchannel%26continue_action%3DQUFFLUhqa2gxeFVlVU52ajhOYWZnbG1FTWFBRlliT3NXd3xBQ3Jtc0tuWTc2NUp0ZWUyWlV0d2ZwbkNyTVpyaktZbThnOVhDMTNNVElxSWs1d0NkM2tDQU5DNV9pQTZ1S3Vxclc3TlpkUFdwYjJYZVJUazNTb2ZMSV8tTUVqSzc5cXhIT3ZiMEhTMlRMdDJNNTQ5a3JSUHV2eWFYcGFWRHlkbWYyMGNCV19GOXY2UTNJMWZIRWVQYUtsclFQaHJKTDd3SHlOTExCVm9VN0pFWWdyeVM3SHkzQUR1N0FxakFpbl8xYlI5ZG01UmRHczRHWF9Ub19KZzlVcG1aVFUyaGhKcENB&hl=en",
+            "webPageType": "WEB_PAGE_TYPE_UNKNOWN",
+            "rootVe": 83769
+          }
+        },
+        "signInEndpoint": {
+          "nextEndpoint": {
+            "clickTrackingParams": "CJsFEPBbIhMIxdPE6tSW-AIVjoJVCh0LJgkw",
+            "commandMetadata": {
+              "webCommandMetadata": {
+                "url": "/results?search_query=ltt+channel",
+                "webPageType": "WEB_PAGE_TYPE_SEARCH",
+                "rootVe": 4724
+              }
+            },
+            "searchEndpoint": {
+              "query": "ltt channel"
+            }
+          },
+          "continueAction": "QUFFLUhqa2gxeFVlVU52ajhOYWZnbG1FTWFBRlliT3NXd3xBQ3Jtc0tuWTc2NUp0ZWUyWlV0d2ZwbkNyTVpyaktZbThnOVhDMTNNVElxSWs1d0NkM2tDQU5DNV9pQTZ1S3Vxclc3TlpkUFdwYjJYZVJUazNTb2ZMSV8tTUVqSzc5cXhIT3ZiMEhTMlRMdDJNNTQ5a3JSUHV2eWFYcGFWRHlkbWYyMGNCV19GOXY2UTNJMWZIRWVQYUtsclFQaHJKTDd3SHlOTExCVm9VN0pFWWdyeVM3SHkzQUR1N0FxakFpbl8xYlI5ZG01UmRHczRHWF9Ub19KZzlVcG1aVFUyaGhKcENB"
+        }
+      },
+      "trackingParams": "CJsFEPBbIhMIxdPE6tSW-AIVjoJVCh0LJgkw"
+    }
+  },
+  "trackingParams": "CJoFENowGAAiEwjF08Tq1Jb4AhWOglUKHQsmCTA=",
+  "longBylineText": {
+    "runs": [
+      {
+        "text": "Linus Tech Tips",
+        "navigationEndpoint": {
+          "clickTrackingParams": "CJoFENowGAAiEwjF08Tq1Jb4AhWOglUKHQsmCTA=",
+          "commandMetadata": {
+            "webCommandMetadata": {
+              "url": "/c/LinusTechTips",
+              "webPageType": "WEB_PAGE_TYPE_CHANNEL",
+              "rootVe": 3611,
+              "apiUrl": "/youtubei/v1/browse"
+            }
+          },
+          "browseEndpoint": {
+            "browseId": "UCXuqSBlHAE6Xw-yeJA0Tunw",
+            "canonicalBaseUrl": "/c/LinusTechTips"
+          }
+        }
+      }
+    ]
+  }
+  });
+  let u: ChannelRenderer = serde_json::from_value(j).unwrap();
+  assert_eq!(u.title.simple_text, "Linus Tech Tips");
+  assert_eq!(u.channel_id, "UCXuqSBlHAE6Xw-yeJA0Tunw")
+}
+
+#[tokio::test]
+async fn test_video_primary_info_renderer(){
+  let j: serde_json::Value = json!({
+      "title": {
+        "runs": [
+          {
+            "text": "The Lab is a Disaster - WAN Show June 3, 2022"
+          }
+        ]
+      },
+      "viewCount": {
+        "videoViewCountRenderer": {
+          "viewCount": {
+            "simpleText": "647,476 views"
+          },
+          "shortViewCount": {
+            "simpleText": "647K views"
+          }
+        }
+      },
+      "videoActions": {
+
+      },
+      "trackingParams": "CI8DEMyrARgAIhMIjcHEuoyZ-AIVS9QRCB1pbQIX",
+      "dateText": {
+        "simpleText": "Streamed live on Jun 3, 2022"
+      }
+   });
+  let u: VideoPrimaryInfoRenderer = serde_json::from_value(j).unwrap();
+  assert_eq!(u.title.runs.get(0).unwrap().text,"The Lab is a Disaster - WAN Show June 3, 2022");
+}
+
+#[tokio::test]
+async fn test_video_secondary_info_renderer(){
+  // The json is shortened due to macro limits, 
+  let j: serde_json::Value = json!({
+    
+      "owner": {
+        "videoOwnerRenderer": {
+          "thumbnail": {
+            "thumbnails": [
+              {
+                "url": "https://yt3.ggpht.com/ytc/AKedOLSZnNA3eg_fDwUgsCxpqMnVWu3UGo-Rln4621ncIQ=s48-c-k-c0x00ffffff-no-rj",
+                "width": 48,
+                "height": 48
+              },
+              {
+                "url": "https://yt3.ggpht.com/ytc/AKedOLSZnNA3eg_fDwUgsCxpqMnVWu3UGo-Rln4621ncIQ=s88-c-k-c0x00ffffff-no-rj",
+                "width": 88,
+                "height": 88
+              },
+              {
+                "url": "https://yt3.ggpht.com/ytc/AKedOLSZnNA3eg_fDwUgsCxpqMnVWu3UGo-Rln4621ncIQ=s176-c-k-c0x00ffffff-no-rj",
+                "width": 176,
+                "height": 176
+              }
+            ]
+          },
+          "title": {
+            "runs": [
+              {
+                "text": "Linus Tech Tips",
+                "navigationEndpoint": {
+                  "clickTrackingParams": "CI4DEOE5IhMInqXs06eb-AIV5swRCB3YEwCp",
+                  "commandMetadata": {
+                    "webCommandMetadata": {
+                      "url": "/c/LinusTechTips",
+                      "webPageType": "WEB_PAGE_TYPE_CHANNEL",
+                      "rootVe": 3611,
+                      "apiUrl": "/youtubei/v1/browse"
+                    }
+                  },
+                  "browseEndpoint": {
+                    "browseId": "UCXuqSBlHAE6Xw-yeJA0Tunw",
+                    "canonicalBaseUrl": "/c/LinusTechTips"
+                  }
+                }
+              }
+            ]
+          },
+          "subscriptionButton": {
+            "type": "FREE"
+          },
+          "navigationEndpoint": {
+            "clickTrackingParams": "CI4DEOE5IhMInqXs06eb-AIV5swRCB3YEwCp",
+            "commandMetadata": {
+              "webCommandMetadata": {
+                "url": "/c/LinusTechTips",
+                "webPageType": "WEB_PAGE_TYPE_CHANNEL",
+                "rootVe": 3611,
+                "apiUrl": "/youtubei/v1/browse"
+              }
+            },
+            "browseEndpoint": {
+              "browseId": "UCXuqSBlHAE6Xw-yeJA0Tunw",
+              "canonicalBaseUrl": "/c/LinusTechTips"
+            }
+          },
+          "subscriberCountText": {
+            "accessibility": {
+              "accessibilityData": {
+                "label": "14.6 million subscribers"
+              }
+            },
+            "simpleText": "14.6M subscribers"
+          },
+          "trackingParams": "CI4DEOE5IhMInqXs06eb-AIV5swRCB3YEwCp",
+          "badges": [
+            {
+              "metadataBadgeRenderer": {
+                "icon": {
+                  "iconType": "CHECK_CIRCLE_THICK"
+                },
+                "style": "BADGE_STYLE_TYPE_VERIFIED",
+                "tooltip": "Verified",
+                "trackingParams": "CI4DEOE5IhMInqXs06eb-AIV5swRCB3YEwCp",
+                "accessibilityData": {
+                  "label": "Verified"
+                }
+              }
+            }
+          ],
+          "membershipButton": {
+            "buttonRenderer": {
+              "style": "STYLE_SUGGESTIVE",
+              "size": "SIZE_DEFAULT",
+              "isDisabled": false,
+              "text": {
+                "runs": [
+                  {
+                    "text": "Join"
+                  }
+                ]
+              },
+              "navigationEndpoint": {
+                "clickTrackingParams": "CI8DEKhgIhMInqXs06eb-AIV5swRCB3YEwCp",
+                "commandMetadata": {
+                  "webCommandMetadata": {
+                    "ignoreNavigation": true
+                  }
+                },
+                "modalEndpoint": {
+                  "modal": {
+                    "modalWithTitleAndButtonRenderer": {
+                      "title": {
+                        "runs": [
+                          {
+                            "text": "Want to join this channel?"
+                          }
+                        ]
+                      },
+                      "content": {
+                        "runs": [
+                          {
+                            "text": "Sign in to become a member."
+                          }
+                        ]
+                      },
+                      "button": {
+                        "buttonRenderer": {
+                          "style": "STYLE_BRAND",
+                          "size": "SIZE_DEFAULT",
+                          "isDisabled": false,
+                          "text": {
+                            "simpleText": "Sign in"
+                          },
+                          "navigationEndpoint": {
+                            "clickTrackingParams": "CJADEPBbIhMInqXs06eb-AIV5swRCB3YEwCp",
+                            "commandMetadata": {
+                              "webCommandMetadata": {
+                                "url": "https://accounts.google.com/ServiceLogin?service=youtube&uilel=3&passive=true&continue=https%3A%2F%2Fwww.youtube.com%2Fsignin%3Faction_handle_signin%3Dtrue%26app%3Ddesktop%26hl%3Den%26next%3Dhttps%253A%252F%252Fwww.youtube.com%252Fyoutubei%252Fv1%252Fnext%253Fkey%253DAIzaSyAO_FJ2SlqU8Q4STEHLGCilw_Y9_11qcW8&hl=en",
+                                "webPageType": "WEB_PAGE_TYPE_UNKNOWN",
+                                "rootVe": 83769
+                              }
+                            },
+                            "signInEndpoint": {
+                              "hack": true
+                            }
+                          },
+                          "trackingParams": "CJADEPBbIhMInqXs06eb-AIV5swRCB3YEwCp"
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "trackingParams": "CI8DEKhgIhMInqXs06eb-AIV5swRCB3YEwCp",
+              "accessibilityData": {
+                "accessibilityData": {
+                  "label": "Join this channel"
+                }
+              },
+              "targetId": "sponsorships-button"
+            }
+          }
+        }
+      },
+      "description": {
+        "runs": [
+          {
+            "text": "Visit "
+          },
+          {
+            "text": "https://www.squarespace.com/WAN",
+            "navigationEndpoint": {
+              "clickTrackingParams": "CIsDEM2rARgBIhMInqXs06eb-AIV5swRCB3YEwCpSILE2te456zvtQE=",
+              "commandMetadata": {
+                "webCommandMetadata": {
+                  "url": "https://www.youtube.com/redirect?event=video_description&redir_token=QUFFLUhqbnJYOTNiMEZPaGppaVZKNVl2RHhvajhSRjYtZ3xBQ3Jtc0trWTEzT1pfMUw4OU9Fc2Rkamc3b3ZKcnczM1QxdkhrbFI1NHFVN0hmZV9LaERDc0RobmtYTzl6RkFNTmJLTkFla1BQZ2tSaXBjRTFPNFozdFdaWC12cnl0X2dUMmNsMGVQSTN4S29mb1FNM29wdzRudw&q=https%3A%2F%2Fwww.squarespace.com%2FWAN&v=td6zO4r2ogI",
+                  "webPageType": "WEB_PAGE_TYPE_UNKNOWN",
+                  "rootVe": 83769
+                }
+              },
+              "urlEndpoint": {
+                "url": "https://www.youtube.com/redirect?event=video_description&redir_token=QUFFLUhqbnJYOTNiMEZPaGppaVZKNVl2RHhvajhSRjYtZ3xBQ3Jtc0trWTEzT1pfMUw4OU9Fc2Rkamc3b3ZKcnczM1QxdkhrbFI1NHFVN0hmZV9LaERDc0RobmtYTzl6RkFNTmJLTkFla1BQZ2tSaXBjRTFPNFozdFdaWC12cnl0X2dUMmNsMGVQSTN4S29mb1FNM29wdzRudw&q=https%3A%2F%2Fwww.squarespace.com%2FWAN&v=td6zO4r2ogI",
+                "target": "TARGET_NEW_WINDOW",
+                "nofollow": true
+              }
+            }
+          },
+          {
+            "text": " and use offer code WAN for 10% off\nGet 50% off (up to $200) your annual Zoho Desk subscription at: "
+          },
+        ]
+      },
+      "metadataRowContainer": {
+        "metadataRowContainerRenderer": {
+          "collapsedItemCount": 0,
+          "trackingParams": "CIsDEM2rARgBIhMInqXs06eb-AIV5swRCB3YEwCp"
+        }
+      },
+      "showMoreText": {
+        "simpleText": "Show more"
+      },
+      "showLessText": {
+        "simpleText": "Show less"
+      },
+    }
+   );
+  let u: VideoSecondaryInfoRenderer = serde_json::from_value(j).unwrap();
+  // Assert that the title text is Linus Tech Tips
+  assert_eq!(u.owner.video_owner_renderer.title.runs.get(0).unwrap().text, "Linus Tech Tips");
+  assert_eq!(u.description.runs.len(), 3);
+}
+#[tokio::test]
+async fn test_compact_video_renderer(){
+  let j: serde_json::Value = json!({
+    "videoId": "qjw8ohwZ4nY",
+    "thumbnail": {
+      "thumbnails": [
+        {
+          "url": "https://i.ytimg.com/vi/qjw8ohwZ4nY/hqdefault.jpg?sqp=-oaymwEiCKgBEF5IWvKriqkDFQgBFQAAAAAYASUAAMhCPQCAokN4AQ==&rs=AOn4CLBqQOG4TTkeEcvziR8iHav1gHLCMA",
+          "width": 168,
+          "height": 94
+        },
+        {
+          "url": "https://i.ytimg.com/vi/qjw8ohwZ4nY/hqdefault.jpg?sqp=-oaymwEjCNACELwBSFryq4qpAxUIARUAAAAAGAElAADIQj0AgKJDeAE=&rs=AOn4CLAfZFFZiZ2jETmbggU3II3L7ahsLQ",
+          "width": 336,
+          "height": 188
+        }
+      ]
+    },
+    "title": {
+      "accessibility": {
+        "accessibilityData": {
+          "label": "Story Time! - WAN Show May 27, 2022 by Linus Tech Tips Streamed 10 days ago 1 hour, 39 minutes 472,838 views"
+        }
+      },
+      "simpleText": "Story Time! - WAN Show May 27, 2022"
+    },
+    "longBylineText": {
+      "runs": [
+        {
+          "text": "Linus Tech Tips",
+          "navigationEndpoint": {
+            "clickTrackingParams": "CIIDEKQwGAAiEwiepezTp5v4AhXmzBEIHdgTAKkyBnJlbG1mdQ==",
+            "browseEndpoint": {
+              "browseId": "UCXuqSBlHAE6Xw-yeJA0Tunw",
+              "canonicalBaseUrl": "/user/LinusTechTips"
+            }
+          }
+        }
+      ]
+    },
+    "publishedTimeText": {
+      "simpleText": "Streamed 10 days ago"
+    },
+    "viewCountText": {
+      "simpleText": "472,838 views"
+    },
+    "lengthText": {
+      "accessibility": {
+        "accessibilityData": {
+          "label": "1 hour, 39 minutes, 36 seconds"
+        }
+      },
+      "simpleText": "1:39:36"
+    },
+    "navigationEndpoint": {
+      "clickTrackingParams": "CIIDEKQwGAAiEwiepezTp5v4AhXmzBEIHdgTAKkyBnJlbG1mdUiCxNrXuOes77UBmgEFCAEQ-B0=",
+      "commandMetadata": {
+        "webCommandMetadata": {
+          "url": "/watch?v=qjw8ohwZ4nY",
+          "webPageType": "WEB_PAGE_TYPE_WATCH",
+          "rootVe": 3832
+        }
+      },
+      "watchEndpoint": {
+        "videoId": "qjw8ohwZ4nY",
+        "nofollow": true,
+        "watchEndpointSupportedOnesieConfig": {
+          "html5PlaybackOnesieConfig": {
+            "commonConfig": {
+              "url": "https://rr3---sn-4g5e6nzl.googlevideo.com/initplayback?source=youtube&orc=1&oeis=1&c=WEB&oad=3200&ovd=3200&oaad=11000&oavd=11000&ocs=700&oewis=1&oputc=1&ofpcc=1&msp=1&odeak=1&odepv=1&osfc=1&id=aa3c3ca21c19e276&ip=159.48.53.142&initcwndbps=1865000&mt=1654603496&oweuc=&pxtags=Cg4KAnR4EggyNDE5MDk2MA&rxtags=Cg4KAnR4EggyNDE5MDk2MA%2CCg4KAnR4EggyNDE5MDk2MQ"
+            }
+          }
+        }
+      }
+    },
+    "shortBylineText": {
+      "runs": [
+        {
+          "text": "Linus Tech Tips",
+          "navigationEndpoint": {
+            "clickTrackingParams": "CIIDEKQwGAAiEwiepezTp5v4AhXmzBEIHdgTAKkyBnJlbG1mdQ==",
+            "commandMetadata": {
+              "webCommandMetadata": {
+                "url": "/user/LinusTechTips",
+                "webPageType": "WEB_PAGE_TYPE_CHANNEL",
+                "rootVe": 3611,
+                "apiUrl": "/youtubei/v1/browse"
+              }
+            },
+            "browseEndpoint": {
+              "browseId": "UCXuqSBlHAE6Xw-yeJA0Tunw",
+              "canonicalBaseUrl": "/user/LinusTechTips"
+            }
+          }
+        }
+      ]
+    },
+    "channelThumbnail": {
+      "thumbnails": [
+        {
+          "url": "https://yt3.ggpht.com/ytc/AKedOLSZnNA3eg_fDwUgsCxpqMnVWu3UGo-Rln4621ncIQ=s68-c-k-c0x00ffffff-no-rj",
+          "width": 68,
+          "height": 68
+        }
+      ]
+    },
+    "ownerBadges": [
+      {
+        "metadataBadgeRenderer": {
+          "icon": {
+            "iconType": "CHECK_CIRCLE_THICK"
+          },
+          "style": "BADGE_STYLE_TYPE_VERIFIED",
+          "tooltip": "Verified",
+          "trackingParams": "CIIDEKQwGAAiEwiepezTp5v4AhXmzBEIHdgTAKk=",
+          "accessibilityData": {
+            "label": "Verified"
+          }
+        }
+      }
+    ],
+    "trackingParams": "CIIDEKQwGAAiEwiepezTp5v4AhXmzBEIHdgTAKlA9sTn4KGUj56qAQ==",
+    "shortViewCountText": {
+      "accessibility": {
+        "accessibilityData": {
+          "label": "472K views"
+        }
+      },
+      "simpleText": "472K views"
+    },
+    "accessibility": {
+      "accessibilityData": {
+        "label": "Story Time! - WAN Show May 27, 2022 - 1 hour, 39 minutes - Go to channel - Linus Tech Tips - 472K views - Streamed 10 days ago - play video"
+      }
+    }
+  });
+  let u: CompactVideoRenderer = serde_json::from_value(j).unwrap();
+  assert_eq!(u.title.simple_text.unwrap(), "Story Time! - WAN Show May 27, 2022");
 }
 
 }
