@@ -12,3 +12,5 @@ pub mod query_results;
 pub mod channel;
 /// Errors that can occur
 pub mod error;
+/// Contians structs and enums to build every response possible from the api
+pub mod misc;
