@@ -39,3 +39,15 @@ pub struct NextResult{
    pub player_overlays:  PlayerOverlayRendererWrapper,
 }
 
+/// Represents a result from a arbitrary player query
+#[derive(Debug, Clone, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct PlayerResult{
+   pub streaming_data: StreamingData,
+   pub video_details: VideoDetails,
+   pub storyboards: StorybordWrapper,
+   pub microformat: PlayerMicroformatRenderer,
+   pub playability_status:PlayabilityStatus,
+   pub captions: PlayerCaptionsTracklistRenderer
+}
+
