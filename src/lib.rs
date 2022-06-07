@@ -855,7 +855,7 @@ async fn test_search_query(){
 #[tokio::test]
 async fn test_search_query_with_refinements(){
   let client_config = &default_client_config();
-  let j: serde_json::Value = endpoints::search("ltt playlist","",client_config).await.unwrap();
+  let j: serde_json::Value = endpoints::search("ltt playlist ","",client_config).await.unwrap();
   let result: SearchResult = serde_json::from_value(j).unwrap();
   assert_ne!(result.contents.two_column_search_results_renderer.unwrap().primary_contents.section_list_renderer.contents.len(), 0);
   assert_eq!(result.refinements.is_none(), false);
