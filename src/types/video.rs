@@ -1,5 +1,7 @@
+use serde::Deserialize;
 use serde_json::Value;
-use super::{endpoints::{EndpointWatch, EndpointBrowse}, channel::Author};
+
+use super::{endpoints::{EndpointWatch, EndpointBrowse}, channel::Author, misc::*};
 
 /// Represents a video with all the information aviable except for captions und storyboards
 pub struct Video{
@@ -88,4 +90,72 @@ pub struct Comment{
    pub reply_continuation: String,
    pub published_time_text: String,
    pub vote_count: String,
+}
+
+#[derive(Debug, Clone, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct  VideoRenderer{
+   pub video_id: String,
+   pub thumbnail: Thumbnails,
+   pub title: Title,
+   pub long_by_line_text: Runs,
+   pub published_time_text: SimpleText,
+   pub length_text: AccessibilitySimpleText,
+   pub view_count_text: SimpleText,
+   pub navigation_endpoint: NavigationEndpoint,
+   pub badges: Option<Vec<BadgeRendererVec>>,
+   pub owner_badges:Option<Vec<BadgeRendererVec>>,
+   pub owner_text: Runs,
+   pub short_line_by_text: Runs,
+   pub short_view_count_text: AccessibilitySimpleText,
+}
+
+#[derive(Debug, Clone, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct CompactVideoRenderer{
+    pub video_id: String,
+    pub thumbnail: Thumbnails,
+    pub title: Title,
+    pub long_byline_text: Runs,
+    pub published_time_text: SimpleText,
+    pub length_text: AccessibilitySimpleText,
+    pub view_count_text: SimpleText,
+    pub channel_thumbnail: Thumbnails,
+    pub navigation_endpoint: NavigationEndpoint,
+    pub badges: Option<Vec<BadgeRendererVec>>,
+    pub owner_badges:Option<Vec<BadgeRendererVec>>,
+    pub short_byline_text: Runs,
+    pub short_view_count_text: AccessibilitySimpleText,
+}
+
+#[derive(Debug, Clone, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct GridVideoRenderer{
+    pub video_id: String,
+    pub thumbnail: Thumbnails,
+    pub title: Title,
+    pub long_byline_text: Runs,
+    pub published_time_text: SimpleText,
+    pub view_count_text: SimpleText,
+    pub navigation_endpoint: NavigationEndpoint,
+    pub owner_badges:Option<Vec<BadgeRendererVec>>,
+    pub short_view_count_text: AccessibilitySimpleText,
+}
+#[derive(Debug, Clone, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct VideoPrimaryInfoRenderer{
+    pub title: Runs,
+    pub view_count:VideoViewCountRendererWrapper,
+    pub date_text: SimpleText
+}
+#[derive(Debug, Clone, Deserialize)]
+pub struct VideoSecondaryInfoRenderer{
+    pub owner: Owner,
+    pub description: Runs,
+}
+
+#[derive(Debug, Clone, Deserialize)]
+pub struct CommentThreadRenderer{
+    pub comment: CommentRenderer,
+    pub replies: CommentRepliesRenderer
 }
