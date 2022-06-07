@@ -37,6 +37,7 @@ pub struct ChannelQuery{
 pub struct NextResult{
    pub contents: TwoColumnWrapper,
    pub player_overlays:  PlayerOverlayRendererWrapper,
+   pub on_response_received_endpoints: Vec<OnResponseReceivedEndpoints>
 }
 
 /// Represents a result from a arbitrary player query
