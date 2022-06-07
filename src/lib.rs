@@ -12,8 +12,6 @@ pub(crate) mod extractors;
 pub mod query;
 /// Contains test functions
 mod tests{
-  use std::f32::consts::E;
-
 #[cfg(test)]
     use serde_json::json;
 

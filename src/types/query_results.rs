@@ -1,6 +1,6 @@
 use serde::Deserialize;
 
-use super::{video::SearchVideo, playlist::SearchPlaylist, channel::{SearchChannel, ChannelMetadataRenderer}, video::{Video, Comment}, channel::Channel, misc::*};
+use super::{video::SearchVideo, playlist::SearchPlaylist, channel::{SearchChannel}, video::{Video, Comment}, channel::Channel, misc::*};
 /// Enum that represents search results.
 pub enum SearchResultEnum {
     VideoRenderer(SearchVideo),
