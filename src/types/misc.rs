@@ -1,7 +1,7 @@
 use serde::Deserialize;
 use serde_json::Value;
 
-use super::{video::{VideoRenderer, VideoPrimaryInfoRenderer, VideoSecondaryInfoRenderer, CompactVideoRenderer, GridVideoRenderer, CommentThreadRenderer}, playlist::{GridPlaylistRenderer, PlaylistRenderer}, channel::{BackstagePostThreadRenderer, TabRenderer, ChannelRenderer}};
+use super::{video::{VideoRenderer, VideoPrimaryInfoRenderer, VideoSecondaryInfoRenderer, CompactVideoRenderer, GridVideoRenderer, CommentThreadRenderer}, playlist::{GridPlaylistRenderer, PlaylistRenderer}, channel::{BackstagePostThreadRenderer, TabRenderer, ChannelRenderer, ChannelMetadataRenderer}};
 
 #[derive(Debug, Clone, Deserialize)]
 pub struct Thumbnails{
@@ -324,7 +324,7 @@ pub struct SectionListRendererWrapper{
 #[derive(Debug, Clone, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct SectionListRenderer{
-    pub contents: ItemSectionRendererWrapper
+    pub contents: Vec<ItemSectionRendererWrapper>
 }
 #[derive(Debug, Clone, Deserialize)]
 #[serde(rename_all = "camelCase")]
@@ -415,7 +415,8 @@ pub struct TwoColumnBrowseResultsRenderer{
 #[derive(Debug, Clone, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct TabRendererWrapper{
-    pub tab_renderer: TabRenderer,
+    pub tab_renderer: Option<TabRenderer>,
+    pub expandable_tab_renderer: Option<Value>
 }
 #[derive(Debug, Clone, Deserialize)]
 #[serde(rename_all = "camelCase")]
@@ -578,7 +579,16 @@ pub struct ShelfRenderer{
     pub title: SimpleText,
     pub content: ShelfContent,
 }
-
+#[derive(Debug, Clone, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct C4TabbedHeaderRendererWrapper{
+    pub c4_tabbed_header_renderer: C4TabbedHeaderRenderer,
+}
+#[derive(Debug, Clone, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct ChannelMetadataRendererWrapper{
+    pub channel_metadata_renderer: ChannelMetadataRenderer,
+}
 #[derive(Debug, Clone, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct C4TabbedHeaderRenderer{
