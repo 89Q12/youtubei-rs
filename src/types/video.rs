@@ -97,7 +97,7 @@ pub struct Comment{
 pub struct  VideoRenderer{
    pub video_id: String,
    pub thumbnail: Thumbnails,
-   pub title: Title,
+   pub title: Runs,
    pub long_by_line_text: Runs,
    pub published_time_text: SimpleText,
    pub length_text: AccessibilitySimpleText,
