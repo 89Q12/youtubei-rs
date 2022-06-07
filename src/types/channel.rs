@@ -1,4 +1,6 @@
-use super::{video::ChannelVideo, playlist::{ChannelPlaylist}, endpoints::EndpointBrowse};
+use serde::Deserialize;
+
+use super::{video::ChannelVideo, playlist::{ChannelPlaylist}, endpoints::EndpointBrowse, misc::*};
 
 /// Represents a channel info that is returned by the api when quering the channel.
 pub struct Channel{
@@ -77,4 +79,47 @@ impl Tab {
             Tab::Community => 3,
         }
     }
+}
+
+#[derive(Debug, Clone, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct ChannelRenderer{
+    pub channel_id: String,
+    pub title: SimpleText,
+    pub navigation_endpoint: NavigationEndpoint,
+    pub thumbnail: Thumbnails,
+    pub description_snippet: Runs,
+    pub short_byline_text: Runs,
+    pub video_count_text: Runs,
+    pub owner_badges: Option<Vec<BadgeRendererVec>>,
+    pub subscriber_count_text: AccessibilitySimpleText,
+    pub long_byline_text: Runs,
+}
+
+#[derive(Debug, Clone, Deserialize)]
+pub struct TabRenderer{
+    pub endpoint: BrowseEndpoint,
+    pub title: String,
+    pub selected: bool,
+    pub content: Option<SectionListRenderer>
+}
+
+#[derive(Debug, Clone, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct ChannelMetadataRenderer{
+    pub title: String,
+    pub description: String,
+    pub rss_url: String,
+    pub external_id: String,
+    pub keywords: String,
+    pub owner_urls: Vec<String>,
+    pub avatar: Thumbnails,
+    pub channel_url: String,
+    pub is_family_safe: bool,
+    pub available_country_codes: Vec<String>
+}
+
+#[derive(Debug, Clone, Deserialize)]
+pub struct BackstagePostThreadRenderer{
+    pub post: BackstagePostRenderer
 }
