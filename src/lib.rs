@@ -12,11 +12,10 @@ pub(crate) mod extractors;
 pub mod query;
 /// Contains test functions
 mod tests{
-    use serde::Deserialize;
-    use serde_json::{json, Value};
+  #[cfg(test)]
+    use serde_json::json;
 
-    #[cfg(test)]
-    use crate::{query::{get_comments, load_related_videos, get_playlist,get_video},utils::default_client_config};
+    use crate::{query::{get_comments, load_related_videos, get_playlist,get_video},utils::default_client_config, types::video::VideoRenderer};
     use crate::{extractors, types::{channel::*, video::{VideoPrimaryInfoRenderer, VideoSecondaryInfoRenderer, CompactVideoRenderer}}};
 
 
@@ -633,5 +632,175 @@ async fn test_compact_video_renderer(){
   let u: CompactVideoRenderer = serde_json::from_value(j).unwrap();
   assert_eq!(u.title.simple_text.unwrap(), "Story Time! - WAN Show May 27, 2022");
 }
-
+#[tokio::test]
+async fn test_video_renderer(){
+  let j: serde_json::Value = json!({
+    "videoId": "Ti8scviDiYc",
+    "thumbnail": {
+      "thumbnails": [
+        {
+          "url": "https://i.ytimg.com/vi/Ti8scviDiYc/hqdefault.jpg?sqp=-oaymwEjCOADEI4CSFryq4qpAxUIARUAAAAAGAElAADIQj0AgKJDeAE=&rs=AOn4CLAE07nKdjfmXi0ZH5ZEmSn7C_R9XA",
+          "width": 480,
+          "height": 270
+        }
+      ]
+    },
+    "title": {
+      "runs": [
+        {
+          "text": "Dream has Too Much Money"
+        }
+      ],
+      "accessibility": {
+        "accessibilityData": {
+          "label": "Dream has Too Much Money by Linus Tech Tips 23 hours ago 23 minutes 1,332,629 views"
+        }
+      }
+    },
+    "longBylineText": {
+      "runs": [
+        {
+          "text": "Linus Tech Tips",
+          "navigationEndpoint": {
+            "clickTrackingParams": "CPYBENwwGAQiEwj4hLWZpZn4AhWFRHoFHRgkAMA=",
+            "commandMetadata": {
+              "webCommandMetadata": {
+                "url": "/c/LinusTechTips",
+                "webPageType": "WEB_PAGE_TYPE_CHANNEL",
+                "rootVe": 3611,
+                "apiUrl": "/youtubei/v1/browse"
+              }
+            },
+            "browseEndpoint": {
+              "browseId": "UCXuqSBlHAE6Xw-yeJA0Tunw",
+              "canonicalBaseUrl": "/c/LinusTechTips"
+            }
+          }
+        }
+      ]
+    },
+    "publishedTimeText": {
+      "simpleText": "23 hours ago"
+    },
+    "lengthText": {
+      "accessibility": {
+        "accessibilityData": {
+          "label": "23 minutes, 55 seconds"
+        }
+      },
+      "simpleText": "23:55"
+    },
+    "viewCountText": {
+      "simpleText": "1,332,629 views"
+    },
+    "navigationEndpoint": {
+      "clickTrackingParams": "CPYBENwwGAQiEwj4hLWZpZn4AhWFRHoFHRgkAMAyBnNlYXJjaFIMbHR0IHBsYXlsaXN0mgEDEPQk",
+      "commandMetadata": {
+        "webCommandMetadata": {
+          "url": "/watch?v=Ti8scviDiYc",
+          "webPageType": "WEB_PAGE_TYPE_WATCH",
+          "rootVe": 3832
+        }
+      },
+      "watchEndpoint": {
+        "videoId": "Ti8scviDiYc",
+        "params": "qgMMbHR0IHBsYXlsaXN0ugMkEiJQTDhtRy1Sa04ydVR5NXpCbFFzdHVUbklVRVFQZTVyREh4ugMkEiJQTDhtRy1Sa04ydVR3MmRLZWUydXRYbWRFQmhtU2JBYmMwugMkEiJQTDhtRy1Sa04ydVR4THNRaE95TTVUQmdNSEY5VjRHZnFhugMkEiJQTGc5a011V3VUaEctLVY2ZVdpSUc4UGFwYjhWb0dmdllOugMkEiJQTGlUeE9nREIzQ3dBeTJjWko0S18tbmlmUFh2MG5zUV9PugMkEiJQTFpYVDdvMmRabFhmVzFiRUxwREFPSWxENXNSbWkyVDBHugMkEiJQTDhtRy1Sa04ydVR6Z3lBOHp6RTh2UkIzX1pYUWZ1RlJ6ugMkEiJQTDhtRy1Sa04ydVR3bGNMVV9ydjI5R3Q0NTc4WGZnSm1fugMkEiJQTDhtRy1Sa04ydVR5dUV1dFFhNzlSWjBRNXU1Z3RlVWNpugMkEiJQTGVxZW92cGl5TjFSY2tzUW1rYTRrenFQOEYzWEJPLVozugMkEiJQTG5DangzRXlFZkg2NEpIa1dFNDBtcnBLUDNkeVFhcGh6ugMkEiJQTDhtRy1Sa04ydVR3N1BobG5BcjRwWlp6MlF1YklidWpIugMkEiJQTG5DangzRXlFZkg2THowa041YVV4OWdjM0ctZUR1Y3U1ugMkEiJQTDhtRy1Sa04ydVR3ZTJWNVhNbTdtbmNOR25FcUJiZlhnugMkEiJQTDhtRy1Sa04ydVR4dmtHR0JfQ0gzNHBOdlJkWVJuTHk0ugMkEiJQTEttNFR0WHRTUjVJV0w0c2oyZzVjLTZwUlM3dVJOSHh6ugMkEiJQTDhtRy1Sa04ydVR4Zks2WEtPQmtDQ3Q5d2xnMDl4c19KugMkEiJQTEttNFR0WHRTUjVJWDNJQnNtVFFWMzB1QkZ6N2pfcmRP",
+        "watchEndpointSupportedOnesieConfig": {
+          "html5PlaybackOnesieConfig": {
+            "commonConfig": {
+              "url": "https://rr3---sn-4g5edndz.googlevideo.com/initplayback?source=youtube&orc=1&oeis=1&c=WEB&oad=3200&ovd=3200&oaad=11000&oavd=11000&ocs=700&oewis=1&oputc=1&ofpcc=1&msp=1&odeak=1&odepv=1&osfc=1&id=4e2f2c72f8838987&ip=159.48.53.240&initcwndbps=1530000&mt=1654534394&oweuc="
+            }
+          }
+        }
+      }
+    },
+    "badges": [
+      {
+        "metadataBadgeRenderer": {
+          "style": "BADGE_STYLE_TYPE_SIMPLE",
+          "label": "New",
+          "trackingParams": "CPYBENwwGAQiEwj4hLWZpZn4AhWFRHoFHRgkAMA="
+        }
+      },
+      {
+        "metadataBadgeRenderer": {
+          "style": "BADGE_STYLE_TYPE_SIMPLE",
+          "label": "4K",
+          "trackingParams": "CPYBENwwGAQiEwj4hLWZpZn4AhWFRHoFHRgkAMA="
+        }
+      }
+    ],
+    "ownerBadges": [
+      {
+        "metadataBadgeRenderer": {
+          "icon": {
+            "iconType": "CHECK_CIRCLE_THICK"
+          },
+          "style": "BADGE_STYLE_TYPE_VERIFIED",
+          "tooltip": "Verified",
+          "trackingParams": "CPYBENwwGAQiEwj4hLWZpZn4AhWFRHoFHRgkAMA=",
+          "accessibilityData": {
+            "label": "Verified"
+          }
+        }
+      }
+    ],
+    "ownerText": {
+      "runs": [
+        {
+          "text": "Linus Tech Tips",
+          "navigationEndpoint": {
+            "clickTrackingParams": "CPYBENwwGAQiEwj4hLWZpZn4AhWFRHoFHRgkAMA=",
+            "commandMetadata": {
+              "webCommandMetadata": {
+                "url": "/c/LinusTechTips",
+                "webPageType": "WEB_PAGE_TYPE_CHANNEL",
+                "rootVe": 3611,
+                "apiUrl": "/youtubei/v1/browse"
+              }
+            },
+            "browseEndpoint": {
+              "browseId": "UCXuqSBlHAE6Xw-yeJA0Tunw",
+              "canonicalBaseUrl": "/c/LinusTechTips"
+            }
+          }
+        }
+      ]
+    },
+    "shortBylineText": {
+      "runs": [
+        {
+          "text": "Linus Tech Tips",
+          "navigationEndpoint": {
+            "clickTrackingParams": "CPYBENwwGAQiEwj4hLWZpZn4AhWFRHoFHRgkAMA=",
+            "commandMetadata": {
+              "webCommandMetadata": {
+                "url": "/c/LinusTechTips",
+                "webPageType": "WEB_PAGE_TYPE_CHANNEL",
+                "rootVe": 3611,
+                "apiUrl": "/youtubei/v1/browse"
+              }
+            },
+            "browseEndpoint": {
+              "browseId": "UCXuqSBlHAE6Xw-yeJA0Tunw",
+              "canonicalBaseUrl": "/c/LinusTechTips"
+            }
+          }
+        }
+      ]
+    },
+    "trackingParams": "CPYBENwwGAQiEwj4hLWZpZn4AhWFRHoFHRgkAMBAh5OOxK-Oy5dO",
+    "showActionMenu": false,
+    "shortViewCountText": {
+      "accessibility": {
+        "accessibilityData": {
+          "label": "1.3 million views"
+        }
+      },
+      "simpleText": "1.3M views"
+    },
+  });
+  let u: VideoRenderer = serde_json::from_value(j).unwrap();
+  assert_eq!(u.title.runs.get(0).unwrap().text, "Dream has Too Much Money")
+}
 }
