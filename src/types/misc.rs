@@ -318,8 +318,13 @@ pub struct VerticalListRenderer{
 }
 #[derive(Debug, Clone, Deserialize)]
 #[serde(rename_all = "camelCase")]
+pub struct SectionListRendererWrapper{
+    pub section_list_renderer: SectionListRenderer
+}
+#[derive(Debug, Clone, Deserialize)]
+#[serde(rename_all = "camelCase")]
 pub struct SectionListRenderer{
-    pub contents: ItemSectionRenderer
+    pub contents: ItemSectionRendererWrapper
 }
 #[derive(Debug, Clone, Deserialize)]
 #[serde(rename_all = "camelCase")]
@@ -337,6 +342,11 @@ pub enum  ItemSectionRendererContents{
     VideoSecondaryInfoRenderer(VideoSecondaryInfoRenderer),
     CompactVideoRenderer(CompactVideoRenderer),
     CommentsEntryPointHeaderRenderer(Value)
+}
+#[derive(Debug, Clone, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct ItemSectionRendererWrapper{
+    pub item_section_renderer:ItemSectionRenderer,
 }
 #[derive(Debug, Clone, Deserialize)]
 #[serde(rename_all = "camelCase")]
@@ -378,7 +388,7 @@ pub struct CommunityPostAttachmentImage{
 #[serde(rename_all = "camelCase")]
 pub struct TwoColumnWatchNextResults{
     pub results: ResultsWrapper,
-    pub secondary_results: ResultsWrapper
+    pub secondary_results: SecondaryResultsWrapper
 }
 
 #[derive(Debug, Clone, Deserialize)]
@@ -386,13 +396,26 @@ pub struct ResultsWrapper{
     pub results: Results
 }
 #[derive(Debug, Clone, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct SecondaryResultsWrapper{
+    pub secondary_results: SecondaryResults
+}
+#[derive(Debug, Clone, Deserialize)]
 pub struct Results{
     pub contents: Vec<ItemSectionRendererContents>
 }
-
+#[derive(Debug, Clone, Deserialize)]
+pub struct SecondaryResults{
+    pub results: Vec<ItemSectionRendererContents>
+}
 #[derive(Debug, Clone, Deserialize)]
 pub struct TwoColumnBrowseResultsRenderer{
-    pub tabs: Vec<TabRenderer>
+    pub tabs: Vec<TabRendererWrapper>
+}
+#[derive(Debug, Clone, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct TabRendererWrapper{
+    pub tab_renderer: TabRenderer,
 }
 #[derive(Debug, Clone, Deserialize)]
 #[serde(rename_all = "camelCase")]
@@ -442,12 +465,12 @@ pub struct MultiMarkersPlayerBarRenderer{
 #[derive(Debug, Clone, Deserialize)]
 pub struct MarkersMap{
     pub key: String,
-    pub value:  MarkersMapValues
+    pub value: MarkersMapValues
 }
 #[derive(Debug, Clone, Deserialize)]
 pub struct MarkersMapValues{
     pub chapters: Option<Vec<Chapter>>,
-    pub heatmap: Option<Vec<HeatMap>>
+    pub heatmap: Option<HeatMap>
 }
 
 #[derive(Debug, Clone, Deserialize)]
@@ -459,7 +482,7 @@ pub struct Chapter{
 #[serde(rename_all = "camelCase")]
 pub struct ChapterRenderer{
     pub title: SimpleText,
-    pub time_range_start_mil: u32,
+    pub time_range_start_millis: u32,
     pub on_active_command: OnActiveCommand,
     pub thumbnail: Thumbnails
 }
@@ -484,7 +507,7 @@ pub struct HeatMapRenderer{
     pub max_height_dp: u16,
     pub min_height_dp: u16,
     pub show_hide_animation_duration_millis: u16,
-    pub heat_markers_decorations: HeatMarkersDecorations,
+    pub heat_markers_decorations: Vec<HeatMarkersDecorations>,
     pub heat_markers: Vec<HeatMarkers>
 }
 #[derive(Debug, Clone, Deserialize)]
@@ -510,7 +533,7 @@ pub struct HeatMarkers{
 pub struct HeatMarkerRenderer{
     pub time_range_start_millis: u32,
     pub marker_duration_millis: u32,
-    pub heat_marker_intensity_score_normalized: u32
+    pub heat_marker_intensity_score_normalized: f32
 }
 #[derive(Debug, Clone, Deserialize)]
 pub struct PlayabilityStatus{
