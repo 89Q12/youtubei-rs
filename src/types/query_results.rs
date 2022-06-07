@@ -59,3 +59,8 @@ pub struct BrowseResult{
     pub header: C4TabbedHeaderRenderer,
     pub metadata: ChannelMetadataRenderer
 }
+/// Represents a result from a arbitrary resolve_url query
+#[derive(Debug, Clone, Deserialize)]
+pub struct ResolveResult{
+    pub endpoint: BrowseEndpoint
+}
