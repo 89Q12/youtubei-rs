@@ -312,18 +312,9 @@ pub struct ShelfContent{
 #[derive(Debug, Clone, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct VerticalListRenderer{
-    pub items: Vec<Item>,
+    pub items: Vec<ItemSectionRendererContents>,
     pub collapsed_item_count: usize,
     pub collapsed_state_button_text: Runs,
-}
-#[derive(Debug, Clone, Deserialize)]
-#[serde(rename_all = "camelCase")]
-pub enum Item{
-    VideoRenderer(VideoRenderer),
-    GridPlaylistRenderer(GridPlaylistRenderer),
-    VideoPrimaryInfoRenderer(VideoPrimaryInfoRenderer),
-    VideoSecondaryInfoRenderer(VideoSecondaryInfoRenderer),
-    CompactVideoRenderer(CompactVideoRenderer),
 }
 #[derive(Debug, Clone, Deserialize)]
 #[serde(rename_all = "camelCase")]
@@ -341,6 +332,10 @@ pub enum  ItemSectionRendererContents{
     PlaylistRenderer(PlaylistRenderer),
     VideoRenderer(VideoRenderer),
     ChannelRenderer(ChannelRenderer),
+    GridPlaylistRenderer(GridPlaylistRenderer),
+    VideoPrimaryInfoRenderer(VideoPrimaryInfoRenderer),
+    VideoSecondaryInfoRenderer(VideoSecondaryInfoRenderer),
+    CompactVideoRenderer(CompactVideoRenderer),
 }
 #[derive(Debug, Clone, Deserialize)]
 #[serde(rename_all = "camelCase")]
@@ -351,7 +346,7 @@ pub struct ItemSectionRenderer{
 #[derive(Debug, Clone, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct GridRenderer{
-    pub items: Vec<Item>,
+    pub items: Vec<ItemSectionRendererContents>,
 }
 #[derive(Debug, Clone, Deserialize)]
 #[serde(rename_all = "camelCase")]
@@ -381,7 +376,7 @@ pub struct CommunityPostAttachmentImage{
 #[derive(Debug, Clone, Deserialize)]
 pub struct TwoColumnWatchNextResults{
     pub results: ResultsWrapper,
-    pub secondaryResults: ResultsWrapper
+    pub secondary_results: ResultsWrapper
 }
 
 #[derive(Debug, Clone, Deserialize)]
@@ -390,7 +385,7 @@ pub struct ResultsWrapper{
 }
 #[derive(Debug, Clone, Deserialize)]
 pub struct Results{
-    pub contents: Vec<Item>
+    pub contents: Vec<ItemSectionRendererContents>
 }
 
 #[derive(Debug, Clone, Deserialize)]
@@ -406,9 +401,9 @@ pub struct TwoColumnSearchResultsRenderer{
 #[derive(Debug, Clone, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct TwoColumnWrapper{
-    pub two_column_browse_results_renderer: TwoColumnBrowseResultsRenderer,
-    pub two_column_next_results: TwoColumnWatchNextResults,
-    pub two_column_search_results_renderer: TwoColumnSearchResultsRenderer,
+    pub two_column_browse_results_renderer: Option<TwoColumnBrowseResultsRenderer>,
+    pub two_column_watch_next_results: Option<TwoColumnWatchNextResults>,
+    pub two_column_search_results_renderer: Option<TwoColumnSearchResultsRenderer>,
 }
 
 #[derive(Debug, Clone, Deserialize)]
@@ -440,7 +435,7 @@ pub struct PlayerBar{
 #[derive(Debug, Clone, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct MultiMarkersPlayerBarRenderer{
-    pub markers_ma: Vec<MarkersMap>
+    pub markers_map: Vec<MarkersMap>
 }
 #[derive(Debug, Clone, Deserialize)]
 pub struct MarkersMap{
