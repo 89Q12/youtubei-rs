@@ -57,8 +57,8 @@ pub struct PlayerResult{
 #[derive(Debug, Clone, Deserialize)]
 pub struct BrowseResult{
     pub contents: TwoColumnWrapper,
-    pub header: C4TabbedHeaderRenderer,
-    pub metadata: ChannelMetadataRenderer
+    pub header: C4TabbedHeaderRendererWrapper,
+    pub metadata: ChannelMetadataRendererWrapper
 }
 /// Represents a result from a arbitrary resolve_url query
 #[derive(Debug, Clone, Deserialize)]
