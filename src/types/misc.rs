@@ -1,7 +1,7 @@
 use serde::Deserialize;
 use serde_json::Value;
 
-use super::{video::{VideoRenderer, VideoPrimaryInfoRenderer, VideoSecondaryInfoRenderer, CompactVideoRenderer, GridVideoRenderer}, playlist::GridPlaylistRenderer, channel::{BackstagePostThreadRenderer, TabRenderer}};
+use super::{video::{VideoRenderer, VideoPrimaryInfoRenderer, VideoSecondaryInfoRenderer, CompactVideoRenderer, GridVideoRenderer}, playlist::{GridPlaylistRenderer, PlaylistRenderer}, channel::{BackstagePostThreadRenderer, TabRenderer, ChannelRenderer}};
 
 #[derive(Debug, Clone, Deserialize)]
 pub struct Thumbnails{
@@ -335,7 +335,10 @@ pub enum  ItemSectionRendererContents{
     GridRenderer(GridRenderer),
     GridVideoRenderer(GridVideoRenderer),
     BackstagePostThreadRenderer(BackstagePostThreadRenderer),
-    ItemSectionRenderer(ItemSectionRenderer)
+    ItemSectionRenderer(ItemSectionRenderer),
+    PlaylistRenderer(PlaylistRenderer),
+    VideoRenderer(VideoRenderer),
+    ChannelRenderer(ChannelRenderer),
 }
 #[derive(Debug, Clone, Deserialize)]
 #[serde(rename_all = "camelCase")]
@@ -392,12 +395,18 @@ pub struct Results{
 pub struct TwoColumnBrowseResultsRenderer{
     pub tabs: Vec<TabRenderer>
 }
+#[derive(Debug, Clone, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct TwoColumnSearchResultsRenderer{
+    pub primary_contents: SectionListRenderer,
+}
 
 #[derive(Debug, Clone, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct TwoColumnWrapper{
     pub two_column_browse_results_renderer: TwoColumnBrowseResultsRenderer,
-    pub two_column_next_results: TwoColumnWatchNextResults
+    pub two_column_next_results: TwoColumnWatchNextResults,
+    pub two_column_search_results_renderer: TwoColumnSearchResultsRenderer,
 }
 
 #[derive(Debug, Clone, Deserialize)]
