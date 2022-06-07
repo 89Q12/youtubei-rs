@@ -98,7 +98,7 @@ pub struct  VideoRenderer{
    pub video_id: String,
    pub thumbnail: Thumbnails,
    pub title: Runs,
-   pub long_by_line_text: Runs,
+   pub long_byline_text: Runs,
    pub published_time_text: SimpleText,
    pub length_text: AccessibilitySimpleText,
    pub view_count_text: SimpleText,
@@ -106,7 +106,7 @@ pub struct  VideoRenderer{
    pub badges: Option<Vec<BadgeRendererVec>>,
    pub owner_badges:Option<Vec<BadgeRendererVec>>,
    pub owner_text: Runs,
-   pub short_line_by_text: Runs,
+   pub short_byline_text: Runs,
    pub short_view_count_text: AccessibilitySimpleText,
 }
 
@@ -134,7 +134,6 @@ pub struct GridVideoRenderer{
     pub video_id: String,
     pub thumbnail: Thumbnails,
     pub title: Title,
-    pub long_byline_text: Runs,
     pub published_time_text: SimpleText,
     pub view_count_text: SimpleText,
     pub navigation_endpoint: NavigationEndpoint,
