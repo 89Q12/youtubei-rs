@@ -14,10 +14,11 @@ pub struct  Thumbnail{
     pub height: u32,
 }
 #[derive(Debug, Clone, Deserialize)]
+#[serde(rename_all = "camelCase")]
 pub struct Title{
     pub runs: Option<Vec<Run>>,
     pub accessibility:Option<Accessibility>,
-    pub simple_text: Option<SimpleText>,    
+    pub simple_text: Option<String>,    
 }
 #[derive(Debug, Clone, Deserialize)]
 pub struct Runs{
@@ -25,6 +26,7 @@ pub struct Runs{
     pub accessibility: Option<Accessibility>,
 }
 #[derive(Debug, Clone, Deserialize)]
+#[serde(rename_all = "camelCase")]
 pub struct Run{
     pub text: String,
     pub navigation_endpoint: Option<NavigationEndpoint>
