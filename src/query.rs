@@ -1,3 +1,4 @@
+use serde_json::json;
 use tracing::Level;
 
 use crate::endpoints;
@@ -5,10 +6,12 @@ use crate::endpoints::*;
 use crate::extractors::*;
 use crate::types::channel::{ChannelTab,Tab};
 use crate::types::client::ClientConfig;
+use crate::types::error::Errors;
 use crate::types::playlist::Playlist;
+use crate::types::query_results::NextResult;
 use crate::types::query_results::{CommentsQuery, VideoQuery, ChannelQuery,SearchQuery};
 use crate::types::video::{SearchVideo,Video};
-use crate::types::error::RequestError;
+use crate::types::error::{RequestError, ParseError};
 use crate::utils::unwrap_to_string;
 
 pub async fn search_legacy(query: String,client_config: &ClientConfig) -> Result<SearchQuery, RequestError>{
@@ -19,7 +22,6 @@ pub async fn search_legacy(query: String,client_config: &ClientConfig) -> Result
         Err(err) => Err(err),
     }
 }
-
 pub async fn load_search_legacy(continuation:String,client_config: &ClientConfig) ->Result<SearchQuery, RequestError>{
     tracing::event!(target: "youtubei_rs",Level::DEBUG,"Continuing search with continuation {}",continuation);
     let json = endpoints::search_continuation(&continuation, &client_config).await;
@@ -36,7 +38,6 @@ pub async fn load_related_videos_legacy(continuation:String,client_config: &Clie
         Err(err) => Err(err),
     }
 }
-
 pub async fn get_comments_legacy(continuation:String,client_config: &ClientConfig) ->Result<CommentsQuery,  RequestError>{
     tracing::event!(target: "youtubei_rs",Level::DEBUG,"Loading comments with continuation {}",continuation);
     let comments_json = next(&continuation, client_config).await;
@@ -45,7 +46,6 @@ pub async fn get_comments_legacy(continuation:String,client_config: &ClientConfi
         Err(err) => Err(err),
     }
 }
-
 pub async fn get_video_legacy(video_id:String, params: String,client_config: &ClientConfig) ->Result<VideoQuery,  RequestError>{
     tracing::event!(target: "youtubei_rs",Level::DEBUG,"Loading video with id {}",video_id);
     let player_json = player(&video_id, &params, &client_config).await;
@@ -73,7 +73,6 @@ pub async fn get_video_legacy(video_id:String, params: String,client_config: &Cl
         related_videos: Vec::new(),
     }))
 }
-
 pub async fn get_channel_info_legacy(channel_id:String,client_config: &ClientConfig) -> Result<ChannelQuery,  RequestError>{
     tracing::event!(target: "youtubei_rs",Level::DEBUG,"Loading channel info for channel: {}", channel_id);
     let complete_url = "https://www.youtube.com/".to_owned() + &channel_id +"/about"; 
@@ -138,5 +137,19 @@ pub async fn get_playlist_legacy(playlist_id: String,client_config: &ClientConfi
     match playlist_json {
         Ok(result) =>     Ok(extract_playlist(&result)),
         Err(err) => return Err(err),
+    }
+}
+
+pub async fn next_video_id(video_id:String, params: String,client_config: &ClientConfig) -> Result<NextResult, Errors>{
+    let json = next_with_data(json!({
+        "videoId": video_id,
+        "params": params,
+    }), client_config).await;
+    match json {
+        Ok(json) => match extract_next_result(&json){
+            Ok(result) => return Ok(result),
+            Err(err) => return Err(Errors::ParseError(err))
+        },
+        Err(err) => return Err(Errors::RequestError(err)),
     }
 }
