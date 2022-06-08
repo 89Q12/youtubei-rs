@@ -11,8 +11,8 @@ pub(crate) mod extractors;
 /// Refer to the tests for usage information
 pub mod query;
 /// Contains test functions
-mod tests{
 #[cfg(test)]
+mod tests{
     use serde_json::json;
 
     use crate::{query::{get_comments_legacy, load_related_videos_legacy, get_playlist_legacy,get_video_legacy},utils::default_client_config, types::{video::VideoRenderer, query_results::{NextResult, BrowseResult, PlayerResult, SearchResult, ResolveResult}}, endpoints, extractors};
@@ -909,7 +909,8 @@ async fn test_next_extractor_sucess(){
   let client_config = &default_client_config();
   let result = extractors::extract_next_result(&endpoints::next_with_data(json!({
     "videoId": "td6zO4r2ogI"
-  }),client_config).await.unwrap()); assert_eq!(result.is_ok(), true);
+  }),client_config).await.unwrap()); 
+  assert_eq!(result.is_ok(), true);
 }
 #[tokio::test]
 async fn test_next_extractor_error(){
