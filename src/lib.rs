@@ -15,7 +15,7 @@ mod tests{
 #[cfg(test)]
     use serde_json::json;
 
-    use crate::{query::{get_comments, load_related_videos, get_playlist,get_video},utils::default_client_config, types::{video::VideoRenderer, query_results::{NextResult, BrowseResult, PlayerResult, SearchResult, ResolveResult}}, endpoints};
+    use crate::{query::{get_comments, load_related_videos, get_playlist,get_video},utils::default_client_config, types::{video::VideoRenderer, query_results::{NextResult, BrowseResult, PlayerResult, SearchResult, ResolveResult}}, endpoints, extractors};
     use crate::{types::{channel::*, video::{VideoPrimaryInfoRenderer, VideoSecondaryInfoRenderer, CompactVideoRenderer}}};
 
 
@@ -873,5 +873,12 @@ async fn test_resolve_url(){
   let result: ResolveResult = serde_json::from_value(j).unwrap();
   assert_eq!(result.endpoint.browse_endpoint.is_some(), true);
   assert_ne!(result.endpoint.browse_endpoint.unwrap().browse_id, "")
+}
+#[tokio::test]
+async fn test_resolve_url_extractor_success(){
+  let client_config = &default_client_config();
+  let result = extractors::extract_resolve_result(&endpoints::resolve_url("https://www.youtube.com//c/LinusTechTips/video",client_config).await.unwrap());
+  assert_eq!(result.is_ok(), true);
+  assert_ne!(result.unwrap().endpoint.browse_endpoint.unwrap().browse_id, "")
 }
 }
