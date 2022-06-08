@@ -92,7 +92,7 @@ pub struct ChannelRenderer{
     pub short_byline_text: Runs,
     pub video_count_text: Runs,
     pub owner_badges: Option<Vec<BadgeRendererVec>>,
-    pub subscriber_count_text: AccessibilitySimpleText,
+    pub subscriber_count_text: Option<AccessibilitySimpleText>,
     pub long_byline_text: Runs,
 }
 
@@ -143,5 +143,5 @@ pub struct GridChannelRenderer{
     pub thumbnail: Thumbnails,
     pub video_count_text: Runs,
     pub owner_badges: Option<Vec<BadgeRendererVec>>,
-    pub subscriber_count_text: AccessibilitySimpleText,
+    pub subscriber_count_text: Option<AccessibilitySimpleText>,
 }

@@ -149,7 +149,7 @@ pub struct VideoOwnerRenderer{
     pub thumbnail: Thumbnails,
     pub title: Runs,
     pub navigation_endpoint: NavigationEndpoint,
-    pub subscriber_count_text: AccessibilitySimpleText,
+    pub subscriber_count_text: Option<AccessibilitySimpleText>,
     pub badges: Vec<BadgeRendererVec>,
 }
 #[derive(Debug, Clone, Deserialize)]
@@ -660,7 +660,7 @@ pub struct C4TabbedHeaderRenderer{
     pub tv_banner: Thumbnails,
     pub mobile_banner: Thumbnails,
     pub badges: Option<Vec<BadgeRendererVec>>,
-    pub subscriber_count_text: AccessibilitySimpleText,
+    pub subscriber_count_text: Option<AccessibilitySimpleText>,
    
 }
 #[derive(Debug, Clone, Deserialize)]
