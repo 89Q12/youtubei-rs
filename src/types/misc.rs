@@ -24,7 +24,6 @@ pub struct Title{
 pub struct Runs{
     pub runs: Vec<Run>,
     pub accessibility: Option<Accessibility>,
-    pub simple_text: Option<SimpleText>
 }
 #[derive(Debug, Clone, Deserialize)]
 #[serde(rename_all = "camelCase")]
@@ -626,7 +625,7 @@ pub struct TranslationLanguages{
 #[derive(Debug, Clone, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct ShelfRenderer{
-    pub title: Runs,
+    pub title: Title,
     pub content: ShelfContent,
 }
 #[derive(Debug, Clone, Deserialize)]
