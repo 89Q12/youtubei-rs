@@ -6,11 +6,12 @@ use serde_json::Value;
 #[derive(Debug)]
 pub struct  ParseError{
     pub message: String,
+    pub to_parse_type: String,
 }
 impl  Error for ParseError{}
 impl  Display for ParseError{
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(f, "{}", self.message)
+        write!(f, "Failed to parse into {}, with message: {}", self.to_parse_type,self.message)
     }
 }
 /// Will be returned when an error while requesting data from the api
