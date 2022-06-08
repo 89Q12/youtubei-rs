@@ -153,3 +153,13 @@ pub async fn next_video_id(video_id:String, params: String,client_config: &Clien
         Err(err) => return Err(Errors::RequestError(err)),
     }
 }
+pub async fn next_continuation(continuation:String,client_config: &ClientConfig) -> Result<NextResult, Errors>{
+    let json = next(&continuation, client_config).await;
+    match json {
+        Ok(json) => match extract_next_result(&json){
+            Ok(result) => return Ok(result),
+            Err(err) => return Err(Errors::ParseError(err))
+        },
+        Err(err) => return Err(Errors::RequestError(err)),
+    }
+}
