@@ -28,3 +28,8 @@ impl  Display for RequestError{
         write!(f, "{} on endpoint {} with status {} and request data {}", self.message, self.endpoint, self.status, self.request_data)
     }
 }
+
+pub enum Errors {
+    RequestError(RequestError),
+    ParseError(ParseError)
+}
