@@ -8,6 +8,7 @@ use crate::types::channel::{ChannelTab,Tab};
 use crate::types::client::ClientConfig;
 use crate::types::error::Errors;
 use crate::types::playlist::Playlist;
+use crate::types::query_results::BrowseResult;
 use crate::types::query_results::NextResult;
 use crate::types::query_results::{CommentsQuery, VideoQuery, ChannelQuery,SearchQuery};
 use crate::types::video::{SearchVideo,Video};
@@ -157,6 +158,16 @@ pub async fn next_continuation(continuation:String,client_config: &ClientConfig)
     let json = next(&continuation, client_config).await;
     match json {
         Ok(json) => match extract_next_result(&json){
+            Ok(result) => return Ok(result),
+            Err(err) => return Err(Errors::ParseError(err))
+        },
+        Err(err) => return Err(Errors::RequestError(err)),
+    }
+}
+pub async fn browse_id(browse_id:String,params:String,client_config: &ClientConfig) -> Result<BrowseResult, Errors>{
+    let json = browse_browseid(&browse_id,&params ,client_config).await;
+    match json {
+        Ok(json) => match extract_browse_result(&json){
             Ok(result) => return Ok(result),
             Err(err) => return Err(Errors::ParseError(err))
         },
