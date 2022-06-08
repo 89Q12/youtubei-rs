@@ -1,7 +1,7 @@
 use serde::Deserialize;
 use serde_json::Value;
 
-use super::{video::{VideoRenderer, VideoPrimaryInfoRenderer, VideoSecondaryInfoRenderer, CompactVideoRenderer, GridVideoRenderer, CommentThreadRenderer}, playlist::{GridPlaylistRenderer, PlaylistRenderer}, channel::{BackstagePostThreadRenderer, TabRenderer, ChannelRenderer, ChannelMetadataRenderer}};
+use super::{video::{VideoRenderer, VideoPrimaryInfoRenderer, VideoSecondaryInfoRenderer, CompactVideoRenderer, GridVideoRenderer, CommentThreadRenderer}, playlist::{GridPlaylistRenderer, PlaylistRenderer}, channel::{BackstagePostThreadRenderer, TabRenderer, ChannelRenderer, ChannelMetadataRenderer, ChannelVideoPlayerRenderer}};
 
 #[derive(Debug, Clone, Deserialize)]
 pub struct Thumbnails{
@@ -24,6 +24,7 @@ pub struct Title{
 pub struct Runs{
     pub runs: Vec<Run>,
     pub accessibility: Option<Accessibility>,
+    pub simple_text: Option<SimpleText>
 }
 #[derive(Debug, Clone, Deserialize)]
 #[serde(rename_all = "camelCase")]
@@ -381,7 +382,7 @@ pub enum  ItemSectionRendererContents{
     ShelfRenderer(ShelfRenderer),
     RadioRenderer(Value), // TODO FIND OUT WHAT THAT IS
     CompactRadioRenderer(Value), // TODO FIND OUT WHAT THAT IS
-    ChannelVideoPlayerRenderer(),
+    ChannelVideoPlayerRenderer(ChannelVideoPlayerRenderer),
 }
 #[derive(Debug, Clone, Deserialize)]
 #[serde(rename_all = "camelCase")]
@@ -617,7 +618,7 @@ pub struct TranslationLanguages{
 #[derive(Debug, Clone, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct ShelfRenderer{
-    pub title: SimpleText,
+    pub title: Runs,
     pub content: ShelfContent,
 }
 #[derive(Debug, Clone, Deserialize)]
