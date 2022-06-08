@@ -3,7 +3,7 @@ A asynchronous implementation of the invidious innertube aka youtubei API wrappe
 Using tokio,reqwest, serde and serde_json.
 
 # Breaking changes
-- queries are now prefixed with _legacy, if you rely on those just rename them in your program they still function the same
+- old queries are now prefixed with _legacy, if you rely on those just rename them in your program they still function the same
 # Dependencies
 - serde_json 
 - serde: features = ["derive"]
