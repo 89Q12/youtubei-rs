@@ -123,3 +123,13 @@ pub struct ChannelMetadataRenderer{
 pub struct BackstagePostThreadRenderer{
     pub post: BackstagePostRenderer
 }
+
+#[derive(Debug, Clone, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct ChannelVideoPlayerRenderer{
+    pub video_id: String,
+    pub title: Runs,
+    pub description: Runs,
+    pub view_count_text: SimpleText,
+    pub published_time_text:Runs,
+}
