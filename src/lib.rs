@@ -895,4 +895,36 @@ async fn test_search_extractor_error(){
   assert_eq!(result.is_ok(), false);
   assert_eq!(result.unwrap_err().to_parse_type, "SearchResult");
 }
+
+#[tokio::test]
+async fn test_next_extractor_sucess(){
+  let client_config = &default_client_config();
+  let result = extractors::extract_next_result(&endpoints::next_with_data(json!({
+    "videoId": "td6zO4r2ogI"
+  }),client_config).await.unwrap()); assert_eq!(result.is_ok(), true);
+}
+#[tokio::test]
+async fn test_next_extractor_error(){
+  let client_config = &default_client_config();
+  let result = extractors::extract_next_result(&endpoints::next_with_data(json!({
+    "videoId": "e"
+  }),client_config).await.unwrap());
+  assert_eq!(result.is_ok(), false);
+  assert_eq!(result.unwrap_err().to_parse_type, "NextResult");
+}
+
+#[tokio::test]
+async fn test_browse_extractor_sucess(){
+  let client_config = &default_client_config();
+  let result = extractors::extract_browse_result(&endpoints::browse_browseid("UCXuqSBlHAE6Xw-yeJA0Tunw","EgZ2aWRlb3O4AQA%3D",client_config).await.unwrap());
+  assert_eq!(result.is_ok(), true);
+}
+#[tokio::test]
+async fn test_browse_extractor_error(){
+  let client_config = &default_client_config();
+  let result = extractors::extract_browse_result(&endpoints::browse_browseid("","",client_config).await.unwrap());
+  assert_eq!(result.is_ok(), false);
+  assert_eq!(result.unwrap_err().to_parse_type, "BrowseResult");
+}
+
 }
