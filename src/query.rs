@@ -196,3 +196,13 @@ pub async fn player(video_id:String,params:String,client_config: &ClientConfig) 
         Err(err) => return Err(Errors::RequestError(err)),
     }
 }
+pub async fn resolve(url:String,client_config: &ClientConfig) -> Result<ResolveResult, Errors>{
+    let json = endpoints::resolve_url(&url ,client_config).await;
+    match json {
+        Ok(json) => match extract_resolve_result(&json){
+            Ok(result) => return Ok(result),
+            Err(err) => return Err(Errors::ParseError(err))
+        },
+        Err(err) => return Err(Errors::RequestError(err)),
+    }
+}
