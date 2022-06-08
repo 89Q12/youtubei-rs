@@ -828,6 +828,14 @@ async fn test_browse_query_browse_id(){
   assert_eq!(result.metadata.channel_metadata_renderer.title, "Linus Tech Tips");
 }
 #[tokio::test]
+async fn test_browse_query_browse_id_no_params(){
+  let client_config = &default_client_config();
+  let j: serde_json::Value = endpoints::browse_browseid("UCXuqSBlHAE6Xw-yeJA0Tunw","",client_config).await.unwrap();
+  let result: BrowseResult = serde_json::from_value(j).unwrap();
+  assert_eq!(result.contents.unwrap().two_column_browse_results_renderer.is_some(),true);
+  assert_eq!(result.metadata.channel_metadata_renderer.title, "Linus Tech Tips");
+}
+#[tokio::test]
 async fn test_browse_query_continuation(){
   let client_config = &default_client_config();
   let j: serde_json::Value = endpoints::browse_continuation("4qmFsgJ_EhhVQ1h1cVNCbEhBRTZYdy15ZUpBMFR1bncaNEVnWjJhV1JsYjNNWUF5QUFNQUU0QWVvREZFVm5jMGx5WDBOQmJWcExWQzFpZG1aQlUyZDWaAixicm93c2UtZmVlZFVDWHVxU0JsSEFFNlh3LXllSkEwVHVud3ZpZGVvczEwMg%3D%3D",client_config).await.unwrap();
