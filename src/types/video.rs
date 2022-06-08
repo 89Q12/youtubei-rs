@@ -158,3 +158,14 @@ pub struct CommentThreadRenderer{
     pub comment: CommentRendererWrapper,
     pub replies: Option<CommentRepliesRendererWrapper>
 }
+/// Represents a youtube short
+#[derive(Debug, Clone, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct ReelItemRenderer{
+    pub video_id: String,
+    pub headline: SimpleText,
+    pub thumbnail: Thumbnails,
+    pub view_count_text: AccessibilitySimpleText,
+
+    pub accessibility: Accessibility
+}
