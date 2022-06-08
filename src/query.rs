@@ -12,9 +12,10 @@ use crate::types::query_results::BrowseResult;
 use crate::types::query_results::NextResult;
 use crate::types::query_results::PlayerResult;
 use crate::types::query_results::ResolveResult;
+use crate::types::query_results::SearchResult;
 use crate::types::query_results::{CommentsQuery, VideoQuery, ChannelQuery,SearchQuery};
 use crate::types::video::{SearchVideo,Video};
-use crate::types::error::{RequestError, ParseError};
+use crate::types::error::RequestError;
 use crate::utils::unwrap_to_string;
 
 pub async fn search_legacy(query: String,client_config: &ClientConfig) -> Result<SearchQuery, RequestError>{
@@ -200,6 +201,26 @@ pub async fn resolve(url:String,client_config: &ClientConfig) -> Result<ResolveR
     let json = endpoints::resolve_url(&url ,client_config).await;
     match json {
         Ok(json) => match extract_resolve_result(&json){
+            Ok(result) => return Ok(result),
+            Err(err) => return Err(Errors::ParseError(err))
+        },
+        Err(err) => return Err(Errors::RequestError(err)),
+    }
+}
+pub async fn search(query:String, params: String,client_config: &ClientConfig) -> Result<SearchResult, Errors>{
+    let json = endpoints::search(&query,&params,client_config).await;
+    match json {
+        Ok(json) => match extract_search_result(&json){
+            Ok(result) => return Ok(result),
+            Err(err) => return Err(Errors::ParseError(err))
+        },
+        Err(err) => return Err(Errors::RequestError(err)),
+    }
+}
+pub async fn search_continuation(continuation:String,client_config: &ClientConfig) -> Result<SearchResult, Errors>{
+    let json = endpoints::search_continuation(&continuation,client_config).await;
+    match json {
+        Ok(json) => match extract_search_result(&json){
             Ok(result) => return Ok(result),
             Err(err) => return Err(Errors::ParseError(err))
         },
