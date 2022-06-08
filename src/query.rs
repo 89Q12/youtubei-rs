@@ -10,6 +10,8 @@ use crate::types::error::Errors;
 use crate::types::playlist::Playlist;
 use crate::types::query_results::BrowseResult;
 use crate::types::query_results::NextResult;
+use crate::types::query_results::PlayerResult;
+use crate::types::query_results::ResolveResult;
 use crate::types::query_results::{CommentsQuery, VideoQuery, ChannelQuery,SearchQuery};
 use crate::types::video::{SearchVideo,Video};
 use crate::types::error::{RequestError, ParseError};
@@ -49,7 +51,7 @@ pub async fn get_comments_legacy(continuation:String,client_config: &ClientConfi
 }
 pub async fn get_video_legacy(video_id:String, params: String,client_config: &ClientConfig) ->Result<VideoQuery,  RequestError>{
     tracing::event!(target: "youtubei_rs",Level::DEBUG,"Loading video with id {}",video_id);
-    let player_json = player(&video_id, &params, &client_config).await;
+    let player_json = endpoints::player(&video_id, &params, &client_config).await;
     /*
     Error handling
     */
@@ -178,6 +180,16 @@ pub async fn browse_continuation(continuation:String,client_config: &ClientConfi
     let json = endpoints::browse_continuation(&continuation, client_config).await;
     match json {
         Ok(json) => match extract_browse_result(&json){
+            Ok(result) => return Ok(result),
+            Err(err) => return Err(Errors::ParseError(err))
+        },
+        Err(err) => return Err(Errors::RequestError(err)),
+    }
+}
+pub async fn player(video_id:String,params:String,client_config: &ClientConfig) -> Result<PlayerResult, Errors>{
+    let json = endpoints::player(&video_id,&params ,client_config).await;
+    match json {
+        Ok(json) => match extract_player_result(&json){
             Ok(result) => return Ok(result),
             Err(err) => return Err(Errors::ParseError(err))
         },
