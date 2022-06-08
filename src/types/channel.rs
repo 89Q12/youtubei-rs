@@ -133,3 +133,15 @@ pub struct ChannelVideoPlayerRenderer{
     pub view_count_text: SimpleText,
     pub published_time_text:Runs,
 }
+
+#[derive(Debug, Clone, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct GridChannelRenderer{
+    pub channel_id: String,
+    pub title: SimpleText,
+    pub navigation_endpoint: NavigationEndpoint,
+    pub thumbnail: Thumbnails,
+    pub video_count_text: Runs,
+    pub owner_badges: Option<Vec<BadgeRendererVec>>,
+    pub subscriber_count_text: AccessibilitySimpleText,
+}

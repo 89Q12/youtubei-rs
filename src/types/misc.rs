@@ -1,7 +1,7 @@
 use serde::Deserialize;
 use serde_json::Value;
 
-use super::{video::{VideoRenderer, VideoPrimaryInfoRenderer, VideoSecondaryInfoRenderer, CompactVideoRenderer, GridVideoRenderer, CommentThreadRenderer}, playlist::{GridPlaylistRenderer, PlaylistRenderer}, channel::{BackstagePostThreadRenderer, TabRenderer, ChannelRenderer, ChannelMetadataRenderer, ChannelVideoPlayerRenderer}};
+use super::{video::{VideoRenderer, VideoPrimaryInfoRenderer, VideoSecondaryInfoRenderer, CompactVideoRenderer, GridVideoRenderer, CommentThreadRenderer}, playlist::{GridPlaylistRenderer, PlaylistRenderer}, channel::{BackstagePostThreadRenderer, TabRenderer, ChannelRenderer, ChannelMetadataRenderer, ChannelVideoPlayerRenderer, GridChannelRenderer}};
 
 #[derive(Debug, Clone, Deserialize)]
 pub struct Thumbnails{
@@ -371,6 +371,7 @@ pub enum  ItemSectionRendererContents{
     PlaylistRenderer(PlaylistRenderer),
     VideoRenderer(VideoRenderer),
     ChannelRenderer(ChannelRenderer),
+    GridChannelRenderer(GridChannelRenderer),
     GridPlaylistRenderer(GridPlaylistRenderer),
     VideoPrimaryInfoRenderer(VideoPrimaryInfoRenderer),
     VideoSecondaryInfoRenderer(VideoSecondaryInfoRenderer),
