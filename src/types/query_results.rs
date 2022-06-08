@@ -65,7 +65,7 @@ pub struct BrowseResult{
 /// Represents a result from a arbitrary resolve_url query
 #[derive(Debug, Clone, Deserialize)]
 pub struct ResolveResult{
-    pub endpoint: BrowseEndpoint
+    pub endpoint: NavigationEndpoint
 }
 
 /// Represents a result from a arbitrary search query
