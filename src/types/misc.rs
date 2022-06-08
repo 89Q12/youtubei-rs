@@ -1,7 +1,7 @@
 use serde::Deserialize;
 use serde_json::Value;
 
-use super::{video::{VideoRenderer, VideoPrimaryInfoRenderer, VideoSecondaryInfoRenderer, CompactVideoRenderer, GridVideoRenderer, CommentThreadRenderer}, playlist::{GridPlaylistRenderer, PlaylistRenderer}, channel::{BackstagePostThreadRenderer, TabRenderer, ChannelRenderer, ChannelMetadataRenderer, ChannelVideoPlayerRenderer, GridChannelRenderer}};
+use super::{video::{VideoRenderer, VideoPrimaryInfoRenderer, VideoSecondaryInfoRenderer, CompactVideoRenderer, GridVideoRenderer, CommentThreadRenderer, ReelItemRenderer}, playlist::{GridPlaylistRenderer, PlaylistRenderer}, channel::{BackstagePostThreadRenderer, TabRenderer, ChannelRenderer, ChannelMetadataRenderer, ChannelVideoPlayerRenderer, GridChannelRenderer}};
 
 #[derive(Debug, Clone, Deserialize)]
 pub struct Thumbnails{
@@ -60,8 +60,14 @@ pub struct NavigationEndpoint {
     pub browse_endpoint: Option<BrowseEndpoint>,
     pub watch_endpoint: Option<WatchEndpoint>,
     pub continuation_endpoint: Option<ContinuationEndpoint>,
+    pub reel_watch_endpoint: Option<ReelWatchEndpoint>
 }
-
+#[derive(Debug, Clone, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct ReelWatchEndpoint{
+    pub video_id: String,
+    pub params: String
+}
 #[derive(Debug, Clone, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct WatchEndpoint {
@@ -384,6 +390,7 @@ pub enum  ItemSectionRendererContents{
     RadioRenderer(Value), // TODO FIND OUT WHAT THAT IS
     CompactRadioRenderer(Value), // TODO FIND OUT WHAT THAT IS
     ChannelVideoPlayerRenderer(ChannelVideoPlayerRenderer),
+    ReelShelfRenderer(ReelShelfRenderer), // Shorts are stored in here
 }
 #[derive(Debug, Clone, Deserialize)]
 #[serde(rename_all = "camelCase")]
@@ -621,6 +628,17 @@ pub struct TranslationLanguages{
 pub struct ShelfRenderer{
     pub title: Runs,
     pub content: ShelfContent,
+}
+#[derive(Debug, Clone, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct ReelShelfRenderer{
+    pub title: Runs,
+    pub items: Vec<ReelShelfContent>
+}
+#[derive(Debug, Clone, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct ReelShelfContent{
+    pub reel_item_renderer:ReelItemRenderer
 }
 #[derive(Debug, Clone, Deserialize)]
 #[serde(rename_all = "camelCase")]
