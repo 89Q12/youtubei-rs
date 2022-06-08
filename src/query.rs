@@ -116,7 +116,7 @@ pub async fn get_channel_tab_url_legacy(channel_id:String,tab: Tab, client_confi
 pub async fn get_channel_tab_continuation_legacy(continuation:String,tab: Tab, client_config: &ClientConfig) -> Result<ChannelTab, RequestError>{
     tracing::event!(target: "youtubei_rs",Level::DEBUG,"Loading channel tab: {}, with continuation: {}", tab.get_name(),continuation);
     let index = tab.get_index();
-    let channel_json = browse_continuation(&continuation,&client_config).await;
+    let channel_json = endpoints::browse_continuation(&continuation,&client_config).await;
     match channel_json {
         Ok(result) => Ok(extract_channel_tab(&result,index)),
         Err(err) => Err(err),
@@ -166,6 +166,16 @@ pub async fn next_continuation(continuation:String,client_config: &ClientConfig)
 }
 pub async fn browse_id(browse_id:String,params:String,client_config: &ClientConfig) -> Result<BrowseResult, Errors>{
     let json = browse_browseid(&browse_id,&params ,client_config).await;
+    match json {
+        Ok(json) => match extract_browse_result(&json){
+            Ok(result) => return Ok(result),
+            Err(err) => return Err(Errors::ParseError(err))
+        },
+        Err(err) => return Err(Errors::RequestError(err)),
+    }
+}
+pub async fn browse_continuation(continuation:String,client_config: &ClientConfig) -> Result<BrowseResult, Errors>{
+    let json = endpoints::browse_continuation(&continuation, client_config).await;
     match json {
         Ok(json) => match extract_browse_result(&json){
             Ok(result) => return Ok(result),
