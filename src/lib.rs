@@ -891,7 +891,7 @@ async fn test_resolve_url_extractor_success(){
 }
 
 #[tokio::test]
-async fn test_search_extractor_sucess(){
+async fn test_search_extractor_success(){
   let client_config = &default_client_config();
   let result = extractors::extract_search_result(&endpoints::search("ltt","",client_config).await.unwrap());
   assert_eq!(result.is_ok(), true);
@@ -905,7 +905,7 @@ async fn test_search_extractor_error(){
 }
 
 #[tokio::test]
-async fn test_next_extractor_sucess(){
+async fn test_next_extractor_success(){
   let client_config = &default_client_config();
   let result = extractors::extract_next_result(&endpoints::next_with_data(json!({
     "videoId": "td6zO4r2ogI"
@@ -922,7 +922,7 @@ async fn test_next_extractor_error(){
 }
 
 #[tokio::test]
-async fn test_browse_extractor_sucess(){
+async fn test_browse_extractor_success(){
   let client_config = &default_client_config();
   let result = extractors::extract_browse_result(&endpoints::browse_browseid("UCXuqSBlHAE6Xw-yeJA0Tunw","EgZ2aWRlb3O4AQA%3D",client_config).await.unwrap());
   assert_eq!(result.is_ok(), true);

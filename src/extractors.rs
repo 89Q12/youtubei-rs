@@ -375,17 +375,17 @@ endregion comment_extraction
 /*
 region helper functions
 */
-fn extract_continuation_token(continuation_item_render: &Value) -> String{
+fn extract_continuation_token(continuation_item_render: &Value) -> String {
     return unwrap_to_string(continuation_item_render["continuationEndpoint"]["continuationCommand"]["token"].as_str());
 }
-fn extract_browse_endpoint(navigation_endpoint: &Value) -> EndpointBrowse{
+fn extract_browse_endpoint(navigation_endpoint: &Value) -> EndpointBrowse {
     EndpointBrowse { 
         url: unwrap_to_string(navigation_endpoint["commandMetadata"]["webCommandMetadata"]["url"].as_str()), 
         browse_id:unwrap_to_string(navigation_endpoint["browseEndpoint"]["browseId"].as_str()), 
         params: String::from(""),
     }
 }
-fn extract_watch_endpoint(navigation_endpoint: &Value) -> EndpointWatch{
+fn extract_watch_endpoint(navigation_endpoint: &Value) -> EndpointWatch {
     EndpointWatch { 
         url: unwrap_to_string(navigation_endpoint["commandMetadata"]["webCommandMetadata"]["url"].as_str()), 
         video_id: unwrap_to_string(navigation_endpoint["watchEndpoint"]["videoId"].as_str()),
@@ -396,14 +396,9 @@ fn extract_watch_endpoint(navigation_endpoint: &Value) -> EndpointWatch{
 // Runs means there is a text field and an navigationEndpoint field 
 // Badges can be optionally supplied, they are used to determine is the author is verified
 fn extract_author(runs: &Value, badges: Option<&Value>) -> Author {
-    let mut verified: bool = false;
-    if badges.is_some() {
-        verified = is_author_verified(&badges.unwrap()[0]);
-    }
-    
     Author {
         name: unwrap_to_string(runs[0]["text"].as_str()),
-        verified,
+        verified: badges.is_some() && is_author_verified(&badges.unwrap()[0]),
         browse_endpoint: extract_browse_endpoint(&runs[0]["navigationEndpoint"]),
     }
 }
