@@ -53,7 +53,7 @@ pub struct GridPlaylistRenderer{
     pub video_count_text: Runs,
     pub video_count_short_text: SimpleText,
     pub view_playlist_text: Runs,
-    pub published_time_text: SimpleText,
+    pub published_time_text:  Option<SimpleText>, // looks like it misses sometimes
     pub owner_badges:Option<Vec<BadgeRendererVec>>,
     pub navigation_endpoint: NavigationEndpoint,
 }
