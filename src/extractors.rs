@@ -1,5 +1,5 @@
 use serde_json::Value;
-use crate::{types::{endpoints::{EndpointBrowse, EndpointWatch}, query_results::{VideoQuery, SearchQuery,SearchResultEnum, CommentsQuery, NextResult, PlayerResult, SearchResult}, video::{Video,SearchVideo,ChannelVideo,VideoPlayer, Format, PlaylistVideo, Comment}, channel::{Channel,ChannelTab, SearchChannel,CommunityPost,TabTypes::*,TabTypes, Author}, playlist::{SearchPlaylist, Playlist, ChannelPlaylist}, error::ParseError}, utils::{is_author_verified, unwrap_to_string, unwrap_to_i64, is_auto_generated}};
+use crate::{types::{endpoints::{EndpointBrowse, EndpointWatch}, query_results::{VideoQuery, SearchQuery,SearchResultEnum, CommentsQuery, NextResult, PlayerResult, SearchResult, BrowseResult}, video::{Video,SearchVideo,ChannelVideo,VideoPlayer, Format, PlaylistVideo, Comment}, channel::{Channel,ChannelTab, SearchChannel,CommunityPost,TabTypes::*,TabTypes, Author}, playlist::{SearchPlaylist, Playlist, ChannelPlaylist}, error::ParseError}, utils::{is_author_verified, unwrap_to_string, unwrap_to_i64, is_auto_generated}};
 /*
 region video_extraction
 */
@@ -432,6 +432,15 @@ pub fn extract_player_result(json: &Value) -> Result<PlayerResult, ParseError> {
         Err(err) => Err(ParseError{
             message: err.to_string(),
             to_parse_type: String::from("PlayerResult"),
+        }),
+    }
+}
+pub fn extract_browse_result(json: &Value) -> Result<BrowseResult, ParseError> {
+    match serde_json::from_value::<BrowseResult>(json.to_owned()) {
+        Ok(res) => Ok(res),
+        Err(err) => Err(ParseError{
+            message: err.to_string(),
+            to_parse_type: String::from("BrowseResult"),
         }),
     }
 }
