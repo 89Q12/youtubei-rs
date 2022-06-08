@@ -926,5 +926,20 @@ async fn test_browse_extractor_error(){
   assert_eq!(result.is_ok(), false);
   assert_eq!(result.unwrap_err().to_parse_type, "BrowseResult");
 }
+#[tokio::test]
+async fn test_player_extractor_success(){
+  let client_config = &default_client_config();
+  let result = extractors::extract_player_result(&endpoints::player("nr1JnAmy5BA","",client_config).await.unwrap());
+  assert_eq!(result.is_ok(), true);
+}
+
+#[tokio::test]
+async fn test_player_extractor_error(){
+  let client_config = &default_client_config();
+  let result = extractors::extract_player_result(&endpoints::player("","",client_config).await.unwrap());
+  assert_eq!(result.is_ok(), false);
+  assert_eq!(result.unwrap_err().to_parse_type, "PlayerResult");
+}
+
 
 }
