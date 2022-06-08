@@ -15,7 +15,7 @@ mod tests{
 #[cfg(test)]
     use serde_json::json;
 
-    use crate::{query::{get_comments, load_related_videos, get_playlist,get_video},utils::default_client_config, types::{video::VideoRenderer, query_results::{NextResult, BrowseResult, PlayerResult, SearchResult}}, endpoints};
+    use crate::{query::{get_comments, load_related_videos, get_playlist,get_video},utils::default_client_config, types::{video::VideoRenderer, query_results::{NextResult, BrowseResult, PlayerResult, SearchResult, ResolveResult}}, endpoints};
     use crate::{types::{channel::*, video::{VideoPrimaryInfoRenderer, VideoSecondaryInfoRenderer, CompactVideoRenderer}}};
 
 
@@ -865,5 +865,13 @@ async fn test_search_query_different_query(){
   let j: serde_json::Value = endpoints::search("sdjfjds","",client_config).await.unwrap();
   let result: SearchResult = serde_json::from_value(j).unwrap();
   assert_ne!(result.contents.two_column_search_results_renderer.unwrap().primary_contents.section_list_renderer.contents.len(), 0);
+}
+#[tokio::test]
+async fn test_resolve_url(){
+  let client_config = &default_client_config();
+  let j: serde_json::Value = endpoints::resolve_url("https://www.youtube.com//c/LinusTechTips/video",client_config).await.unwrap();
+  let result: ResolveResult = serde_json::from_value(j).unwrap();
+  assert_eq!(result.endpoint.browse_endpoint.is_some(), true);
+  assert_ne!(result.endpoint.browse_endpoint.unwrap().browse_id, "")
 }
 }
