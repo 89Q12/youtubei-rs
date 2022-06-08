@@ -104,8 +104,14 @@ pub struct MenuRenderer{
 #[derive(Debug, Clone, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub enum TopLevelButtons{
-    ButtonRenderer(Value),
+    ButtonRenderer(ButtonRenderer),
     ToggleButtonRenderer(ToggleButtonRenderer)
+}
+#[derive(Debug, Clone, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct ButtonRenderer{
+    pub navigation_endpoint: NavigationEndpoint,
+    pub text: Runs,
 }
 #[derive(Debug, Clone, Deserialize)]
 #[serde(rename_all = "camelCase")]
@@ -322,8 +328,19 @@ pub struct CommentRepliesRenderer{
 #[derive(Debug, Clone, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct ShelfContent{
-    pub vertical_list_renderer: VerticalListRenderer
-
+    pub vertical_list_renderer: Option<VerticalListRenderer>,
+    pub horizontal_list_renderer: Option<HorizontalListRenderer>,
+    pub play_all_button: Option<PlayAllButton>,
+}
+#[derive(Debug, Clone, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct PlayAllButton{
+    pub button_renderer: ButtonRenderer
+}
+#[derive(Debug, Clone, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct HorizontalListRenderer{
+    pub items: Vec<ItemSectionRendererContents>,
 }
 #[derive(Debug, Clone, Deserialize)]
 #[serde(rename_all = "camelCase")]
@@ -393,8 +410,6 @@ pub struct BackstagePostRenderer{
     pub backstage_attachment: BackstageImageRenderer,
     pub publish_time_text: Runs,
     pub vote_count: AccessibilitySimpleText,
-
-
 }
 #[derive(Debug, Clone, Deserialize)]
 #[serde(rename_all = "camelCase")]
