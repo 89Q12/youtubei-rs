@@ -25,7 +25,7 @@ pub struct Video{
    pub is_family_safe: bool,
 }
 
-/// Represents all formats aviable for the current video
+/// Represents all formats available for the current video
 pub struct VideoPlayer{
    pub formats: Vec<Format>,
    pub apdaptiveformts: Vec<Format>,
@@ -94,7 +94,7 @@ pub struct Comment{
 
 #[derive(Debug, Clone, Deserialize)]
 #[serde(rename_all = "camelCase")]
-pub struct  VideoRenderer{
+pub struct VideoRenderer{
    pub video_id: String,
    pub thumbnail: Thumbnails,
    pub title: Runs,
