@@ -98,10 +98,10 @@ pub struct ChannelRenderer{
 
 #[derive(Debug, Clone, Deserialize)]
 pub struct TabRenderer{
-    pub endpoint: NavigationEndpoint,
+    pub endpoint: Option<NavigationEndpoint>,
     pub title: String,
     pub selected: bool,
-    pub content: Option<SectionListRendererWrapper>
+    pub content: Option<TabRendererContent>
 }
 
 #[derive(Debug, Clone, Deserialize)]
