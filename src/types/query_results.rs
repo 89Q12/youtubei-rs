@@ -59,7 +59,7 @@ pub struct PlayerResult{
 pub struct BrowseResult{
     pub contents: Option<TwoColumnWrapper>,
     pub header: Option<HeaderContents>,
-    pub metadata: ChannelMetadataRendererWrapper,
+    pub metadata: Option<ChannelMetadataRendererWrapper>,
     pub on_response_received_actions: Option<Vec<OnResponseReceivedActions>>,
 }
 /// Represents a result from a arbitrary resolve_url query
