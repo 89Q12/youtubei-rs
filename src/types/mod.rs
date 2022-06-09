@@ -14,3 +14,4 @@ pub mod channel;
 pub mod error;
 /// Contains structs and enums to build every response possible from the api
 pub mod misc;
+pub mod filter;
