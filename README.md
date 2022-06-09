@@ -39,7 +39,7 @@ async fn main() {
     let client_config = &default_client_config();
     // get player for video with id gC6dQrScmHE
     let player: PlayerResult = player(String::from("gC6dQrScmHE"),String::from(""),&client_config).await.unwrap();
-    println!("{}",video_query.video_details.title); // video title
+    println!("{}",player.video_details.title); // video title
 }
 
 ```
