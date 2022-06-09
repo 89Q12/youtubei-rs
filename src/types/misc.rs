@@ -390,6 +390,15 @@ pub enum  ItemSectionRendererContents{
     CompactRadioRenderer(Value), // TODO FIND OUT WHAT THAT IS
     ChannelVideoPlayerRenderer(ChannelVideoPlayerRenderer),
     ReelShelfRenderer(ReelShelfRenderer), // Shorts are stored in here
+    RichGridRenderer(RichGridRenderer), // Hashtags are stored in there
+}
+#[derive(Debug, Clone, Deserialize)]
+pub struct RichGridRenderer{
+    pub contents: Vec<RichItemRenderer>,
+}
+#[derive(Debug, Clone, Deserialize)]
+pub struct RichItemRenderer{
+    pub content: VideoRenderer
 }
 #[derive(Debug, Clone, Deserialize)]
 #[serde(rename_all = "camelCase")]
