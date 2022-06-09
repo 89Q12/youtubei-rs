@@ -46,7 +46,7 @@ async fn main() {
 # With logging
 For logging tracing is used so tracing_subscribe can be installed for easier use of tracing. The library has as target youtubei_rs with debug,trace and error levels.
 ```rust
-use youtubei_rs::{query::get_video, utils::default_client_config};
+use youtubei_rs::{query::player, utils::default_client_config};
 #[tokio::main]
 async fn main() {
     std::env::set_var("RUST_LOG", "youtubei_rs=debug");
@@ -55,7 +55,7 @@ async fn main() {
     let client_config = &default_client_config();
     // get player for video with id gC6dQrScmHE
     let player: PlayerResult = player(String::from("gC6dQrScmHE"),String::from(""),&client_config).await.unwrap();
-    println!("{}",video_query.video_details.title); // video title
+    println!("{}",player.video_details.title); // video title
 }
 
 ```
