@@ -216,7 +216,7 @@ pub struct VideoDetails{
     pub video_id: String,
     pub title: String,
     pub length_seconds: String,
-    pub keywords: Vec<String>,
+    pub keywords: Option<Vec<String>>,
     pub channel_id: String,
     pub short_description: String,
     pub thumbnail: Thumbnails,
@@ -647,7 +647,7 @@ pub struct CaptionTrack{
     pub name: SimpleText,
     pub vss_id: String,
     pub language_code: String,
-    pub kind: String,
+    pub kind: Option<String>,
     pub is_translatable: bool
 }
 #[derive(Debug, Clone, Deserialize)]
