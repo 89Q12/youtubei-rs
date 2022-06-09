@@ -1,3 +1,4 @@
+use reqwest::StatusCode;
 use serde_json::{json, Value};
 use tracing::Level;
 use crate::types::client::ClientConfig;
@@ -100,15 +101,24 @@ async fn post_json(endpoint: &str, data: Value, client_config : &ClientConfig) -
   .post("https://www.youtube.com".to_owned() +&url)
   .json(&data)
   .send().await;
-  return match wrapped_response{
-      Ok(t) => match t.json().await{
+  match wrapped_response{
+      Ok(t) => match t.json::<Value>().await{
         Ok(val) => {
           tracing::event!(target:"youtubei_rs",Level::DEBUG,"Successfully requested data from endpoint: {}",endpoint);
-          Ok(val)
+          if !val["error"].is_null(){
+            return Err(RequestError{
+              message: val["error"]["message"].to_string(),
+              status:  StatusCode::BAD_REQUEST,
+              endpoint: endpoint.to_string(),
+              request_data: data,
+            })
+          }else{
+            return Ok(val)
+          }
         },
         Err(e) => {
           tracing::error!("Failed to extract json from response: {:?}", e);
-          Err(RequestError{
+          return Err(RequestError{
           message: e.to_string(),
           status: e.status().unwrap(),
           endpoint: endpoint.to_string(),
