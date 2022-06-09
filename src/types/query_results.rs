@@ -49,7 +49,7 @@ pub struct PlayerResult{
    pub storyboards: StorybordWrapper,
    pub microformat: PlayerMicroformatRenderer,
    pub playability_status:PlayabilityStatus,
-   pub captions: PlayerCaptionsTracklistRenderer
+   pub captions: Option<PlayerCaptionsTracklistRenderer>
 }
 
 
