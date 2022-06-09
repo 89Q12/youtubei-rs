@@ -390,7 +390,6 @@ pub enum  ItemSectionRendererContents{
     CompactRadioRenderer(Value), // TODO FIND OUT WHAT THAT IS
     ChannelVideoPlayerRenderer(ChannelVideoPlayerRenderer),
     ReelShelfRenderer(ReelShelfRenderer), // Shorts are stored in here
-    RichGridRenderer(RichGridRenderer), // Hashtags are stored in there
 }
 #[derive(Debug, Clone, Deserialize)]
 #[serde(rename_all = "camelCase")]
@@ -408,12 +407,30 @@ pub struct HashtagHeaderRenderer{
     pub background_image: Thumbnails,
 }
 #[derive(Debug, Clone, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub enum TabRendererContent{
+    RichGridRenderer(RichGridRenderer), // Hashtags are stored in there
+    SectionListRenderer(SectionListRenderer),
+}
+
+#[derive(Debug, Clone, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub enum RichGridRendererContent{
+    RichItemRenderer(RichItemRenderer),
+    ContinuationItemRenderer(ContinuationItemRenderer), 
+}
+#[derive(Debug, Clone, Deserialize)]
 pub struct RichGridRenderer{
-    pub contents: Vec<RichItemRenderer>,
+    pub contents: Vec<RichGridRendererContent>,
 }
 #[derive(Debug, Clone, Deserialize)]
 pub struct RichItemRenderer{
-    pub content: VideoRenderer
+    pub content: VideoRendererWrapper
+}
+#[derive(Debug, Clone, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct VideoRendererWrapper{
+    pub video_renderer: VideoRenderer
 }
 #[derive(Debug, Clone, Deserialize)]
 #[serde(rename_all = "camelCase")]
