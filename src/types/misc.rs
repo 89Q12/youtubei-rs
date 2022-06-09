@@ -404,7 +404,6 @@ pub struct HashtagHeaderRenderer{
     pub hashtag_info_text: SimpleText,
     pub avatar_facepile: Vec<Thumbnails>,
     pub background_color: u64,
-    pub background_image: Thumbnails,
 }
 #[derive(Debug, Clone, Deserialize)]
 #[serde(rename_all = "camelCase")]
