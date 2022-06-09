@@ -393,6 +393,21 @@ pub enum  ItemSectionRendererContents{
     RichGridRenderer(RichGridRenderer), // Hashtags are stored in there
 }
 #[derive(Debug, Clone, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub enum HeaderContents{
+    C4TabbedHeaderRenderer(C4TabbedHeaderRenderer),
+    HashtagHeaderRenderer(HashtagHeaderRenderer)
+}
+#[derive(Debug, Clone, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct HashtagHeaderRenderer{
+    pub hashtag: SimpleText,
+    pub hashtag_info_text: SimpleText,
+    pub avatar_facepile: Vec<Thumbnails>,
+    pub background_color: u64,
+    pub background_image: Thumbnails,
+}
+#[derive(Debug, Clone, Deserialize)]
 pub struct RichGridRenderer{
     pub contents: Vec<RichItemRenderer>,
 }

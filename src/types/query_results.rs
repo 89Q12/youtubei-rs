@@ -58,7 +58,7 @@ pub struct PlayerResult{
 #[serde(rename_all = "camelCase")]
 pub struct BrowseResult{
     pub contents: Option<TwoColumnWrapper>,
-    pub header: Option<C4TabbedHeaderRendererWrapper>,
+    pub header: Option<HeaderContents>,
     pub metadata: ChannelMetadataRendererWrapper,
     pub on_response_received_actions: Option<Vec<OnResponseReceivedActions>>,
 }
