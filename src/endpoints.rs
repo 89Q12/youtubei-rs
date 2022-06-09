@@ -120,7 +120,7 @@ async fn post_json(endpoint: &str, data: Value, client_config : &ClientConfig) -
           tracing::error!("Failed to extract json from response: {:?}", e);
           return Err(RequestError{
           message: e.to_string(),
-          status: e.status().unwrap(),
+          status: StatusCode::BAD_REQUEST,
           endpoint: endpoint.to_string(),
           request_data: data,
         })},
