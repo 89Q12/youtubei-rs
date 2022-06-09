@@ -16,7 +16,7 @@ mod tests{
     use serde_json::json;
 
     use crate::{query::{get_comments_legacy, load_related_videos_legacy, get_playlist_legacy,get_video_legacy},utils::default_client_config, types::{video::VideoRenderer, query_results::{NextResult, BrowseResult, PlayerResult, SearchResult, ResolveResult}}, endpoints, extractors};
-    use crate::{types::{channel::*, video::{VideoPrimaryInfoRenderer, VideoSecondaryInfoRenderer, CompactVideoRenderer}}};
+    use crate::types::{channel::*, video::{VideoPrimaryInfoRenderer, VideoSecondaryInfoRenderer, CompactVideoRenderer}};
 
 
 #[tokio::test]
@@ -812,6 +812,7 @@ async fn test_next_query(){
   let result: NextResult = serde_json::from_value(j).unwrap();
   assert_ne!(result.contents.unwrap().two_column_watch_next_results.unwrap().results.results.contents.len(),0)
 }
+
 #[tokio::test]
 async fn test_next_query_continuation(){
   let client_config = &default_client_config();
@@ -820,12 +821,19 @@ async fn test_next_query_continuation(){
   assert_eq!(result.contents.is_none(),true)
 }
 #[tokio::test]
+async fn test_browse_query_browse_hashtag(){
+  let client_config = &default_client_config();
+  let j: serde_json::Value = endpoints::browse_browseid("FEhashtag","6gUECgJwYw%3D%3D",client_config).await.unwrap();
+  let result: BrowseResult = serde_json::from_value(j).unwrap();
+  assert_eq!(result.contents.unwrap().two_column_browse_results_renderer.is_some(),true);
+}
+#[tokio::test]
 async fn test_browse_query_browse_id(){
   let client_config = &default_client_config();
   let j: serde_json::Value = endpoints::browse_browseid("UCXuqSBlHAE6Xw-yeJA0Tunw","EgZ2aWRlb3O4AQA%3D",client_config).await.unwrap();
   let result: BrowseResult = serde_json::from_value(j).unwrap();
   assert_eq!(result.contents.unwrap().two_column_browse_results_renderer.is_some(),true);
-  assert_eq!(result.metadata.channel_metadata_renderer.title, "Linus Tech Tips");
+  assert_eq!(result.metadata.unwrap().channel_metadata_renderer.title, "Linus Tech Tips");
 }
 #[tokio::test]
 async fn test_browse_query_browse_id_no_params(){
@@ -833,7 +841,7 @@ async fn test_browse_query_browse_id_no_params(){
   let j: serde_json::Value = endpoints::browse_browseid("UCXuqSBlHAE6Xw-yeJA0Tunw","",client_config).await.unwrap();
   let result: BrowseResult = serde_json::from_value(j).unwrap();
   assert_eq!(result.contents.unwrap().two_column_browse_results_renderer.is_some(),true);
-  assert_eq!(result.metadata.channel_metadata_renderer.title, "Linus Tech Tips");
+  assert_eq!(result.metadata.unwrap().channel_metadata_renderer.title, "Linus Tech Tips");
 }
 #[tokio::test]
 async fn test_browse_query_continuation(){
@@ -842,7 +850,7 @@ async fn test_browse_query_continuation(){
   let result: BrowseResult = serde_json::from_value(j).unwrap();
   assert_eq!(result.contents.is_none(),true);
   assert_eq!(result.on_response_received_actions.is_some(), true);
-  assert_eq!(result.metadata.channel_metadata_renderer.title, "Linus Tech Tips");
+  assert_eq!(result.metadata.unwrap().channel_metadata_renderer.title, "Linus Tech Tips");
 }
 
 #[tokio::test]
