@@ -15,7 +15,7 @@ pub mod query;
 mod tests{
   use serde_json::json;
 
-  use crate::{query::{get_comments_legacy, load_related_videos_legacy, get_playlist_legacy,get_video_legacy},utils::default_client_config, types::{video::VideoRenderer, query_results::{NextResult, BrowseResult, PlayerResult, SearchResult, ResolveResult}}, endpoints, extractors};
+  use crate::{query::{get_comments_legacy, load_related_videos_legacy, get_playlist_legacy,get_video_legacy},utils::default_client_config, types::{video::VideoRenderer, query_results::{NextResult, BrowseResult, PlayerResult, SearchResult, ResolveResult}, filter}, endpoints, extractors};
   use crate::types::{channel::*, video::{VideoPrimaryInfoRenderer, VideoSecondaryInfoRenderer, CompactVideoRenderer}};
 
 
@@ -859,6 +859,13 @@ mod tests{
     let j: serde_json::Value = endpoints::player("nr1JnAmy5BA","",client_config).await.unwrap();
     let result: PlayerResult = serde_json::from_value(j).unwrap();
     assert_eq!(result.playability_status.status, "OK");
+  }
+  #[tokio::test]
+  async fn test_search_query_sort_by_newest(){
+    let client_config = &default_client_config();
+    let j: serde_json::Value = endpoints::search("ltt",filter::DateFilters::TODAY,client_config).await.unwrap();
+    let result: SearchResult = serde_json::from_value(j).unwrap();
+    assert_ne!(result.contents.two_column_search_results_renderer.unwrap().primary_contents.section_list_renderer.contents.len(), 0);
   }
   #[tokio::test]
   async fn test_search_query(){
