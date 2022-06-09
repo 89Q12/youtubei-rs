@@ -939,7 +939,8 @@ async fn test_browse_extractor_success(){
 #[tokio::test]
 async fn test_browse_extractor_error(){
   let client_config = &default_client_config();
-  let result = extractors::extract_browse_result(&endpoints::browse_browseid("","",client_config).await.unwrap());
+  // FAILS because FEwhat_to_watch isn't supported yet
+  let result = extractors::extract_browse_result(&endpoints::browse_browseid("FEwhat_to_watch","",client_config).await.unwrap());
   assert_eq!(result.is_ok(), false);
   assert_eq!(result.unwrap_err().to_parse_type, "BrowseResult");
 }
@@ -958,5 +959,11 @@ async fn test_player_extractor_error(){
   assert_eq!(result.unwrap_err().to_parse_type, "PlayerResult");
 }
 
-
+#[tokio::test]
+async fn test_endpoint_query_fail(){
+  let client_config = &default_client_config();
+  let result = endpoints::browse_browseid("","",client_config).await;
+  assert_eq!(result.is_ok(), false);
+  assert_eq!(result.unwrap_err().status, 400);
+}
 }
