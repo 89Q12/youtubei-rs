@@ -150,7 +150,7 @@ pub struct VideoOwnerRenderer{
     pub title: Runs,
     pub navigation_endpoint: NavigationEndpoint,
     pub subscriber_count_text: Option<AccessibilitySimpleText>,
-    pub badges: Vec<BadgeRendererVec>,
+    pub badges: Option<Vec<BadgeRendererVec>>,
 }
 #[derive(Debug, Clone, Deserialize)]
 #[serde(rename_all = "camelCase")]
