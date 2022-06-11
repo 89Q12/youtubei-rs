@@ -146,7 +146,8 @@ pub struct GridVideoRenderer{
 pub struct VideoPrimaryInfoRenderer{
     pub title: Runs,
     pub view_count:VideoViewCountRendererWrapper,
-    pub date_text: SimpleText
+    pub date_text: SimpleText,
+    pub video_actions: MenuRendererWrapper
 }
 #[derive(Debug, Clone, Deserialize)]
 #[serde(rename_all = "camelCase")]
