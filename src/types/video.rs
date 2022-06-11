@@ -99,15 +99,16 @@ pub struct VideoRenderer{
    pub thumbnail: Thumbnails,
    pub title: Runs,
    pub long_byline_text: Runs,
-   pub published_time_text: SimpleText,
+   pub published_time_text: Option<SimpleText>, // None if upcoming
    pub length_text: AccessibilitySimpleText,
-   pub view_count_text: SimpleText,
+   pub view_count_text: Option<SimpleText>,  // None if upcoming
    pub navigation_endpoint: NavigationEndpoint,
    pub badges: Option<Vec<BadgeRendererVec>>,
    pub owner_badges:Option<Vec<BadgeRendererVec>>,
    pub owner_text: Runs,
    pub short_byline_text: Runs,
-   pub short_view_count_text: AccessibilitySimpleText,
+   pub short_view_count_text: Option<AccessibilitySimpleText>, // None if upcoming
+   pub upcoming_event_data: Option<UpcomingEventData>
 }
 
 #[derive(Debug, Clone, Deserialize)]
@@ -126,7 +127,6 @@ pub struct CompactVideoRenderer{
     pub owner_badges:Option<Vec<BadgeRendererVec>>,
     pub short_byline_text: Runs,
     pub short_view_count_text: AccessibilitySimpleText,
-    pub metadata_row_contain: MetadataRowContainer
 }
 
 #[derive(Debug, Clone, Deserialize)]
@@ -149,9 +149,11 @@ pub struct VideoPrimaryInfoRenderer{
     pub date_text: SimpleText
 }
 #[derive(Debug, Clone, Deserialize)]
+#[serde(rename_all = "camelCase")]
 pub struct VideoSecondaryInfoRenderer{
     pub owner: Owner,
     pub description: Runs,
+    pub metadata_row_container: MetadataRowContainer
 }
 
 #[derive(Debug, Clone, Deserialize)]

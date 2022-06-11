@@ -747,3 +747,9 @@ pub struct MetadataRowRenderer{
     pub contents: Vec<Title>,
     
 }
+#[derive(Debug, Clone, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct UpcomingEventData{
+    pub start_time: String,
+    pub upcoming_event_text:Runs,
+}
