@@ -68,3 +68,41 @@ pub struct CompactRadioRenderer{
     pub video_count_short_text: Runs,
     pub video_count_text: Runs,
 }
+#[derive(Debug, Clone, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct NextPlaylistWrapper{
+    pub playlist: NextPlaylist,
+}
+#[derive(Debug, Clone, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct NextPlaylist{
+    pub playlist_id: String,
+    pub title: String,
+    pub current_index: u16,
+    pub total_videos: u16,
+    pub owner_name: SimpleText,
+    pub contents: Vec<PlaylistPanelVideoRendererWrapper>,
+    pub endpoint: NavigationEndpoint,
+    pub continuations: Vec<NextContinuationDataWrapper>,
+    pub short_byline_text: Runs,
+    pub long_byline_text: Runs,
+    pub title_text:Runs,
+
+}
+#[derive(Debug, Clone, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct PlaylistPanelVideoRendererWrapper{
+    pub playlist_panel_video_renderer: PlaylistPanelVideoRenderer
+}
+#[derive(Debug, Clone, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct PlaylistPanelVideoRenderer{
+    pub video_id: String,
+    pub title: AccessibilitySimpleText,
+    pub long_byline_text: Runs,
+    pub short_byline_text: Runs,
+    pub length_text: AccessibilitySimpleText,
+    pub thumbnail: Thumbnails,
+    pub index_text: SimpleText,
+    pub navigation_endpoint: NavigationEndpoint,
+}
