@@ -15,7 +15,7 @@ pub mod query;
 mod tests{
   use serde_json::json;
 
-  use crate::{query::{get_comments_legacy, load_related_videos_legacy, get_playlist_legacy,get_video_legacy},utils::default_client_config, types::{video::VideoRenderer, query_results::{NextResult, BrowseResult, PlayerResult, SearchResult, ResolveResult}, filter}, endpoints, extractors};
+  use crate::{query::{get_comments_legacy, load_related_videos_legacy, get_playlist_legacy,get_video_legacy},utils::default_client_config, types::{video::VideoRenderer, query_results::{NextResult, BrowseResult, PlayerResult, SearchResult, ResolveResult}, filter, misc::ItemSectionRendererContents}, endpoints, extractors};
   use crate::types::{channel::*, video::{VideoPrimaryInfoRenderer, VideoSecondaryInfoRenderer, CompactVideoRenderer}};
 
 
@@ -972,5 +972,21 @@ mod tests{
     let result = endpoints::browse_browseid("","",client_config).await;
     assert_eq!(result.is_ok(), false);
     assert_eq!(result.unwrap_err().status, 400);
+  }
+  #[tokio::test]
+  async fn test_next_video_music(){
+    let client_config = &default_client_config();
+    let j: serde_json::Value = endpoints::next_with_data(json!({
+      "videoId": "zYRHFT_Z7VY"
+    }),client_config).await.unwrap();
+    let result: Result<NextResult,serde_json::Error> = serde_json::from_value(j);
+    assert_eq!(result.is_ok(), true);
+  }
+  #[tokio::test]
+  async fn test_player_video_music(){
+    let client_config = &default_client_config();
+    let j: serde_json::Value = endpoints::player("zYRHFT_Z7VY","",client_config).await.unwrap();
+    let result: Result<PlayerResult,serde_json::Error> = serde_json::from_value(j);
+    assert_eq!(result.is_ok(), true);
   }
 }
