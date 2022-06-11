@@ -311,7 +311,7 @@ pub struct CommentRenderer{
     pub content_text: Runs,
     pub published_time_text: Runs,
     pub comment_id: String,
-    pub vote_count: AccessibilitySimpleText,
+    pub vote_count: Option<AccessibilitySimpleText>, // None if there is no likes on the comment
     pub reply_count: Option<i16>,
     pub author_comment_badge: Option<AuthorCommentBadgeRendererWrapper>
 }

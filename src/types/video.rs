@@ -100,7 +100,7 @@ pub struct VideoRenderer{
    pub title: Runs,
    pub long_byline_text: Runs,
    pub published_time_text: Option<SimpleText>, // None if upcoming
-   pub length_text: AccessibilitySimpleText,
+   pub length_text: Option<AccessibilitySimpleText>,
    pub view_count_text: Option<SimpleText>,  // None if upcoming
    pub navigation_endpoint: NavigationEndpoint,
    pub badges: Option<Vec<BadgeRendererVec>>,
@@ -118,7 +118,7 @@ pub struct CompactVideoRenderer{
     pub thumbnail: Thumbnails,
     pub title: Title,
     pub long_byline_text: Runs,
-    pub published_time_text: SimpleText,
+    pub published_time_text: Option<SimpleText>, // ONLY None if youtube returns a recommendation and the view count will be "Recommended to you"
     pub length_text: AccessibilitySimpleText,
     pub view_count_text: SimpleText,
     pub channel_thumbnail: Thumbnails,
