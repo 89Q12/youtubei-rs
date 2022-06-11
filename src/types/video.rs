@@ -126,6 +126,7 @@ pub struct CompactVideoRenderer{
     pub owner_badges:Option<Vec<BadgeRendererVec>>,
     pub short_byline_text: Runs,
     pub short_view_count_text: AccessibilitySimpleText,
+    pub metadata_row_contain: MetadataRowContainer
 }
 
 #[derive(Debug, Clone, Deserialize)]
