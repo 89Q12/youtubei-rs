@@ -732,7 +732,7 @@ pub struct MetadataRowContainer{
 }
 #[derive(Debug, Clone, Deserialize)]
 pub struct MetadataRowContainerRenderer{
-    pub rows: Vec<MetadataRowContents>,
+    pub rows: Option<Vec<MetadataRowContents>>,
 }
 #[derive(Debug, Clone, Deserialize)]
 #[serde(rename_all = "camelCase")]
