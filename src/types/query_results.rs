@@ -32,12 +32,13 @@ pub struct ChannelQuery{
 
 
 /// Represents a result from a arbitrary next query
+/// Everything can be None but never are all at the same time None
 #[derive(Debug, Clone, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct NextResult{
    pub contents: Option<TwoColumnWrapper>,
    pub player_overlays:  Option<PlayerOverlayRendererWrapper>,
-   pub on_response_received_endpoints: Vec<OnResponseReceivedEndpoints>
+   pub on_response_received_endpoints: Option<Vec<OnResponseReceivedEndpoints>>
 }
 
 /// Represents a result from a arbitrary player query
