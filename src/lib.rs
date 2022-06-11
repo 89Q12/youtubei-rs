@@ -989,4 +989,15 @@ mod tests{
     let result: Result<PlayerResult,serde_json::Error> = serde_json::from_value(j);
     assert_eq!(result.is_ok(), true);
   }
+  #[tokio::test]
+  async fn test_next_video_playlist(){
+    let client_config = &default_client_config();
+    let j: serde_json::Value = endpoints::next_with_data(json!({
+      "videoId":"hPQXVIBSd_o",
+      "playlistId": "PLOd3J15SswK6yaIsQbEHJy73Xx1VNNLym",
+    }),client_config).await.unwrap();
+    let result: Result<NextResult,serde_json::Error> = serde_json::from_value(j);
+    assert_eq!(result.is_ok(), true);
+    assert_eq!(result.unwrap().contents.unwrap().two_column_watch_next_results.unwrap().playlist.unwrap().playlist.title,"Bootleg Remixes");
+  }
 }
