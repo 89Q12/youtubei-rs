@@ -15,7 +15,7 @@ pub mod query;
 mod tests{
   use serde_json::json;
 
-  use crate::{query::{get_comments_legacy, load_related_videos_legacy, get_playlist_legacy,get_video_legacy},utils::default_client_config, types::{video::VideoRenderer, query_results::{NextResult, BrowseResult, PlayerResult, SearchResult, ResolveResult}, filter}, endpoints, extractors};
+  use crate::{query::{get_comments_legacy, load_related_videos_legacy, get_playlist_legacy,get_video_legacy, get_channel_info_legacy},utils::default_client_config, types::{video::VideoRenderer, query_results::{NextResult, BrowseResult, PlayerResult, SearchResult, ResolveResult}, filter}, endpoints, extractors};
   use crate::types::{channel::*, video::{VideoPrimaryInfoRenderer, VideoSecondaryInfoRenderer, CompactVideoRenderer}};
 
 
@@ -76,6 +76,19 @@ mod tests{
     assert_eq!(playlist.video_count,"314 videos");
     // Assert that the videos vector has a len of 100
     assert_eq!(playlist.videos.len(), 100);
+    
+  }
+  #[tokio::test]
+  async fn fetch_channel_legacy() {
+    let client_config = &default_client_config();
+    // PLe8jmEHFkvsbeJL2QNucGv00eO8PKbSUn is a long playlist from the channel Monstercat Uncaged
+    let channel_query = get_channel_info_legacy("UCXuqSBlHAE6Xw-yeJA0Tunw".to_string(),&client_config).await;
+    // Checks that there are related videos
+    assert_eq!(channel_query.is_ok(), true);
+    // unwrap into a video playlist vector
+    let channel = channel_query.unwrap().channel;
+    // Assert that there is the correct number of videos
+    assert_eq!(channel.name,"Linus Tech Tips");
     
   }
   #[tokio::test]
