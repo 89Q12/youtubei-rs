@@ -1000,4 +1000,25 @@ mod tests{
     assert_eq!(result.is_ok(), true);
     assert_eq!(result.unwrap().contents.unwrap().two_column_watch_next_results.unwrap().playlist.unwrap().playlist.title,"Bootleg Remixes");
   }
+  #[tokio::test]
+  async fn test_channel_videos(){
+    let client_config = &default_client_config();
+    let j: serde_json::Value = endpoints::browse_browseid("UCXuqSBlHAE6Xw-yeJA0Tunw","EgZ2aWRlb3O4AQDyBgQKAjoA",client_config).await.unwrap();
+    let result: Result<BrowseResult,serde_json::Error> = serde_json::from_value(j);
+    assert_eq!(result.is_ok(), true);
+  }
+  #[tokio::test]
+  async fn test_channel_playlists(){
+    let client_config = &default_client_config();
+    let j: serde_json::Value = endpoints::browse_browseid("UCXuqSBlHAE6Xw-yeJA0Tunw","EglwbGF5bGlzdHO4AQDyBgQKAkIA",client_config).await.unwrap();
+    let result: Result<BrowseResult,serde_json::Error> = serde_json::from_value(j);
+    assert_eq!(result.is_ok(), true);
+  }
+  #[tokio::test]
+  async fn test_channel_community(){
+    let client_config = &default_client_config();
+    let j: serde_json::Value = endpoints::browse_browseid("UCXuqSBlHAE6Xw-yeJA0Tunw","Egljb21tdW5pdHm4AQDyBgQKAkoA",client_config).await.unwrap();
+    let result: Result<BrowseResult,serde_json::Error> = serde_json::from_value(j);
+    assert_eq!(result.is_ok(), true);
+  }
 }
