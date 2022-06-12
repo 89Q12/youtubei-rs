@@ -170,6 +170,13 @@ pub struct ReelItemRenderer{
     pub headline: SimpleText,
     pub thumbnail: Thumbnails,
     pub view_count_text: AccessibilitySimpleText,
-
     pub accessibility: Accessibility
+}
+#[derive(Debug, Clone, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct ChildVideoRenderer{
+    pub length_text: AccessibilitySimpleText,
+    pub navigation_endpoint: NavigationEndpoint,
+    pub title: SimpleText,
+    pub video_id: String,
 }
