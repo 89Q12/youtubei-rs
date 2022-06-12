@@ -1,7 +1,7 @@
 use serde::Deserialize;
 use serde_json::Value;
 
-use super::{video::{VideoRenderer, VideoPrimaryInfoRenderer, VideoSecondaryInfoRenderer, CompactVideoRenderer, GridVideoRenderer, CommentThreadRenderer, ReelItemRenderer}, playlist::{GridPlaylistRenderer, PlaylistRenderer, CompactRadioRenderer, NextPlaylistWrapper}, channel::{BackstagePostThreadRenderer, TabRenderer, ChannelRenderer, ChannelMetadataRenderer, ChannelVideoPlayerRenderer, GridChannelRenderer}};
+use super::{video::{VideoRenderer, VideoPrimaryInfoRenderer, VideoSecondaryInfoRenderer, CompactVideoRenderer, GridVideoRenderer, CommentThreadRenderer, ReelItemRenderer}, playlist::{GridPlaylistRenderer, PlaylistRenderer, CompactRadioRenderer, NextPlaylistWrapper, RadioRenderer}, channel::{BackstagePostThreadRenderer, TabRenderer, ChannelRenderer, ChannelMetadataRenderer, ChannelVideoPlayerRenderer, GridChannelRenderer}};
 
 #[derive(Debug, Clone, Deserialize)]
 pub struct Thumbnails{
@@ -24,6 +24,13 @@ pub struct Title{
 #[serde(rename_all = "camelCase")]
 pub struct RunsOption{
     pub runs: Option<Vec<Run>>,
+}
+#[derive(Debug, Clone, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct RunsOptionAccessibilitySimpleText{
+    pub runs: Option<Vec<Run>>,
+    pub accessibility: Option<Accessibility>,
+    pub simple_text: Option<String>,
 }
 #[derive(Debug, Clone, Deserialize)]
 pub struct Runs{
@@ -393,7 +400,7 @@ pub enum  ItemSectionRendererContents{
     //SearchPyvRenderer(Value), // TODO FIND OUT WHAT IT IS
     //PromotedSparklesWebRenderer(Value),
     CommentsEntryPointHeaderRenderer(Value),
-    RadioRenderer(Value), // Wrapper for CompactRadioRenderer
+    RadioRenderer(RadioRenderer), // Wrapper for CompactRadioRenderer
 }
 #[derive(Debug, Clone, Deserialize)]
 #[serde(rename_all = "camelCase")]

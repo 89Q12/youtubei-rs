@@ -101,13 +101,13 @@ pub struct VideoRenderer{
    pub long_byline_text: Runs,
    pub published_time_text: Option<SimpleText>, // None if upcoming
    pub length_text: Option<AccessibilitySimpleText>,
-   pub view_count_text: Option<SimpleText>,  // None if upcoming
+   pub view_count_text: Option<RunsOptionAccessibilitySimpleText>,  // None if upcoming
    pub navigation_endpoint: NavigationEndpoint,
    pub badges: Option<Vec<BadgeRendererVec>>,
    pub owner_badges:Option<Vec<BadgeRendererVec>>,
    pub owner_text: Runs,
    pub short_byline_text: Runs,
-   pub short_view_count_text: Option<AccessibilitySimpleText>, // None if upcoming
+   pub short_view_count_text: Option<RunsOptionAccessibilitySimpleText>, // None if upcoming
    pub upcoming_event_data: Option<UpcomingEventData>
 }
 
