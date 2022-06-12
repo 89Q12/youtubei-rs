@@ -1026,7 +1026,6 @@ mod tests{
     let client_config = &default_client_config();
     let j: serde_json::Value = endpoints::browse_browseid("UCXuqSBlHAE6Xw-yeJA0Tunw","EgVhYm91dLgBAPIGBAoCEgA%3D",client_config).await.unwrap();
     let result: Result<BrowseResult,serde_json::Error> = serde_json::from_value(j);
-    assert_eq!(result.is_err(), true);
-    println!("{}", result.unwrap_err().to_string());
+    assert_eq!(result.is_ok(), true);
   }
 }
