@@ -180,3 +180,8 @@ pub struct ChildVideoRenderer{
     pub title: SimpleText,
     pub video_id: String,
 }
+#[derive(Debug, Clone, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct ChildVideoRendererWrapper{
+    pub child_video_renderer: ChildVideoRenderer,
+}

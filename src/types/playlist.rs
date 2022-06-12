@@ -1,6 +1,6 @@
 use serde::Deserialize;
 
-use super::{endpoints::{EndpointBrowse, EndpointWatch}, video::{PlaylistVideo, ChildVideoRenderer}, channel::Author, misc::*};
+use super::{endpoints::{EndpointBrowse, EndpointWatch}, video::{PlaylistVideo, ChildVideoRendererWrapper}, channel::Author, misc::*};
 /// Represents a playlist found in search results.
 pub struct SearchPlaylist{
     pub title:String,
@@ -114,6 +114,6 @@ pub struct RadioRenderer{
     pub title: SimpleText,
     pub video_count_text: Runs,
     pub video_count_short_text: Runs,
-    pub videos: Vec<ChildVideoRenderer>,
+    pub videos: Vec<ChildVideoRendererWrapper>,
     pub thumbnail: Thumbnails,
 }
