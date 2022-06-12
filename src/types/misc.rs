@@ -1,7 +1,7 @@
 use serde::Deserialize;
 use serde_json::Value;
 
-use super::{video::{VideoRenderer, VideoPrimaryInfoRenderer, VideoSecondaryInfoRenderer, CompactVideoRenderer, GridVideoRenderer, CommentThreadRenderer, ReelItemRenderer}, playlist::{GridPlaylistRenderer, PlaylistRenderer, CompactRadioRenderer, NextPlaylistWrapper, RadioRenderer}, channel::{BackstagePostThreadRenderer, TabRenderer, ChannelRenderer, ChannelMetadataRenderer, ChannelVideoPlayerRenderer, GridChannelRenderer}};
+use super::{video::{VideoRenderer, VideoPrimaryInfoRenderer, VideoSecondaryInfoRenderer, CompactVideoRenderer, GridVideoRenderer, CommentThreadRenderer, ReelItemRenderer}, playlist::{GridPlaylistRenderer, PlaylistRenderer, CompactRadioRenderer, NextPlaylistWrapper, RadioRenderer}, channel::{BackstagePostThreadRenderer, TabRenderer, ChannelRenderer, ChannelMetadataRenderer, ChannelVideoPlayerRenderer, GridChannelRenderer, ChannelAboutFullMetadataRenderer}};
 
 #[derive(Debug, Clone, Deserialize)]
 pub struct Thumbnails{
@@ -401,6 +401,7 @@ pub enum  ItemSectionRendererContents{
     PromotedSparklesWebRenderer(Value),
     CommentsEntryPointHeaderRenderer(Value),
     RadioRenderer(RadioRenderer), // Wrapper for CompactRadioRenderer
+    ChannelAboutFullMetadataRenderer(ChannelAboutFullMetadataRenderer)
 }
 #[derive(Debug, Clone, Deserialize)]
 #[serde(rename_all = "camelCase")]

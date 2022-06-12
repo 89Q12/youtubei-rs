@@ -149,3 +149,15 @@ pub struct GridChannelRenderer{
     pub owner_badges: Option<Vec<BadgeRendererVec>>,
     pub subscriber_count_text: Option<AccessibilitySimpleText>,
 }
+
+#[derive(Debug, Clone, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct ChannelAboutFullMetadataRenderer{
+    pub description: SimpleText,
+    pub view_count_text: SimpleText,
+    pub joined_date_text: Runs,
+    pub title: SimpleText,
+    pub avatar: Thumbnails,
+    pub country: SimpleText,
+    pub channel_id: String
+}
