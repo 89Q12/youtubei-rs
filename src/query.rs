@@ -79,7 +79,7 @@ pub async fn get_video_legacy(video_id:String, params: String,client_config: &Cl
 }
 pub async fn get_channel_info_legacy(channel_id:String,client_config: &ClientConfig) -> Result<ChannelQuery,  RequestError>{
     tracing::event!(target: "youtubei_rs",Level::DEBUG,"Loading channel info for channel: {}", channel_id);
-    let complete_url = "https://www.youtube.com/".to_owned() + &channel_id +"/about"; 
+    let complete_url = "https://www.youtube.com/channel/".to_owned() + &channel_id +"/about"; 
     let resolved_url = resolve_url(&complete_url,&client_config ).await;
     let res = match resolved_url {
         Ok(result) => result,
