@@ -121,9 +121,13 @@ pub struct ChannelMetadataRenderer{
 
 #[derive(Debug, Clone, Deserialize)]
 pub struct BackstagePostThreadRenderer{
-    pub post: BackstagePostRenderer
+    pub post: BackstagePostRendererWrapper
 }
-
+#[derive(Debug, Clone, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct BackstagePostRendererWrapper{
+    pub backstage_post_renderer: BackstagePostRenderer,
+}
 #[derive(Debug, Clone, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct ChannelVideoPlayerRenderer{

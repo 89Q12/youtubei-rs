@@ -21,6 +21,11 @@ pub struct Title{
     pub simple_text: Option<String>,    
 }
 #[derive(Debug, Clone, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct RunsOption{
+    pub runs: Option<Vec<Run>>,
+}
+#[derive(Debug, Clone, Deserialize)]
 pub struct Runs{
     pub runs: Vec<Run>,
     pub accessibility: Option<Accessibility>,
@@ -460,22 +465,22 @@ pub struct BackstagePostRenderer{
     pub post_id: String,
     pub author_text: Runs,
     pub author_thumbnail: Thumbnails,
-    pub author_endpoint: BrowseEndpoint,
-    pub content_text: Runs,
+    pub author_endpoint: NavigationEndpoint,
+    pub content_text: RunsOption,
     pub backstage_attachment: BackstageImageRenderer,
-    pub publish_time_text: Runs,
+    pub published_time_text: Title,
     pub vote_count: AccessibilitySimpleText,
 }
 #[derive(Debug, Clone, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct BackstageImageRenderer{
-    pub backstage_image_renderer: CommunityPostAttachmentImage,
+    pub backstage_image_renderer: Option<CommunityPostAttachmentImage>,
 }
 
 #[derive(Debug, Clone, Deserialize)]
 pub struct CommunityPostAttachmentImage{
-    pub image: Vec<Thumbnail>,
-    pub command: BrowseEndpoint,
+    pub image: Thumbnails,
+    pub command: NavigationEndpoint,
 }
 #[derive(Debug, Clone, Deserialize)]
 #[serde(rename_all = "camelCase")]
