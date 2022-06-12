@@ -397,8 +397,8 @@ pub enum  ItemSectionRendererContents{
     ShelfRenderer(ShelfRenderer),
     ChannelVideoPlayerRenderer(ChannelVideoPlayerRenderer),
     ReelShelfRenderer(ReelShelfRenderer), // Shorts are stored in here
-    //SearchPyvRenderer(Value), // TODO FIND OUT WHAT IT IS
-    //PromotedSparklesWebRenderer(Value),
+    SearchPyvRenderer(Value), // TODO FIND OUT WHAT IT IS
+    PromotedSparklesWebRenderer(Value),
     CommentsEntryPointHeaderRenderer(Value),
     RadioRenderer(RadioRenderer), // Wrapper for CompactRadioRenderer
 }
