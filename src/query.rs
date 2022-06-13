@@ -1,3 +1,4 @@
+use serde_json::Value;
 use serde_json::json;
 use tracing::Level;
 
@@ -167,8 +168,19 @@ pub async fn next_continuation(continuation:String,client_config: &ClientConfig)
         Err(err) => return Err(Errors::RequestError(err)),
     }
 }
+
 pub async fn browse_id(browse_id:String,params:String,client_config: &ClientConfig) -> Result<BrowseResult, Errors>{
     let json = browse_browseid(&browse_id,&params ,client_config).await;
+    match json {
+        Ok(json) => match extract_browse_result(&json){
+            Ok(result) => return Ok(result),
+            Err(err) => return Err(Errors::ParseError(err))
+        },
+        Err(err) => return Err(Errors::RequestError(err)),
+    }
+}
+pub async fn browse_custom_data(data: Value, client_config: &ClientConfig) -> Result<BrowseResult, Errors>{
+    let json = browse_with_data(data,client_config).await;
     match json {
         Ok(json) => match extract_browse_result(&json){
             Ok(result) => return Ok(result),

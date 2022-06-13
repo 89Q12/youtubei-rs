@@ -23,6 +23,13 @@ pub(crate) async fn browse_browseid(browse_id : &str, params:  &str, client_conf
   });
   return post_json("/youtubei/v1/browse", data, client_config).await;
 }
+pub(crate) async fn browse_with_data(mut browse_data : Value, client_config : &ClientConfig) ->  Result<Value, RequestError> {
+  tracing::event!(target:"youtubei_rs",Level::TRACE,"Requesting browse results with data: {}",browse_data); 
+  merge(&mut browse_data, &json!({
+    "context"      : make_context(&client_config),
+  }));
+return post_json("/youtubei/v1/browse", browse_data, client_config).await;
+}
 /// Prepares the data and makes a post request to the next endpoint
 pub(crate) async fn next(continuation : &str, client_config: &ClientConfig) ->  Result<Value, RequestError> {
     tracing::event!(target:"youtubei_rs",Level::TRACE,"Requesting next results for continuation: {}",continuation); 
