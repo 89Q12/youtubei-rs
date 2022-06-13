@@ -1041,4 +1041,12 @@ mod tests{
     let result: Result<BrowseResult,serde_json::Error> = serde_json::from_value(j);
     assert_eq!(result.is_ok(), true);
   }
+  #[tokio::test]
+  async fn test_channel_search(){
+    let client_config = &default_client_config();
+    let j: serde_json::Value = endpoints::browse_browseid("UCXuqSBlHAE6Xw-yeJA0Tunw","EgVhYm91dLgBAPIGBAoCEgA%3D",client_config).await.unwrap();
+    let result: Result<BrowseResult,serde_json::Error> = serde_json::from_value(j);
+    assert_eq!(result.is_ok(), true);
+    assert_eq!(result.unwrap().contents.unwrap().two_column_browse_results_renderer.unwrap().tabs.last().unwrap().expandable_tab_renderer.is_some(), true);
+  }
 }
