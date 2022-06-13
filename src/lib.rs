@@ -1028,6 +1028,13 @@ mod tests{
     assert_eq!(result.is_ok(), true);
   }
   #[tokio::test]
+  async fn test_channel_channels(){
+    let client_config = &default_client_config();
+    let j: serde_json::Value = endpoints::browse_browseid("UCXuqSBlHAE6Xw-yeJA0Tunw","EghjaGFubmVsc7gBAPIGBAoCUgA%3D",client_config).await.unwrap();
+    let result: Result<BrowseResult,serde_json::Error> = serde_json::from_value(j);
+    assert_eq!(result.is_ok(), true);
+  }
+  #[tokio::test]
   async fn test_channel_community(){
     let client_config = &default_client_config();
     let j: serde_json::Value = endpoints::browse_browseid("UCXuqSBlHAE6Xw-yeJA0Tunw","Egljb21tdW5pdHm4AQDyBgQKAkoA",client_config).await.unwrap();
@@ -1045,6 +1052,18 @@ mod tests{
   async fn test_channel_search(){
     let client_config = &default_client_config();
     let j: serde_json::Value = endpoints::browse_browseid("UCXuqSBlHAE6Xw-yeJA0Tunw","EgVhYm91dLgBAPIGBAoCEgA%3D",client_config).await.unwrap();
+    let result: Result<BrowseResult,serde_json::Error> = serde_json::from_value(j);
+    assert_eq!(result.is_ok(), true);
+    assert_eq!(result.unwrap().contents.unwrap().two_column_browse_results_renderer.unwrap().tabs.last().unwrap().expandable_tab_renderer.is_some(), true);
+  }
+  #[tokio::test]
+  async fn test_query_channel_search(){
+    let client_config = &default_client_config();
+    let j: serde_json::Value = endpoints::browse_with_data(json!({
+      "browseId": "UCXuqSBlHAE6Xw-yeJA0Tunw",
+      "params": "EgZzZWFyY2i4AQDyBgQKAloA",
+      "query": "best pc"
+    }),client_config).await.unwrap();
     let result: Result<BrowseResult,serde_json::Error> = serde_json::from_value(j);
     assert_eq!(result.is_ok(), true);
     assert_eq!(result.unwrap().contents.unwrap().two_column_browse_results_renderer.unwrap().tabs.last().unwrap().expandable_tab_renderer.is_some(), true);
