@@ -398,7 +398,6 @@ pub enum  ItemSectionRendererContents{
     ChannelVideoPlayerRenderer(ChannelVideoPlayerRenderer),
     ReelShelfRenderer(ReelShelfRenderer), // Shorts are stored in here
     SearchPyvRenderer(Value), // TODO FIND OUT WHAT IT IS
-    PromotedSparklesWebRenderer(Value),
     CommentsEntryPointHeaderRenderer(Value),
     RadioRenderer(RadioRenderer), // Wrapper for CompactRadioRenderer
     ChannelAboutFullMetadataRenderer(ChannelAboutFullMetadataRenderer)
@@ -423,6 +422,7 @@ pub enum NextContents{
     VideoSecondaryInfoRenderer(VideoSecondaryInfoRenderer),
     ContinuationItemRenderer(ContinuationItemRenderer),
     ItemSectionRenderer(ItemSectionRenderer),
+    PromotedSparklesWebRenderer(Value),
 }
 #[derive(Debug, Clone, Deserialize)]
 #[serde(rename_all = "camelCase")]
