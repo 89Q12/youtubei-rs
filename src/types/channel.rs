@@ -101,7 +101,8 @@ pub struct TabRenderer{
     pub endpoint: Option<NavigationEndpoint>,
     pub title: Option<String>,
     pub selected: bool,
-    pub content: Option<TabRendererContent>
+    pub content: Option<TabRendererContent>,
+    pub expanded_text: Option<String>,
 }
 
 #[derive(Debug, Clone, Deserialize)]

@@ -530,7 +530,7 @@ pub struct TwoColumnBrowseResultsRenderer{
 #[serde(rename_all = "camelCase")]
 pub struct TabRendererWrapper{
     pub tab_renderer: Option<TabRenderer>,
-    pub expandable_tab_renderer: Option<Value>
+    pub expandable_tab_renderer: Option<TabRenderer>
 }
 #[derive(Debug, Clone, Deserialize)]
 #[serde(rename_all = "camelCase")]
