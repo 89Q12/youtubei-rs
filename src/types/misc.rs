@@ -724,9 +724,9 @@ pub struct C4TabbedHeaderRenderer{
     pub title: String,
     pub navigation_endpoint: NavigationEndpoint,
     pub avatar: Thumbnails,
-    pub banner: Thumbnails,
-    pub tv_banner: Thumbnails,
-    pub mobile_banner: Thumbnails,
+    pub banner: Option<Thumbnails>,
+    pub tv_banner: Option<Thumbnails>,
+    pub mobile_banner: Option<Thumbnails>,
     pub badges: Option<Vec<BadgeRendererVec>>,
     pub subscriber_count_text: Option<AccessibilitySimpleText>,
    
