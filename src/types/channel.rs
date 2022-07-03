@@ -35,7 +35,7 @@ pub struct SearchChannel{
  /// Represents a channel tab e.g. videos.
 pub struct ChannelTab{
     pub title: String,
-    pub selected: bool,
+    pub selected: Option<bool>,
     pub content: Vec<TabTypes>,
     pub continuation: String,
 }
