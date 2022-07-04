@@ -1,5 +1,6 @@
 use serde_json::Value;
 use crate::types::client::ClientConfig;
+use crate::types::misc::MetadataBadgeRenderer;
 use crate::types::{client, self};
 use crate::types::query_results::NextResult;
 
@@ -115,41 +116,12 @@ pub fn get_description(video: &NextResult) -> String {
     }
     desc
 }
-/// Utility function to check if the author is verified
-pub fn get_author_verified(video: &NextResult) -> bool {
-    match video
-        .contents
-        .as_ref()
-        .unwrap()
-        .two_column_watch_next_results
-        .as_ref()
-        .unwrap()
-        .results
-        .results
-        .contents
-        .get(1)
-        .unwrap()
-    {
-        types::misc::NextContents::VideoSecondaryInfoRenderer(vsir) => {
-            match &vsir.owner.video_owner_renderer.badges {
-                Some(badges) => match badges
-                    .get(0)
-                    .unwrap()
-                    .metadata_badge_renderer
-                    .icon
-                    .as_ref()
-                    .unwrap()
-                    .icon_type
-                    .as_str()
-                {
-                    "OFFICIAL_ARTIST_BADGE" => true,
-                    "CHECK_CIRCLE_THICK" => true,
-                    _ => false,
-                },
-                None => false,
-            }
-        }
-        _ => unreachable!(),
+/// Utility function to check if the author is verified it takes the first BadgeRenderer
+pub fn get_author_verified(video: &MetadataBadgeRenderer) -> bool {
+    match video.icon.as_ref().unwrap().icon_type.as_str() {
+        "OFFICIAL_ARTIST_BADGE" => true,
+        "CHECK_CIRCLE_THICK" => true,
+        _ => false,
     }
 }
 /// Utility function to get the subscriber count
