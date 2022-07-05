@@ -400,7 +400,8 @@ pub enum  ItemSectionRendererContents{
     SearchPyvRenderer(Value), // TODO FIND OUT WHAT IT IS
     CommentsEntryPointHeaderRenderer(Value),
     RadioRenderer(RadioRenderer), // Wrapper for CompactRadioRenderer
-    ChannelAboutFullMetadataRenderer(ChannelAboutFullMetadataRenderer)
+    ChannelAboutFullMetadataRenderer(ChannelAboutFullMetadataRenderer),
+    RecognitionShelfRenderer(Value), // Channel members but needs more investigation
 }
 #[derive(Debug, Clone, Deserialize)]
 #[serde(rename_all = "camelCase")]
