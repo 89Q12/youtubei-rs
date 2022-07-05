@@ -120,13 +120,13 @@ pub struct CompactVideoRenderer{
     pub long_byline_text: Runs,
     pub published_time_text: Option<SimpleText>, // ONLY None if youtube returns a recommendation and the view count will be "Recommended to you"
     pub length_text: AccessibilitySimpleText,
-    pub view_count_text: SimpleText,
+    pub view_count_text: Title, // contains runs if video is live_now instead of simple_text
     pub channel_thumbnail: Thumbnails,
     pub navigation_endpoint: NavigationEndpoint,
     pub badges: Option<Vec<BadgeRendererVec>>,
     pub owner_badges:Option<Vec<BadgeRendererVec>>,
     pub short_byline_text: Runs,
-    pub short_view_count_text: Title,
+    pub short_view_count_text: Title,// contains runs if video is live_now instead of simple_text
 }
 
 #[derive(Debug, Clone, Deserialize)]
