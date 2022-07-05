@@ -1,6 +1,6 @@
 [package]
 name = "youtubei-rs"
-version = "1.4.7"
+version = "1.4.6"
 edition = "2021"
 license = "AGPL-3.0-only"
 keywords = ["api", "youtube","innertube", "wrapper"]
