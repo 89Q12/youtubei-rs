@@ -2,13 +2,10 @@
 A asynchronous implementation of the invidious innertube aka youtubei API wrapper. <br>
 Using tokio,reqwest, serde and serde_json.
 
-# Breaking changes in version bump 0.2.3 to 1.2.3
-- old queries are now prefixed with _legacy, if you rely on those just rename them in your program they still function the same
-# Dependencies
-- serde_json 
-- serde: features = ["derive"]
-- reqwest: features = ["json","gzip"]
-- tokio: features = ["full"]
+# Configuration
+The client_config can be configured to dump the json response to a file if its not parsable,</br>
+this is on by default when using the `default_client_config()` function.</br>
+When creating the client_config manually you can parse true/false as the last parameter to disable this behavior.
 
 # Roadmap
 - implementing proxy support
@@ -30,7 +27,7 @@ Using tokio,reqwest, serde and serde_json.
 - resolve, // Resolve a given url
 - player // Get player data for a given videoId
 
-# Example 
+# Example
 ```rust
 use youtubei_rs::{query::player, utils::default_client_config, types::query_results::PlayerResult};
 #[tokio::main]
