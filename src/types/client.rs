@@ -100,12 +100,13 @@ pub struct ClientConfig{
    pub client_type: ClientTypes,
    pub region: String,
    pub proxy_region:String,
-   pub http_client: Client
+   pub http_client: Client,
+   pub dump_on_error: bool,
 }
 
 impl ClientConfig {
     /// Constructs a new ClientConfig with the client and all required headers
-    pub fn new(client_type: ClientTypes, region: String, proxy_region: String) -> Self {
+    pub fn new(client_type: ClientTypes, region: String, proxy_region: String, dump_on_error: bool) -> Self {
         let mut headers = header::HeaderMap::new();
         headers.insert("Content-Type", header::HeaderValue::from_static("application/json; charset=UTF-8"));
         headers.insert("Accept-Encoding", header::HeaderValue::from_static("gzip"));
@@ -121,7 +122,7 @@ impl ClientConfig {
         .default_headers(headers)
         .gzip(true)
         .build().unwrap();
-        Self { client_type, region, proxy_region, http_client: _http_client} 
+        Self { client_type, region, proxy_region, http_client: _http_client, dump_on_error} 
     }
 
     pub fn name(&self) ->  String {
