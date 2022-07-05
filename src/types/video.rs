@@ -119,7 +119,7 @@ pub struct CompactVideoRenderer{
     pub title: Title,
     pub long_byline_text: Runs,
     pub published_time_text: Option<SimpleText>, // ONLY None if youtube returns a recommendation and the view count will be "Recommended to you"
-    pub length_text: AccessibilitySimpleText,
+    pub length_text: Option<AccessibilitySimpleText>, // None if its a live video
     pub view_count_text: Title, // contains runs if video is live_now instead of simple_text
     pub channel_thumbnail: Thumbnails,
     pub navigation_endpoint: NavigationEndpoint,
