@@ -150,8 +150,8 @@ pub struct ToggleButtonRenderer{
 #[derive(Debug, Clone, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct VideoViewCountRenderer{
-    pub view_count: Title,
-    pub short_view_count: SimpleText,
+    pub view_count:  Option<Title>,
+    pub short_view_count: Option<SimpleText>,
 }
 #[derive(Debug, Clone, Deserialize)]
 #[serde(rename_all = "camelCase")]
