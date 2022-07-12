@@ -402,7 +402,6 @@ pub enum  ItemSectionRendererContents{
     RadioRenderer(RadioRenderer), // Wrapper for CompactRadioRenderer
     ChannelAboutFullMetadataRenderer(ChannelAboutFullMetadataRenderer),
     RecognitionShelfRenderer(Value), // Channel members but needs more investigation
-    MerchandiseShelfRenderer(Value), // Basically ads but we dont want those so we don't parse it further
 }
 #[derive(Debug, Clone, Deserialize)]
 #[serde(rename_all = "camelCase")]
@@ -425,6 +424,7 @@ pub enum NextContents{
     ContinuationItemRenderer(ContinuationItemRenderer),
     ItemSectionRenderer(ItemSectionRenderer),
     PromotedSparklesWebRenderer(Value),
+    MerchandiseShelfRenderer(Value), // Basically ads but we dont want those so we don't parse it further
 }
 #[derive(Debug, Clone, Deserialize)]
 #[serde(rename_all = "camelCase")]
