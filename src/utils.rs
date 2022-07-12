@@ -5,7 +5,7 @@ use crate::types::{client, self};
 use crate::types::query_results::NextResult;
 
 pub fn default_client_config() -> ClientConfig {
-    ClientConfig::new(client::ClientTypes::Web,"US".to_string(),"US".to_string())
+    ClientConfig::new(client::ClientTypes::Web,"US".to_string(),"US".to_string(), true)
 }
 /// Used to merge 2 values into one, probably could be optimized
 pub fn merge(a: &mut Value, b: &Value) {
