@@ -227,7 +227,7 @@ pub async fn next_video_id(
                 tracing::event!(target: "youtubei_rs",Level::ERROR,"Error parsing next result: {}",err);
                 if client_config.dump_on_error {
                     tracing::event!(target: "youtubei_rs",Level::ERROR,"Dumping json for request with error: {}, ID: {}, params: {}",err,video_id,params);
-                    let mut log = String::from(&format!("---------------------------------------------------- \n Video ID: {} \n params: {} \n ----------------------------------------------------", video_id,params));
+                    let mut log = String::from(&format!("---------------------------------------------------- \n Video ID: {} \n params: {} \n Error {} \n----------------------------------------------------", video_id,params, err));
                     log += &json.to_string();
                     fs::write(format!("json_dump_endpoint_next"), log).unwrap();
                 }
@@ -250,7 +250,7 @@ pub async fn next_continuation(
                 tracing::event!(target: "youtubei_rs",Level::ERROR,"Error parsing next result: {}",err);
                 if client_config.dump_on_error {
                     tracing::event!(target: "youtubei_rs",Level::DEBUG,"Dumping json for request with error: {}, CToken: {}",err,continuation);
-                    let mut log = String::from(&format!("---------------------------------------------------- \n CToken: {} \n ----------------------------------------------------", continuation));
+                    let mut log = String::from(&format!("---------------------------------------------------- \n CToken: {} \n Error {} \n----------------------------------------------------", continuation, err));
                     log += &json.to_string();
                     fs::write(format!("json_dump_endpoint_next_ctoken"), log).unwrap();
                 }
@@ -275,7 +275,7 @@ pub async fn browse_id(
                 tracing::event!(target: "youtubei_rs",Level::ERROR,"Error parsing browse result: {}",err);
                 if client_config.dump_on_error {
                     tracing::event!(target: "youtubei_rs",Level::DEBUG,"Dumping json for request with error: {}, ID: {}, params: {}",err,browse_id,params);
-                    let mut log = String::from(&format!("---------------------------------------------------- \n Browse ID: {} \n params: {} \n ----------------------------------------------------", browse_id,params));
+                    let mut log = String::from(&format!("---------------------------------------------------- \n Browse ID: {} \n params: {} \n Error {} \n ----------------------------------------------------", browse_id,params, err));
                     log += &json.to_string();
                     fs::write(format!("json_dump_endpoint_browse"), log).unwrap();
                 }
@@ -298,7 +298,7 @@ pub async fn browse_custom_data(
                 tracing::event!(target: "youtubei_rs",Level::ERROR,"Error parsing browse result: {}",err);
                 if client_config.dump_on_error {
                     tracing::event!(target: "youtubei_rs",Level::ERROR,"Dumping json for request with error: {}",err);
-                    let mut log = String::from(&format!("---------------------------------------------------- \n Custom Data:\n {} \n ----------------------------------------------------", data.to_string()));
+                    let mut log = String::from(&format!("---------------------------------------------------- \n Custom Data:\n {} \n Error {} \n ----------------------------------------------------", data.to_string(), err));
                     log += &json.to_string();
                     fs::write(format!("json_dump_endpoint_browse_custom_data"), log).unwrap();
                 }
@@ -321,7 +321,7 @@ pub async fn browse_continuation(
                 tracing::event!(target: "youtubei_rs",Level::ERROR,"Error parsing browse result: {}",err);
                 if client_config.dump_on_error {
                     tracing::event!(target: "youtubei_rs",Level::ERROR,"Dumping json for request with error: {}, CToken: {}",err, continuation);
-                    let mut log = String::from(&format!("---------------------------------------------------- \n CToken: {} \n ----------------------------------------------------", continuation));
+                    let mut log = String::from(&format!("---------------------------------------------------- \n CToken: {} \n Error {} \n  ----------------------------------------------------", continuation, err));
                     log += &json.to_string();
                     fs::write(format!("json_dump_endpoint_browse_ctoken"), log).unwrap();
                 }
@@ -345,7 +345,7 @@ pub async fn player(
                 tracing::event!(target: "youtubei_rs",Level::ERROR,"Error parsing player result: {}",err);
                 if client_config.dump_on_error {
                     tracing::event!(target: "youtubei_rs",Level::ERROR,"Dumping json for request with error: {}, ID: {}, params: {}",err,video_id,params);
-                    let mut log = String::from(&format!("---------------------------------------------------- \n Video ID: {} \n params: {} \n ----------------------------------------------------", video_id,params));
+                    let mut log = String::from(&format!("---------------------------------------------------- \n Video ID: {} \n params: {} \n Error {} \n----------------------------------------------------", video_id,params, err));
                     log += &json.to_string();
                     fs::write(format!("json_dump_endpoint_player"), log).unwrap();
                 }
@@ -365,7 +365,7 @@ pub async fn resolve(url: String, client_config: &ClientConfig) -> Result<Resolv
                 tracing::event!(target: "youtubei_rs",Level::ERROR,"Error parsing resolve result: {}",err);
                 if client_config.dump_on_error {
                     tracing::event!(target: "youtubei_rs",Level::ERROR,"Dumping json for request with error: {}, url: {}",err,url);
-                    let mut log = String::from(&format!("---------------------------------------------------- \n URL: {} \n ----------------------------------------------------", url));
+                    let mut log = String::from(&format!("---------------------------------------------------- \n URL: {} \n Error {} \n----------------------------------------------------", url, err));
                     log += &json.to_string();
                     fs::write(format!("json_dump_endpoint_resolve"), log).unwrap();
                 }
@@ -389,7 +389,7 @@ pub async fn search(
                 tracing::event!(target: "youtubei_rs",Level::ERROR,"Error parsing next result: {}",err);
                 if client_config.dump_on_error {
                     tracing::event!(target: "youtubei_rs",Level::ERROR,"Dumping json for request with error: {}, Search query: {}, params: {}",err,query,params);
-                    let mut log = String::from(&format!("---------------------------------------------------- \n Search query: {} \n params: {} \n ----------------------------------------------------", query,params));
+                    let mut log = String::from(&format!("---------------------------------------------------- \n Search query: {} \n params: {} \n Error {} \n ----------------------------------------------------", query,params, err));
                     log += &json.to_string();
                     fs::write(format!("json_dump_endpoint_search"), log).unwrap();
                 }
@@ -412,7 +412,7 @@ pub async fn search_continuation(
                 tracing::event!(target: "youtubei_rs",Level::ERROR,"Error parsing next result: {}",err);
                 if client_config.dump_on_error {
                     tracing::event!(target: "youtubei_rs",Level::ERROR,"Dumping json for request with error: {}, CToken: {}",err, continuation);
-                    let mut log = String::from(&format!("---------------------------------------------------- \n CToken: {} \n ----------------------------------------------------", continuation));
+                    let mut log = String::from(&format!("---------------------------------------------------- \n CToken: {} \n Error {} \n----------------------------------------------------", continuation, err));
                     log += &json.to_string();
                     fs::write(format!("json_dump_endpoint_search_ctoken"), log).unwrap();
                 }
