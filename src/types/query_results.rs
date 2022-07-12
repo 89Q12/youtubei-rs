@@ -45,9 +45,9 @@ pub struct NextResult{
 #[derive(Debug, Clone, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct PlayerResult{
-   pub streaming_data: StreamingData,
+   pub streaming_data: Option<StreamingData>, // Only None if there is an error or the video is to premiere in the future
    pub video_details: VideoDetails,
-   pub storyboards: StorybordWrapper,
+   pub storyboards:  Option<StorybordWrapper>,
    pub microformat: PlayerMicroformatRenderer,
    pub playability_status:PlayabilityStatus,
    pub captions: Option<PlayerCaptionsTracklistRenderer>
