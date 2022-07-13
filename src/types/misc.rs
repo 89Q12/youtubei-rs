@@ -249,8 +249,9 @@ pub struct PlayerStoryboardSpecRenderer{
 }
 #[derive(Debug, Clone, Deserialize)]
 #[serde(rename_all = "camelCase")]
-pub struct StorybordWrapper{
+pub struct StoryboardWrapper{
     pub player_storyboard_spec_renderer: PlayerStoryboardSpecRenderer,
+    pub player_live_storyboard_spec_renderer: PlayerStoryboardSpecRenderer
 }
 #[derive(Debug, Clone, Deserialize)]
 #[serde(rename_all = "camelCase")]
