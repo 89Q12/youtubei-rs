@@ -15,3 +15,6 @@ pub mod error;
 /// Contains structs and enums to build every response possible from the api
 pub mod misc;
 pub mod filter;
+pub mod enums;
+pub mod thumbnail;
+pub mod accessibility;

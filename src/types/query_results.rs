@@ -1,13 +1,13 @@
 use serde::Deserialize;
 
-use super::misc::*;
+use super::{misc::*, endpoints::NavigationEndpoint, video::{PlayerOverlayRendererWrapper, StreamingData, VideoDetails, StoryboardWrapper, PlayerMicroformatRenderer, PlayabilityStatus, PlayerCaptionsTracklistRenderer}, enums::{HeaderContents, TwoColumnTypes}, channel::ChannelMetadataRendererWrapper};
 
 /// Represents a result from a arbitrary next query
 /// Everything can be None but never are all at the same time None
 #[derive(Debug, Clone, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct NextResult{
-   pub contents: Option<TwoColumnWrapper>,
+   pub contents: Option<TwoColumnTypes>,
    pub player_overlays:  Option<PlayerOverlayRendererWrapper>,
    pub on_response_received_endpoints: Option<Vec<OnResponseReceivedEndpoints>>
 }
@@ -29,7 +29,7 @@ pub struct PlayerResult{
 #[derive(Debug, Clone, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct BrowseResult{
-    pub contents: Option<TwoColumnWrapper>,
+    pub contents: Option<TwoColumnTypes>,
     pub header: Option<HeaderContents>,
     pub metadata: Option<ChannelMetadataRendererWrapper>,
     pub on_response_received_actions: Option<Vec<OnResponseReceivedActions>>,
@@ -45,5 +45,5 @@ pub struct ResolveResult{
 #[derive(Debug, Clone, Deserialize)]
 pub struct SearchResult{
     pub refinements: Option<Vec<String>>,
-    pub contents: TwoColumnWrapper,
+    pub contents: TwoColumnTypes,
 }

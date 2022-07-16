@@ -1,6 +1,6 @@
 use serde::Deserialize;
 
-use super::misc::*;
+use super::{misc::*, endpoints::NavigationEndpoint, enums::{ItemSectionRendererContents, RichGridRendererContent, TabRendererContent}, video::VideoRendererWrapper, thumbnail::{Thumbnails, ThumbnailsAccessibility, ShowCustomThumbnailRenderer}, accessibility::Accessibility};
 
 #[derive(Debug, Clone, Deserialize)]
 #[serde(rename_all = "camelCase")]
@@ -112,4 +112,89 @@ pub struct GridRadioRenderer{
 pub struct ChannelFeaturedContentRenderer{
     pub title: Runs,
     pub items: ItemSectionRendererContents,
+}
+#[derive(Debug, Clone, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct ChannelThumbnailSupportedRenderers{
+    pub channel_thumbnail_with_link_renderer: ChannelThumbnailWithLinkRenderer
+}
+#[derive(Debug, Clone, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct ChannelThumbnailWithLinkRenderer{
+    pub thumbnail: Thumbnails,
+    pub accessibility: Accessibility,
+    pub navigation_endpoint: NavigationEndpoint,
+}
+
+#[derive(Debug, Clone, Deserialize)]
+pub struct RichGridRenderer{
+    pub contents: Vec<RichGridRendererContent>,
+}
+#[derive(Debug, Clone, Deserialize)]
+pub struct RichItemRenderer{
+    pub content: VideoRendererWrapper
+}
+#[derive(Debug, Clone, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct C4TabbedHeaderRendererWrapper{
+    pub c4_tabbed_header_renderer: C4TabbedHeaderRenderer,
+}
+#[derive(Debug, Clone, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct ChannelMetadataRendererWrapper{
+    pub channel_metadata_renderer: ChannelMetadataRenderer,
+}
+#[derive(Debug, Clone, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct C4TabbedHeaderRenderer{
+    pub channel_id: String,
+    pub title: Option<String>, // None if the channels is terminated or the channel doesn't exist
+    pub navigation_endpoint: Option<NavigationEndpoint>,// None if the channels is terminated or the channel doesn't exist
+    pub avatar: Thumbnails,
+    pub banner: Option<Thumbnails>,
+    pub tv_banner: Option<Thumbnails>,
+    pub mobile_banner: Option<Thumbnails>,
+    pub badges: Option<Vec<BadgeRendererVec>>,
+    pub subscriber_count_text: Option<AccessibilitySimpleText>,
+   
+}
+#[derive(Debug, Clone, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct BackstagePostRenderer{
+    pub post_id: String,
+    pub author_text: Runs,
+    pub author_thumbnail: Thumbnails,
+    pub author_endpoint: NavigationEndpoint,
+    pub content_text: RunsOption,
+    pub backstage_attachment: Option<BackstageImageRenderer>,
+    pub published_time_text: RunsSimpleTextAccessibility,
+    pub vote_count: AccessibilitySimpleText,
+}
+#[derive(Debug, Clone, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct SharedPostRenderer{
+    pub post_id: String,
+    pub content: Runs,
+    pub display_name: RunsSimpleTextAccessibility,
+    pub endpoint: NavigationEndpoint,
+    pub navigation_endpoint: NavigationEndpoint,
+    pub original_post: BackstagePostRendererWrapper,
+    pub thumbnail: ThumbnailsAccessibility
+}
+#[derive(Debug, Clone, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct BackstageImageRenderer{
+    pub backstage_image_renderer: Option<CommunityPostAttachmentImage>,
+}
+
+#[derive(Debug, Clone, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct TabRendererWrapper{
+    pub tab_renderer: Option<TabRenderer>,
+    pub expandable_tab_renderer: Option<TabRenderer>
+}
+#[derive(Debug, Clone, Deserialize)]
+pub struct CommunityPostAttachmentImage{
+    pub image: Thumbnails,
+    pub command: NavigationEndpoint,
 }

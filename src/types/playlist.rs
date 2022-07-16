@@ -1,6 +1,6 @@
 use serde::Deserialize;
 
-use super::{video::{ChildVideoRendererWrapper}, misc::*};
+use super::{video::ChildVideoRendererWrapper, misc::*, endpoints::NavigationEndpoint, thumbnail::Thumbnails};
 #[derive(Debug, Clone, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct PlaylistRenderer{
