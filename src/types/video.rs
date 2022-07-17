@@ -157,8 +157,11 @@ pub struct StoryboardWrapper{
 #[serde(rename_all = "camelCase")]
 pub struct StreamingData {
     pub expires_in_seconds: String,
-    pub formats: Vec<Format>,
+    pub formats: Option<Vec<Format>>, // None if its a live stream
     pub adaptive_formats: Vec<Format>,
+    pub dash_manifest_url: Option<String>, // None if its not a live stream
+    pub hls_manifest_url: Option<String>,// None if its not a live stream
+    pub hls_formats: Option<Vec<Format>> // None if its not a live stream and the user agent wasnt Safari
 }
 
 #[derive(Debug, Clone, Deserialize)]
