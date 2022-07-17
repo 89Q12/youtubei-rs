@@ -252,3 +252,8 @@ pub struct AlertRenderer{
 pub struct MessageRenderer{
     pub text: RunsSimpleTextAccessibility,
 }
+#[derive(Debug, Clone, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct SingleColumnBrowseResultsRenderer{
+    pub tabs: Vec<TabRendererWrapper>
+}
