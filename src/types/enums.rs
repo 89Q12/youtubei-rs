@@ -1,6 +1,6 @@
 use serde::Deserialize;
 use serde_json::Value;
-use super::{video::{VideoRenderer, VideoPrimaryInfoRenderer, VideoSecondaryInfoRenderer, CompactVideoRenderer, GridVideoRenderer, CommentThreadRenderer, ReelItemRenderer, CommentRenderer, MetadataRowRenderer}, playlist::{GridPlaylistRenderer, PlaylistRenderer, CompactRadioRenderer, RadioRenderer}, channel::{BackstagePostThreadRenderer, ChannelRenderer, ChannelVideoPlayerRenderer, GridChannelRenderer, ChannelAboutFullMetadataRenderer, RichGridRenderer, C4TabbedHeaderRenderer}, misc::{HashtagHeaderRenderer, MessageRenderer, ShelfRenderer, ReelShelfRenderer, ContinuationItemRenderer, ItemSectionRenderer, SectionListRenderer, GridRenderer, ButtonRenderer, ToggleButtonRenderer, TwoColumnBrowseResultsRenderer, TwoColumnWatchNextResults, TwoColumnSearchResultsRenderer}};
+use super::{video::{VideoRenderer, VideoPrimaryInfoRenderer, VideoSecondaryInfoRenderer, CompactVideoRenderer, GridVideoRenderer, CommentThreadRenderer, ReelItemRenderer, CommentRenderer, MetadataRowRenderer}, playlist::{GridPlaylistRenderer, PlaylistRenderer, CompactRadioRenderer, RadioRenderer}, channel::{BackstagePostThreadRenderer, ChannelRenderer, ChannelVideoPlayerRenderer, GridChannelRenderer, ChannelAboutFullMetadataRenderer, RichGridRenderer, C4TabbedHeaderRenderer, RichItemRenderer}, misc::{HashtagHeaderRenderer, MessageRenderer, ShelfRenderer, ReelShelfRenderer, ContinuationItemRenderer, ItemSectionRenderer, SectionListRenderer, GridRenderer, ButtonRenderer, ToggleButtonRenderer, TwoColumnBrowseResultsRenderer, TwoColumnWatchNextResults, TwoColumnSearchResultsRenderer, SingleColumnBrowseResultsRenderer}};
 
 #[derive(Debug, Clone, Deserialize)]
 #[serde(rename_all = "camelCase")]
@@ -58,7 +58,7 @@ pub enum TabRendererContent{
 #[derive(Debug, Clone, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub enum RichGridRendererContent{
-    RichItemRenderer(ReelItemRenderer),
+    RichItemRenderer(RichItemRenderer),
     ContinuationItemRenderer(ContinuationItemRenderer), 
 }
 
@@ -81,4 +81,5 @@ pub enum TwoColumnTypes{
     TwoColumnBrowseResultsRenderer(TwoColumnBrowseResultsRenderer),
     TwoColumnWatchNextResults(TwoColumnWatchNextResults),
     TwoColumnSearchResultsRenderer(TwoColumnSearchResultsRenderer),
+    SingleColumnBrowseResultsRenderer(SingleColumnBrowseResultsRenderer)
 }
