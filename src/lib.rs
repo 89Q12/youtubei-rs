@@ -550,7 +550,7 @@ mod tests {
               {
                 "url": "https://yt3.ggpht.com/ytc/AKedOLSZnNA3eg_fDwUgsCxpqMnVWu3UGo-Rln4621ncIQ=s68-c-k-c0x00ffffff-no-rj",
                 "width": 68,
-                "hei&ght": 68
+                "height": 68
               }
             ]
           },
