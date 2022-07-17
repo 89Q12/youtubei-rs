@@ -4,7 +4,7 @@ use serde::Deserialize;
 #[derive(Debug, Clone, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct VideoRenderer {
-    pub channel_thumbnail_supported_renderers: ChannelThumbnailSupportedRenderers,
+    pub channel_thumbnail_supported_renderers: Option<ChannelThumbnailSupportedRenderers>,
     pub video_id: String,
     pub thumbnail: Thumbnails,
     pub title: Runs,
