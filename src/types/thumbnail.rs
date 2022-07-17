@@ -26,3 +26,11 @@ pub struct ThumbnailWrapper{
 pub struct ShowCustomThumbnailRenderer{
     pub show_custom_thumbnail_renderer: ThumbnailWrapper
 }
+#[derive(Debug, Clone, Deserialize)]
+pub struct ThumbnailUrlOnly{
+    pub url: String
+}
+#[derive(Debug, Clone, Deserialize)]
+pub struct ThumbnailUrlOnlyWrapper{
+    pub thumbnails: ThumbnailUrlOnly
+}

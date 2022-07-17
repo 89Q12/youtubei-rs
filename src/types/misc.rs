@@ -1,7 +1,7 @@
 use serde::Deserialize;
 use serde_json::Value;
 
-use super::{video::ReelItemRenderer, playlist::NextPlaylistWrapper, endpoints::{NavigationEndpoint, ContinuationEndpoint}, enums::{NextContents, ItemSectionRendererContents, TopLevelButtons}, channel::TabRendererWrapper, accessibility::{Accessibility, AccessibilityData}};
+use super::{video::ReelItemRenderer, playlist::NextPlaylistWrapper, endpoints::{NavigationEndpoint, ContinuationEndpoint}, enums::{NextContents, ItemSectionRendererContents, TopLevelButtons}, channel::TabRendererWrapper, accessibility::{Accessibility, AccessibilityData}, thumbnail::{Thumbnail, ThumbnailUrlOnlyWrapper}};
 
 #[derive(Debug, Clone, Deserialize)]
 #[serde(rename_all = "camelCase")]
@@ -256,4 +256,19 @@ pub struct MessageRenderer{
 #[serde(rename_all = "camelCase")]
 pub struct SingleColumnBrowseResultsRenderer{
     pub tabs: Vec<TabRendererWrapper>
+}
+#[derive(Debug, Clone, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct IncludingResultsForRenderer{
+    pub including_results_for: Runs,
+    pub corrected_query: Runs,
+}
+#[derive(Debug, Clone, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct HashtagTileRenderer{
+    pub hashtag: SimpleText,
+    pub hashtag_info_text: SimpleText,
+    pub hashtag_thumbnail: ThumbnailUrlOnlyWrapper,
+    pub hashtag_video_count: SimpleText,
+    pub hashtag_channel_count: SimpleText
 }
