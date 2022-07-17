@@ -797,7 +797,7 @@ mod tests {
     async fn test_browse_query_browse_hashtag() {
         let client_config = &default_client_config();
         let j: serde_json::Value =
-            endpoints::browse_browseid("FEhashtag", "6gUECgJwYw%3D%3D", client_config)
+            endpoints::browse_browseid("FEhashtag", "6gULCgllbGRlbnJpbmc%3D", client_config)
                 .await
                 .unwrap();
         let result: BrowseResult = serde_json::from_value(j).unwrap();
