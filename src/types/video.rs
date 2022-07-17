@@ -1,4 +1,4 @@
-use super::{misc::*, endpoints::NavigationEndpoint, enums::{MetadataRowContents, RichGridRendererContent}, channel::ChannelThumbnailSupportedRenderers, thumbnail::Thumbnails, accessibility::Accessibility};
+use super::{misc::*, endpoints::NavigationEndpoint, enums::MetadataRowContents, channel::ChannelThumbnailSupportedRenderers, thumbnail::Thumbnails, accessibility::Accessibility};
 use serde::Deserialize;
 
 #[derive(Debug, Clone, Deserialize)]
