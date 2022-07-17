@@ -239,216 +239,214 @@ mod tests {
     async fn test_video_secondary_info_renderer() {
         // The json is shortened due to macro limits,
         let j: serde_json::Value = json!({
-
-            "owner": {
-              "videoOwnerRenderer": {
-                "thumbnail": {
-                  "thumbnails": [
-                    {
-                      "url": "https://yt3.ggpht.com/ytc/AKedOLSZnNA3eg_fDwUgsCxpqMnVWu3UGo-Rln4621ncIQ=s48-c-k-c0x00ffffff-no-rj",
-                      "width": 48,
-                      "height": 48
-                    },
-                    {
-                      "url": "https://yt3.ggpht.com/ytc/AKedOLSZnNA3eg_fDwUgsCxpqMnVWu3UGo-Rln4621ncIQ=s88-c-k-c0x00ffffff-no-rj",
-                      "width": 88,
-                      "height": 88
-                    },
-                    {
-                      "url": "https://yt3.ggpht.com/ytc/AKedOLSZnNA3eg_fDwUgsCxpqMnVWu3UGo-Rln4621ncIQ=s176-c-k-c0x00ffffff-no-rj",
-                      "width": 176,
-                      "height": 176
-                    }
-                  ]
-                },
-                "title": {
-                  "runs": [
-                    {
-                      "text": "Linus Tech Tips",
-                      "navigationEndpoint": {
-                        "clickTrackingParams": "CI4DEOE5IhMInqXs06eb-AIV5swRCB3YEwCp",
-                        "commandMetadata": {
-                          "webCommandMetadata": {
-                            "url": "/c/LinusTechTips",
-                            "webPageType": "WEB_PAGE_TYPE_CHANNEL",
-                            "rootVe": 3611,
-                            "apiUrl": "/youtubei/v1/browse"
-                          }
-                        },
-                        "browseEndpoint": {
-                          "browseId": "UCXuqSBlHAE6Xw-yeJA0Tunw",
-                          "canonicalBaseUrl": "/c/LinusTechTips"
-                        }
-                      }
-                    }
-                  ]
-                },
-                "subscriptionButton": {
-                  "type": "FREE"
-                },
-                "navigationEndpoint": {
-                  "clickTrackingParams": "CI4DEOE5IhMInqXs06eb-AIV5swRCB3YEwCp",
-                  "commandMetadata": {
-                    "webCommandMetadata": {
-                      "url": "/c/LinusTechTips",
-                      "webPageType": "WEB_PAGE_TYPE_CHANNEL",
-                      "rootVe": 3611,
-                      "apiUrl": "/youtubei/v1/browse"
-                    }
-                  },
-                  "browseEndpoint": {
-                    "browseId": "UCXuqSBlHAE6Xw-yeJA0Tunw",
-                    "canonicalBaseUrl": "/c/LinusTechTips"
-                  }
-                },
-                "subscriberCountText": {
-                  "accessibility": {
-                    "accessibilityData": {
-                      "label": "14.6 million subscribers"
-                    }
-                  },
-                  "simpleText": "14.6M subscribers"
-                },
-                "trackingParams": "CI4DEOE5IhMInqXs06eb-AIV5swRCB3YEwCp",
-                "badges": [
+          "owner": {
+            "videoOwnerRenderer": {
+              "thumbnail": {
+                "thumbnails": [
                   {
-                    "metadataBadgeRenderer": {
-                      "icon": {
-                        "iconType": "CHECK_CIRCLE_THICK"
-                      },
-                      "style": "BADGE_STYLE_TYPE_VERIFIED",
-                      "tooltip": "Verified",
-                      "trackingParams": "CI4DEOE5IhMInqXs06eb-AIV5swRCB3YEwCp",
-                      "accessibilityData": {
-                        "label": "Verified"
-                      }
-                    }
+                    "url": "https://yt3.ggpht.com/ytc/AKedOLSZnNA3eg_fDwUgsCxpqMnVWu3UGo-Rln4621ncIQ=s48-c-k-c0x00ffffff-no-rj",
+                    "width": 48,
+                    "height": 48
+                  },
+                  {
+                    "url": "https://yt3.ggpht.com/ytc/AKedOLSZnNA3eg_fDwUgsCxpqMnVWu3UGo-Rln4621ncIQ=s88-c-k-c0x00ffffff-no-rj",
+                    "width": 88,
+                    "height": 88
+                  },
+                  {
+                    "url": "https://yt3.ggpht.com/ytc/AKedOLSZnNA3eg_fDwUgsCxpqMnVWu3UGo-Rln4621ncIQ=s176-c-k-c0x00ffffff-no-rj",
+                    "width": 176,
+                    "height": 176
                   }
-                ],
-                "membershipButton": {
-                  "buttonRenderer": {
-                    "style": "STYLE_SUGGESTIVE",
-                    "size": "SIZE_DEFAULT",
-                    "isDisabled": false,
-                    "text": {
-                      "runs": [
-                        {
-                          "text": "Join"
-                        }
-                      ]
-                    },
+                ]
+              },
+              "title": {
+                "runs": [
+                  {
+                    "text": "Linus Tech Tips",
                     "navigationEndpoint": {
-                      "clickTrackingParams": "CI8DEKhgIhMInqXs06eb-AIV5swRCB3YEwCp",
+                      "clickTrackingParams": "CI4DEOE5IhMInqXs06eb-AIV5swRCB3YEwCp",
                       "commandMetadata": {
                         "webCommandMetadata": {
-                          "ignoreNavigation": true
+                          "url": "/c/LinusTechTips",
+                          "webPageType": "WEB_PAGE_TYPE_CHANNEL",
+                          "rootVe": 3611,
+                          "apiUrl": "/youtubei/v1/browse"
                         }
                       },
-                      "modalEndpoint": {
-                        "modal": {
-                          "modalWithTitleAndButtonRenderer": {
-                            "title": {
-                              "runs": [
-                                {
-                                  "text": "Want to join this channel?"
-                                }
-                              ]
-                            },
-                            "content": {
-                              "runs": [
-                                {
-                                  "text": "Sign in to become a member."
-                                }
-                              ]
-                            },
-                            "button": {
-                              "buttonRenderer": {
-                                "style": "STYLE_BRAND",
-                                "size": "SIZE_DEFAULT",
-                                "isDisabled": false,
-                                "text": {
-                                  "simpleText": "Sign in"
-                                },
-                                "navigationEndpoint": {
-                                  "clickTrackingParams": "CJADEPBbIhMInqXs06eb-AIV5swRCB3YEwCp",
-                                  "commandMetadata": {
-                                    "webCommandMetadata": {
-                                      "url": "https://accounts.google.com/ServiceLogin?service=youtube&uilel=3&passive=true&continue=https%3A%2F%2Fwww.youtube.com%2Fsignin%3Faction_handle_signin%3Dtrue%26app%3Ddesktop%26hl%3Den%26next%3Dhttps%253A%252F%252Fwww.youtube.com%252Fyoutubei%252Fv1%252Fnext%253Fkey%253DAIzaSyAO_FJ2SlqU8Q4STEHLGCilw_Y9_11qcW8&hl=en",
-                                      "webPageType": "WEB_PAGE_TYPE_UNKNOWN",
-                                      "rootVe": 83769
-                                    }
-                                  },
-                                  "signInEndpoint": {
-                                    "hack": true
+                      "browseEndpoint": {
+                        "browseId": "UCXuqSBlHAE6Xw-yeJA0Tunw",
+                        "canonicalBaseUrl": "/c/LinusTechTips"
+                      }
+                    }
+                  }
+                ]
+              },
+              "subscriptionButton": {
+                "type": "FREE"
+              },
+              "navigationEndpoint": {
+                "clickTrackingParams": "CI4DEOE5IhMInqXs06eb-AIV5swRCB3YEwCp",
+                "commandMetadata": {
+                  "webCommandMetadata": {
+                    "url": "/c/LinusTechTips",
+                    "webPageType": "WEB_PAGE_TYPE_CHANNEL",
+                    "rootVe": 3611,
+                    "apiUrl": "/youtubei/v1/browse"
+                  }
+                },
+                "browseEndpoint": {
+                  "browseId": "UCXuqSBlHAE6Xw-yeJA0Tunw",
+                  "canonicalBaseUrl": "/c/LinusTechTips"
+                }
+              },
+              "subscriberCountText": {
+                "accessibility": {
+                  "accessibilityData": {
+                    "label": "14.6 million subscribers"
+                  }
+                },
+                "simpleText": "14.6M subscribers"
+              },
+              "trackingParams": "CI4DEOE5IhMInqXs06eb-AIV5swRCB3YEwCp",
+              "badges": [
+                {
+                  "metadataBadgeRenderer": {
+                    "icon": {
+                      "iconType": "CHECK_CIRCLE_THICK"
+                    },
+                    "style": "BADGE_STYLE_TYPE_VERIFIED",
+                    "tooltip": "Verified",
+                    "trackingParams": "CI4DEOE5IhMInqXs06eb-AIV5swRCB3YEwCp",
+                    "accessibilityData": {
+                      "label": "Verified"
+                    }
+                  }
+                }
+              ],
+              "membershipButton": {
+                "buttonRenderer": {
+                  "style": "STYLE_SUGGESTIVE",
+                  "size": "SIZE_DEFAULT",
+                  "isDisabled": false,
+                  "text": {
+                    "runs": [
+                      {
+                        "text": "Join"
+                      }
+                    ]
+                  },
+                  "navigationEndpoint": {
+                    "clickTrackingParams": "CI8DEKhgIhMInqXs06eb-AIV5swRCB3YEwCp",
+                    "commandMetadata": {
+                      "webCommandMetadata": {
+                        "ignoreNavigation": true
+                      }
+                    },
+                    "modalEndpoint": {
+                      "modal": {
+                        "modalWithTitleAndButtonRenderer": {
+                          "title": {
+                            "runs": [
+                              {
+                                "text": "Want to join this channel?"
+                              }
+                            ]
+                          },
+                          "content": {
+                            "runs": [
+                              {
+                                "text": "Sign in to become a member."
+                              }
+                            ]
+                          },
+                          "button": {
+                            "buttonRenderer": {
+                              "style": "STYLE_BRAND",
+                              "size": "SIZE_DEFAULT",
+                              "isDisabled": false,
+                              "text": {
+                                "simpleText": "Sign in"
+                              },
+                              "navigationEndpoint": {
+                                "clickTrackingParams": "CJADEPBbIhMInqXs06eb-AIV5swRCB3YEwCp",
+                                "commandMetadata": {
+                                  "webCommandMetadata": {
+                                    "url": "https://accounts.google.com/ServiceLogin?service=youtube&uilel=3&passive=true&continue=https%3A%2F%2Fwww.youtube.com%2Fsignin%3Faction_handle_signin%3Dtrue%26app%3Ddesktop%26hl%3Den%26next%3Dhttps%253A%252F%252Fwww.youtube.com%252Fyoutubei%252Fv1%252Fnext%253Fkey%253DAIzaSyAO_FJ2SlqU8Q4STEHLGCilw_Y9_11qcW8&hl=en",
+                                    "webPageType": "WEB_PAGE_TYPE_UNKNOWN",
+                                    "rootVe": 83769
                                   }
                                 },
-                                "trackingParams": "CJADEPBbIhMInqXs06eb-AIV5swRCB3YEwCp"
-                              }
+                                "signInEndpoint": {
+                                  "hack": true
+                                }
+                              },
+                              "trackingParams": "CJADEPBbIhMInqXs06eb-AIV5swRCB3YEwCp"
                             }
                           }
                         }
                       }
-                    },
-                    "trackingParams": "CI8DEKhgIhMInqXs06eb-AIV5swRCB3YEwCp",
+                    }
+                  },
+                  "trackingParams": "CI8DEKhgIhMInqXs06eb-AIV5swRCB3YEwCp",
+                  "accessibilityData": {
                     "accessibilityData": {
-                      "accessibilityData": {
-                        "label": "Join this channel"
-                      }
-                    },
-                    "targetId": "sponsorships-button"
-                  }
+                      "label": "Join this channel"
+                    }
+                  },
+                  "targetId": "sponsorships-button"
                 }
               }
-            },
-            "description": {
-              "runs": [
-                {
-                  "text": "Visit "
-                },
-                {
-                  "text": "https://www.squarespace.com/WAN",
-                  "navigationEndpoint": {
-                    "clickTrackingParams": "CIsDEM2rARgBIhMInqXs06eb-AIV5swRCB3YEwCpSILE2te456zvtQE=",
-                    "commandMetadata": {
-                      "webCommandMetadata": {
-                        "url": "https://www.youtube.com/redirect?event=video_description&redir_token=QUFFLUhqbnJYOTNiMEZPaGppaVZKNVl2RHhvajhSRjYtZ3xBQ3Jtc0trWTEzT1pfMUw4OU9Fc2Rkamc3b3ZKcnczM1QxdkhrbFI1NHFVN0hmZV9LaERDc0RobmtYTzl6RkFNTmJLTkFla1BQZ2tSaXBjRTFPNFozdFdaWC12cnl0X2dUMmNsMGVQSTN4S29mb1FNM29wdzRudw&q=https%3A%2F%2Fwww.squarespace.com%2FWAN&v=td6zO4r2ogI",
-                        "webPageType": "WEB_PAGE_TYPE_UNKNOWN",
-                        "rootVe": 83769
-                      }
-                    },
-                    "urlEndpoint": {
+            }
+          },
+          "description": {
+            "runs": [
+              {
+                "text": "Visit "
+              },
+              {
+                "text": "https://www.squarespace.com/WAN",
+                "navigationEndpoint": {
+                  "clickTrackingParams": "CIsDEM2rARgBIhMInqXs06eb-AIV5swRCB3YEwCpSILE2te456zvtQE=",
+                  "commandMetadata": {
+                    "webCommandMetadata": {
                       "url": "https://www.youtube.com/redirect?event=video_description&redir_token=QUFFLUhqbnJYOTNiMEZPaGppaVZKNVl2RHhvajhSRjYtZ3xBQ3Jtc0trWTEzT1pfMUw4OU9Fc2Rkamc3b3ZKcnczM1QxdkhrbFI1NHFVN0hmZV9LaERDc0RobmtYTzl6RkFNTmJLTkFla1BQZ2tSaXBjRTFPNFozdFdaWC12cnl0X2dUMmNsMGVQSTN4S29mb1FNM29wdzRudw&q=https%3A%2F%2Fwww.squarespace.com%2FWAN&v=td6zO4r2ogI",
-                      "target": "TARGET_NEW_WINDOW",
-                      "nofollow": true
+                      "webPageType": "WEB_PAGE_TYPE_UNKNOWN",
+                      "rootVe": 83769
                     }
+                  },
+                  "urlEndpoint": {
+                    "url": "https://www.youtube.com/redirect?event=video_description&redir_token=QUFFLUhqbnJYOTNiMEZPaGppaVZKNVl2RHhvajhSRjYtZ3xBQ3Jtc0trWTEzT1pfMUw4OU9Fc2Rkamc3b3ZKcnczM1QxdkhrbFI1NHFVN0hmZV9LaERDc0RobmtYTzl6RkFNTmJLTkFla1BQZ2tSaXBjRTFPNFozdFdaWC12cnl0X2dUMmNsMGVQSTN4S29mb1FNM29wdzRudw&q=https%3A%2F%2Fwww.squarespace.com%2FWAN&v=td6zO4r2ogI",
+                    "target": "TARGET_NEW_WINDOW",
+                    "nofollow": true
                   }
-                },
-                {
-                  "text": " and use offer code WAN for 10% off\nGet 50% off (up to $200) your annual Zoho Desk subscription at: "
-                },
-              ]
-            },
-            "metadataRowContainer": {
-              "metadataRowContainerRenderer": {
-                "collapsedItemCount": 0,
-                "trackingParams": "CIsDEM2rARgBIhMInqXs06eb-AIV5swRCB3YEwCp"
-              }
-            },
-            "showMoreText": {
-              "simpleText": "Show more"
-            },
-            "showLessText": {
-              "simpleText": "Show less"
-            },
-          }
-        );
+                }
+              },
+              {
+                "text": " and use offer code WAN for 10% off\nGet 50% off (up to $200) your annual Zoho Desk subscription at: "
+              },
+            ]
+          },
+          "metadataRowContainer": {
+            "metadataRowContainerRenderer": {
+              "collapsedItemCount": 0,
+              "trackingParams": "CIsDEM2rARgBIhMInqXs06eb-AIV5swRCB3YEwCp"
+            }
+          },
+          "showMoreText": {
+            "simpleText": "Show more"
+          },
+          "showLessText": {
+            "simpleText": "Show less"
+          },
+        });
         let u: VideoSecondaryInfoRenderer = serde_json::from_value(j).unwrap();
         // Assert that the title text is Linus Tech Tips
         assert_eq!(
             u.owner.video_owner_renderer.title.runs.get(0).unwrap().text,
             "Linus Tech Tips"
         );
-        assert_eq!(u.description.runs.len(), 3);
+        assert_eq!(u.description.unwrap().runs.len(), 3);
     }
     #[tokio::test]
     async fn test_compact_video_renderer() {
@@ -779,15 +777,11 @@ mod tests {
         .unwrap();
         let result: NextResult = serde_json::from_value(j).unwrap();
         assert_ne!(
-            result
-                .contents
-                .unwrap()
-                .two_column_watch_next_results
-                .unwrap()
-                .results
-                .results
-                .contents
-                .len(),
+            match result.contents.unwrap() {
+                crate::types::enums::TwoColumnTypes::TwoColumnWatchNextResults(res) =>
+                    res.results.results.contents.len(),
+                _ => unreachable!(),
+            },
             0
         )
     }
@@ -807,14 +801,7 @@ mod tests {
                 .await
                 .unwrap();
         let result: BrowseResult = serde_json::from_value(j).unwrap();
-        assert_eq!(
-            result
-                .contents
-                .unwrap()
-                .two_column_browse_results_renderer
-                .is_some(),
-            true
-        );
+        assert_eq!(result.contents.is_some(), true);
     }
     #[tokio::test]
     async fn test_browse_query_browse_id() {
@@ -827,14 +814,7 @@ mod tests {
         .await
         .unwrap();
         let result: BrowseResult = serde_json::from_value(j).unwrap();
-        assert_eq!(
-            result
-                .contents
-                .unwrap()
-                .two_column_browse_results_renderer
-                .is_some(),
-            true
-        );
+        assert_eq!(result.contents.is_some(), true);
         assert_eq!(
             result.metadata.unwrap().channel_metadata_renderer.title,
             "Linus Tech Tips"
@@ -848,14 +828,7 @@ mod tests {
                 .await
                 .unwrap();
         let result: BrowseResult = serde_json::from_value(j).unwrap();
-        assert_eq!(
-            result
-                .contents
-                .unwrap()
-                .two_column_browse_results_renderer
-                .is_some(),
-            true
-        );
+        assert_eq!(result.contents.is_some(), true);
         assert_eq!(
             result.metadata.unwrap().channel_metadata_renderer.title,
             "Linus Tech Tips"
@@ -892,14 +865,11 @@ mod tests {
                 .unwrap();
         let result: SearchResult = serde_json::from_value(j).unwrap();
         assert_ne!(
-            result
-                .contents
-                .two_column_search_results_renderer
-                .unwrap()
-                .primary_contents
-                .section_list_renderer
-                .contents
-                .len(),
+            match result.contents {
+                crate::types::enums::TwoColumnTypes::TwoColumnSearchResultsRenderer(res) =>
+                    res.primary_contents.section_list_renderer.contents.len(),
+                _ => unreachable!(),
+            },
             0
         );
     }
@@ -909,14 +879,11 @@ mod tests {
         let j: serde_json::Value = endpoints::search("ltt", "", client_config).await.unwrap();
         let result: SearchResult = serde_json::from_value(j).unwrap();
         assert_ne!(
-            result
-                .contents
-                .two_column_search_results_renderer
-                .unwrap()
-                .primary_contents
-                .section_list_renderer
-                .contents
-                .len(),
+            match result.contents {
+                crate::types::enums::TwoColumnTypes::TwoColumnSearchResultsRenderer(res) =>
+                    res.primary_contents.section_list_renderer.contents.len(),
+                _ => unreachable!(),
+            },
             0
         );
     }
@@ -928,14 +895,11 @@ mod tests {
             .unwrap();
         let result: SearchResult = serde_json::from_value(j).unwrap();
         assert_ne!(
-            result
-                .contents
-                .two_column_search_results_renderer
-                .unwrap()
-                .primary_contents
-                .section_list_renderer
-                .contents
-                .len(),
+            match result.contents {
+                crate::types::enums::TwoColumnTypes::TwoColumnSearchResultsRenderer(res) =>
+                    res.primary_contents.section_list_renderer.contents.len(),
+                _ => unreachable!(),
+            },
             0
         );
         assert_eq!(result.refinements.is_none(), false);
@@ -948,14 +912,11 @@ mod tests {
             .unwrap();
         let result: SearchResult = serde_json::from_value(j).unwrap();
         assert_ne!(
-            result
-                .contents
-                .two_column_search_results_renderer
-                .unwrap()
-                .primary_contents
-                .section_list_renderer
-                .contents
-                .len(),
+            match result.contents {
+                crate::types::enums::TwoColumnTypes::TwoColumnSearchResultsRenderer(res) =>
+                    res.primary_contents.section_list_renderer.contents.len(),
+                _ => unreachable!(),
+            },
             0
         );
     }
@@ -1132,16 +1093,11 @@ mod tests {
         let result: Result<NextResult, serde_json::Error> = serde_json::from_value(j);
         assert_eq!(result.is_ok(), true);
         assert_eq!(
-            result
-                .unwrap()
-                .contents
-                .unwrap()
-                .two_column_watch_next_results
-                .unwrap()
-                .playlist
-                .unwrap()
-                .playlist
-                .title,
+            match result.unwrap().contents.unwrap() {
+                crate::types::enums::TwoColumnTypes::TwoColumnWatchNextResults(res) =>
+                    res.playlist.unwrap().playlist.title,
+                _ => unreachable!(),
+            },
             "Bootleg Remixes"
         );
     }
@@ -1223,17 +1179,11 @@ mod tests {
         let result: Result<BrowseResult, serde_json::Error> = serde_json::from_value(j);
         assert_eq!(result.is_ok(), true);
         assert_eq!(
-            result
-                .unwrap()
-                .contents
-                .unwrap()
-                .two_column_browse_results_renderer
-                .unwrap()
-                .tabs
-                .last()
-                .unwrap()
-                .expandable_tab_renderer
-                .is_some(),
+            match result.unwrap().contents.unwrap() {
+                crate::types::enums::TwoColumnTypes::TwoColumnBrowseResultsRenderer(res) =>
+                    res.tabs.last().unwrap().expandable_tab_renderer.is_some(),
+                _ => unreachable!(),
+            },
             true
         );
     }
@@ -1253,17 +1203,11 @@ mod tests {
         let result: Result<BrowseResult, serde_json::Error> = serde_json::from_value(j);
         assert_eq!(result.is_ok(), true);
         assert_eq!(
-            result
-                .unwrap()
-                .contents
-                .unwrap()
-                .two_column_browse_results_renderer
-                .unwrap()
-                .tabs
-                .last()
-                .unwrap()
-                .expandable_tab_renderer
-                .is_some(),
+            match result.unwrap().contents.unwrap() {
+                crate::types::enums::TwoColumnTypes::TwoColumnBrowseResultsRenderer(res) =>
+                    res.tabs.last().unwrap().expandable_tab_renderer.is_some(),
+                _ => unreachable!(),
+            },
             true
         );
     }
