@@ -10,6 +10,7 @@ pub struct PlaylistRenderer{
     pub video_count: String,
     pub view_playlist_text: Runs,
     pub short_byline_text: Runs,
+    pub owner_badges: Option<Vec<BadgeRendererVec>>,
 }
 
 #[derive(Debug, Clone, Deserialize)]
