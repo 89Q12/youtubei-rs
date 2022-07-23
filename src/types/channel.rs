@@ -9,7 +9,7 @@ pub struct ChannelRenderer{
     pub title: SimpleText,
     pub navigation_endpoint: NavigationEndpoint,
     pub thumbnail: Thumbnails,
-    pub description_snippet: Runs,
+    pub description_snippet: Option<Runs>,
     pub short_byline_text: Runs,
     pub video_count_text: Runs,
     pub owner_badges: Option<Vec<BadgeRendererVec>>,
