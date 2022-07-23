@@ -1,7 +1,7 @@
 use serde::Deserialize;
 use serde_json::Value;
 
-use super::{video::ReelItemRenderer, playlist::NextPlaylistWrapper, endpoints::{NavigationEndpoint, ContinuationEndpoint}, enums::{NextContents, ItemSectionRendererContents, TopLevelButtons}, channel::TabRendererWrapper, accessibility::{Accessibility, AccessibilityData}, thumbnail::ThumbnailUrlOnlyWrapper};
+use super::{video::ReelItemRenderer, playlist::NextPlaylistWrapper, endpoints::{NavigationEndpoint, ContinuationEndpoint}, enums::{NextContents, ItemSectionRendererContents, TopLevelButtons}, channel::TabRendererWrapper, accessibility::{Accessibility, AccessibilityData}, thumbnail::{ThumbnailUrlOnlyWrapper, Thumbnails}};
 
 #[derive(Debug, Clone, Deserialize)]
 #[serde(rename_all = "camelCase")]
@@ -277,4 +277,18 @@ pub struct HashtagTileRenderer{
 pub struct ShowingResultsForRenderer{
     pub corrected_query: Runs,
     pub original_query: Runs,
+}
+#[derive(Debug, Clone, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct MicroformatDataRenderer{
+    pub url_canonical: String,
+    pub title: String,
+    pub description: String,
+    pub thumbnail: Thumbnails,
+    pub unlisted: bool,
+}
+#[derive(Debug, Clone, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct MicroformatDataRendererWrapper{
+    pub microformat_data_renderer: MicroformatDataRenderer,
 }

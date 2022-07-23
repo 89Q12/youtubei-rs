@@ -1,6 +1,6 @@
 use serde::Deserialize;
 
-use super::{misc::*, endpoints::NavigationEndpoint, video::{PlayerOverlayRendererWrapper, StreamingData, VideoDetails, StoryboardWrapper, PlayerMicroformatRenderer, PlayabilityStatus, PlayerCaptionsTracklistRenderer}, enums::{HeaderContents, TwoColumnTypes}, channel::ChannelMetadataRendererWrapper};
+use super::{misc::*, endpoints::NavigationEndpoint, video::{PlayerOverlayRendererWrapper, StreamingData, VideoDetails, StoryboardWrapper, PlayerMicroformatRenderer, PlayabilityStatus, PlayerCaptionsTracklistRenderer}, enums::{HeaderContents, TwoColumnTypes, MetadataRenderers}};
 
 /// Represents a result from a arbitrary next query
 /// Everything can be None but never are all at the same time None
@@ -31,9 +31,10 @@ pub struct PlayerResult{
 pub struct BrowseResult{
     pub contents: Option<TwoColumnTypes>,
     pub header: Option<HeaderContents>,
-    pub metadata: Option<ChannelMetadataRendererWrapper>,
+    pub metadata: Option<MetadataRenderers>,
     pub on_response_received_actions: Option<Vec<OnResponseReceivedActions>>,
     pub alerts: Option<Vec<AlertsRenderer>>,
+    pub microformat: Option<MicroformatDataRendererWrapper>
 }
 /// Represents a result from a arbitrary resolve_url query
 #[derive(Debug, Clone, Deserialize)]

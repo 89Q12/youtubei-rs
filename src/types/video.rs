@@ -118,6 +118,7 @@ pub struct PlayerMicroformat{
     pub available_countries: Vec<String>,
     pub live_broadcast_details: Option<LiveBroadcastDetails>,
     pub upload_date: String,
+    pub is_unlisted: bool,
 
 }
 #[derive(Debug, Clone, Deserialize)]
@@ -462,4 +463,17 @@ pub struct CompactMovieRenderer{
     pub owner_badges: Option<Vec<BadgeRendererVec>>,
     pub short_byline_text: Runs,
     pub top_metadata_items: Vec<SimpleText>,
+}
+
+#[derive(Debug, Clone, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct PlaylistVideoRenderer{
+    pub video_id: String,
+    pub thumbnail: Thumbnails,
+    pub title: Runs,
+    pub length_text: AccessibilitySimpleText,
+    pub navigation_endpoint: NavigationEndpoint,
+    pub short_byline_text: Runs,
+    pub length_seconds: String,
+    pub index: SimpleText,
 }

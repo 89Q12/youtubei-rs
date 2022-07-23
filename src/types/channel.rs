@@ -141,11 +141,6 @@ pub struct C4TabbedHeaderRendererWrapper{
 }
 #[derive(Debug, Clone, Deserialize)]
 #[serde(rename_all = "camelCase")]
-pub struct ChannelMetadataRendererWrapper{
-    pub channel_metadata_renderer: ChannelMetadataRenderer,
-}
-#[derive(Debug, Clone, Deserialize)]
-#[serde(rename_all = "camelCase")]
 pub struct C4TabbedHeaderRenderer{
     pub channel_id: String,
     pub title: Option<String>, // None if the channels is terminated or the channel doesn't exist

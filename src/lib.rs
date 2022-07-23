@@ -17,6 +17,7 @@ mod tests {
 
     use crate::types::{
         channel::*,
+        enums,
         video::{CompactVideoRenderer, VideoPrimaryInfoRenderer, VideoSecondaryInfoRenderer},
     };
     use crate::{
@@ -816,8 +817,28 @@ mod tests {
         let result: BrowseResult = serde_json::from_value(j).unwrap();
         assert_eq!(result.contents.is_some(), true);
         assert_eq!(
-            result.metadata.unwrap().channel_metadata_renderer.title,
-            "Linus Tech Tips"
+          match result.metadata.unwrap() {
+              enums::MetadataRenderers::ChannelMetadataRenderer(ch) => ch.title,
+              _ => unreachable!(),
+          },
+          "Linus Tech Tips"
+      );
+    }
+    #[tokio::test]
+    async fn test_browse_playlist() {
+        let client_config = &default_client_config();
+        let j: serde_json::Value =
+            endpoints::browse_browseid("VLPL8mG-RkN2uTy5zBlQstuTnIUEQPe5rDHx", "", client_config)
+                .await
+                .unwrap();
+        let result: BrowseResult = serde_json::from_value(j).unwrap();
+        assert_eq!(result.contents.is_some(), true);
+        assert_eq!(
+            match result.metadata.unwrap() {
+                enums::MetadataRenderers::PlaylistMetadataRenderer(pl) => pl.title,
+                _ => unreachable!(),
+            },
+            "Build Logs"
         );
     }
     #[tokio::test]
@@ -830,7 +851,10 @@ mod tests {
         let result: BrowseResult = serde_json::from_value(j).unwrap();
         assert_eq!(result.contents.is_some(), true);
         assert_eq!(
-            result.metadata.unwrap().channel_metadata_renderer.title,
+            match result.metadata.unwrap() {
+                enums::MetadataRenderers::ChannelMetadataRenderer(ch) => ch.title,
+                _ => unreachable!(),
+            },
             "Linus Tech Tips"
         );
     }
@@ -842,7 +866,10 @@ mod tests {
         assert_eq!(result.contents.is_none(), true);
         assert_eq!(result.on_response_received_actions.is_some(), true);
         assert_eq!(
-            result.metadata.unwrap().channel_metadata_renderer.title,
+          match result.metadata.unwrap(){
+            enums::MetadataRenderers::ChannelMetadataRenderer(ch) => ch.title,
+            _ => unreachable!(),
+          },
             "Linus Tech Tips"
         );
     }
