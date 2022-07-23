@@ -89,7 +89,7 @@ pub struct RadioRenderer{
 #[derive(Debug, Clone, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct CompactPlaylistRenderer{
-    pub compact_playlist_renderer:Runs,
+    pub video_count_text:Runs,
     pub video_count_short_text: SimpleText,
     pub title: SimpleText,
     pub thumbnail: Thumbnails,
