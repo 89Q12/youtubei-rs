@@ -1,6 +1,6 @@
 use serde::Deserialize;
 use serde_json::Value;
-use super::{video::{VideoRenderer, VideoPrimaryInfoRenderer, VideoSecondaryInfoRenderer, CompactVideoRenderer, GridVideoRenderer, CommentThreadRenderer, CommentRenderer, MetadataRowRenderer, CompactMovieRenderer, PlaylistVideoRenderer}, playlist::{GridPlaylistRenderer, PlaylistRenderer, CompactRadioRenderer, RadioRenderer, CompactPlaylistRenderer, PlaylistMetadataRenderer, PlaylistVideoListRenderer}, channel::{BackstagePostThreadRenderer, ChannelRenderer, ChannelVideoPlayerRenderer, GridChannelRenderer, ChannelAboutFullMetadataRenderer, RichGridRenderer, C4TabbedHeaderRenderer, RichItemRenderer, ChannelMetadataRenderer}, misc::{HashtagHeaderRenderer, MessageRenderer, ShelfRenderer, ReelShelfRenderer, ContinuationItemRenderer, ItemSectionRenderer, SectionListRenderer, GridRenderer, ButtonRenderer, ToggleButtonRenderer, TwoColumnBrowseResultsRenderer, TwoColumnWatchNextResults, TwoColumnSearchResultsRenderer, SingleColumnBrowseResultsRenderer, IncludingResultsForRenderer, ShowingResultsForRenderer}};
+use super::{video::{VideoRenderer, VideoPrimaryInfoRenderer, VideoSecondaryInfoRenderer, CompactVideoRenderer, GridVideoRenderer, CommentThreadRenderer, CommentRenderer, MetadataRowRenderer, CompactMovieRenderer, PlaylistVideoRenderer}, playlist::{GridPlaylistRenderer, PlaylistRenderer, CompactRadioRenderer, RadioRenderer, CompactPlaylistRenderer, PlaylistMetadataRenderer, PlaylistVideoListRenderer, PlaylistHeaderRenderer}, channel::{BackstagePostThreadRenderer, ChannelRenderer, ChannelVideoPlayerRenderer, GridChannelRenderer, ChannelAboutFullMetadataRenderer, RichGridRenderer, C4TabbedHeaderRenderer, RichItemRenderer, ChannelMetadataRenderer}, misc::{HashtagHeaderRenderer, MessageRenderer, ShelfRenderer, ReelShelfRenderer, ContinuationItemRenderer, ItemSectionRenderer, SectionListRenderer, GridRenderer, ButtonRenderer, ToggleButtonRenderer, TwoColumnBrowseResultsRenderer, TwoColumnWatchNextResults, TwoColumnSearchResultsRenderer, SingleColumnBrowseResultsRenderer, IncludingResultsForRenderer, ShowingResultsForRenderer}};
 
 #[derive(Debug, Clone, Deserialize)]
 #[serde(rename_all = "camelCase")]
@@ -33,6 +33,7 @@ pub enum ItemSectionRendererContents{
 pub enum HeaderContents{
     C4TabbedHeaderRenderer(C4TabbedHeaderRenderer),
     HashtagHeaderRenderer(HashtagHeaderRenderer),
+    PlaylistHeaderRenderer(PlaylistHeaderRenderer),
 }
 #[derive(Debug, Clone, Deserialize)]
 #[serde(rename_all = "camelCase")]

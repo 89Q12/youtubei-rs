@@ -109,6 +109,8 @@ pub struct PlaylistVideoListRenderer{
 pub struct PlaylistMetadataRenderer{
     pub title: String,
 }
+#[derive(Debug, Clone, Deserialize)]
+#[serde(rename_all = "camelCase")]
 pub struct PlaylistHeaderRenderer{
     pub playlist_id: String,
     pub title: SimpleText,
