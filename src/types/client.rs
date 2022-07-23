@@ -44,7 +44,7 @@ impl ClientTypes {
     match self {
         ClientTypes::Web =>  ClientType{
               name:    "WEB".to_string(),
-              version: "2.20210721.00.00".to_string(),
+              version: "2.20220714.01.00".to_string(),
               api_key: "AIzaSyAO_FJ2SlqU8Q4STEHLGCilw_Y9_11qcW8".to_string(),
               screen:  "WATCH_FULL_SCREEN".to_string(),
             },
@@ -56,13 +56,13 @@ impl ClientTypes {
         },
         ClientTypes::WebMobile => ClientType{
             name:    "MWEB".to_string(),
-            version: "2.20210726.08.00".to_string(),
+            version: "2.20220714.01.00".to_string(),
             api_key: "AIzaSyAO_FJ2SlqU8Q4STEHLGCilw_Y9_11qcW8".to_string(),
             screen:  "".to_string(),
         },
         ClientTypes::WebScreenEmbed => ClientType{      
             name:    "WEB".to_string(),
-            version: "2.20210721.00.00".to_string(),
+            version: "2.20220714.01.00".to_string(),
             api_key: "AIzaSyAO_FJ2SlqU8Q4STEHLGCilw_Y9_11qcW8".to_string(),
             screen:  "EMBED".to_string(),
         },
