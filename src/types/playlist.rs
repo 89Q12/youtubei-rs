@@ -86,3 +86,15 @@ pub struct RadioRenderer{
     pub videos: Vec<ChildVideoRendererWrapper>,
     pub thumbnail: Thumbnails,
 }
+#[derive(Debug, Clone, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct CompactPlaylistRenderer{
+    pub compact_playlist_renderer:Runs,
+    pub video_count_short_text: SimpleText,
+    pub title: SimpleText,
+    pub thumbnail: Thumbnails,
+    pub long_byline_text: Runs,
+    pub short_byline_text: Runs,
+    pub playlist_id: String,
+    pub navigation_endpoint: NavigationEndpoint,
+}

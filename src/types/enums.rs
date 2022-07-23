@@ -1,6 +1,6 @@
 use serde::Deserialize;
 use serde_json::Value;
-use super::{video::{VideoRenderer, VideoPrimaryInfoRenderer, VideoSecondaryInfoRenderer, CompactVideoRenderer, GridVideoRenderer, CommentThreadRenderer, CommentRenderer, MetadataRowRenderer, CompactMovieRenderer}, playlist::{GridPlaylistRenderer, PlaylistRenderer, CompactRadioRenderer, RadioRenderer}, channel::{BackstagePostThreadRenderer, ChannelRenderer, ChannelVideoPlayerRenderer, GridChannelRenderer, ChannelAboutFullMetadataRenderer, RichGridRenderer, C4TabbedHeaderRenderer, RichItemRenderer}, misc::{HashtagHeaderRenderer, MessageRenderer, ShelfRenderer, ReelShelfRenderer, ContinuationItemRenderer, ItemSectionRenderer, SectionListRenderer, GridRenderer, ButtonRenderer, ToggleButtonRenderer, TwoColumnBrowseResultsRenderer, TwoColumnWatchNextResults, TwoColumnSearchResultsRenderer, SingleColumnBrowseResultsRenderer, IncludingResultsForRenderer, ShowingResultsForRenderer}};
+use super::{video::{VideoRenderer, VideoPrimaryInfoRenderer, VideoSecondaryInfoRenderer, CompactVideoRenderer, GridVideoRenderer, CommentThreadRenderer, CommentRenderer, MetadataRowRenderer, CompactMovieRenderer}, playlist::{GridPlaylistRenderer, PlaylistRenderer, CompactRadioRenderer, RadioRenderer, CompactPlaylistRenderer}, channel::{BackstagePostThreadRenderer, ChannelRenderer, ChannelVideoPlayerRenderer, GridChannelRenderer, ChannelAboutFullMetadataRenderer, RichGridRenderer, C4TabbedHeaderRenderer, RichItemRenderer}, misc::{HashtagHeaderRenderer, MessageRenderer, ShelfRenderer, ReelShelfRenderer, ContinuationItemRenderer, ItemSectionRenderer, SectionListRenderer, GridRenderer, ButtonRenderer, ToggleButtonRenderer, TwoColumnBrowseResultsRenderer, TwoColumnWatchNextResults, TwoColumnSearchResultsRenderer, SingleColumnBrowseResultsRenderer, IncludingResultsForRenderer, ShowingResultsForRenderer}};
 
 #[derive(Debug, Clone, Deserialize)]
 #[serde(rename_all = "camelCase")]
@@ -50,6 +50,7 @@ pub enum NextContents{
     ItemSectionRenderer(ItemSectionRenderer),
     PromotedSparklesWebRenderer(Value),
     MerchandiseShelfRenderer(Value), // Basically ads but we dont want those so we don't parse it further
+    CompactPlaylistRenderer(CompactPlaylistRenderer), // Contains a playlist
 }
 #[derive(Debug, Clone, Deserialize)]
 #[serde(rename_all = "camelCase")]
