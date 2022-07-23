@@ -22,6 +22,7 @@ pub enum ItemSectionRendererContents{
     CommentsEntryPointHeaderRenderer(Value),
     RadioRenderer(RadioRenderer), // Wrapper for CompactRadioRenderer
     ChannelAboutFullMetadataRenderer(ChannelAboutFullMetadataRenderer),
+    #[serde(skip)]
     RecognitionShelfRenderer(Value), // Channel members but needs more investigation
     MessageRenderer(MessageRenderer), // Contains messages that e.g the channel has no videos
     ShowingResultsForRenderer(ShowingResultsForRenderer),// When youtube returns other results
