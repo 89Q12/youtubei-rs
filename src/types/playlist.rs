@@ -1,6 +1,6 @@
 use serde::Deserialize;
 
-use super::{video::ChildVideoRendererWrapper, misc::*, endpoints::{NavigationEndpoint, WatchEndpoint, BrowseEndpoint}, thumbnail::Thumbnails, enums::PlaylistVideoListContent};
+use super::{video::ChildVideoRendererWrapper, misc::*, endpoints::NavigationEndpoint, thumbnail::Thumbnails, enums::PlaylistVideoListContent};
 #[derive(Debug, Clone, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct PlaylistRenderer{
@@ -114,13 +114,13 @@ pub struct PlaylistMetadataRenderer{
 pub struct PlaylistHeaderRenderer{
     pub playlist_id: String,
     pub title: SimpleText,
-    pub play_endpoint: WatchEndpoint,
+    pub play_endpoint: NavigationEndpoint,
     pub num_videos_text: Runs,
     pub description_text: RunsOption,
     pub owner_text: Runs,
     pub view_count_text: SimpleText,
     pub privacy: String,
-    pub owner_endpoint: BrowseEndpoint,
+    pub owner_endpoint: NavigationEndpoint,
     pub stats: Vec<RunsSimpleTextAccessibility>,
-    pub brief_stats: Runs,
+    pub brief_stats: Vec<Runs>,
 }
