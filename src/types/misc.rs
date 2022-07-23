@@ -272,3 +272,9 @@ pub struct HashtagTileRenderer{
     pub hashtag_video_count: SimpleText,
     pub hashtag_channel_count: SimpleText
 }
+#[derive(Debug, Clone, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct ShowingResultsForRenderer{
+    pub corrected_query: Runs,
+    pub original_query: Runs,
+}

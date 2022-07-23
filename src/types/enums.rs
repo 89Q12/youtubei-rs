@@ -1,6 +1,6 @@
 use serde::Deserialize;
 use serde_json::Value;
-use super::{video::{VideoRenderer, VideoPrimaryInfoRenderer, VideoSecondaryInfoRenderer, CompactVideoRenderer, GridVideoRenderer, CommentThreadRenderer, ReelItemRenderer, CommentRenderer, MetadataRowRenderer}, playlist::{GridPlaylistRenderer, PlaylistRenderer, CompactRadioRenderer, RadioRenderer}, channel::{BackstagePostThreadRenderer, ChannelRenderer, ChannelVideoPlayerRenderer, GridChannelRenderer, ChannelAboutFullMetadataRenderer, RichGridRenderer, C4TabbedHeaderRenderer, RichItemRenderer}, misc::{HashtagHeaderRenderer, MessageRenderer, ShelfRenderer, ReelShelfRenderer, ContinuationItemRenderer, ItemSectionRenderer, SectionListRenderer, GridRenderer, ButtonRenderer, ToggleButtonRenderer, TwoColumnBrowseResultsRenderer, TwoColumnWatchNextResults, TwoColumnSearchResultsRenderer, SingleColumnBrowseResultsRenderer}};
+use super::{video::{VideoRenderer, VideoPrimaryInfoRenderer, VideoSecondaryInfoRenderer, CompactVideoRenderer, GridVideoRenderer, CommentThreadRenderer, ReelItemRenderer, CommentRenderer, MetadataRowRenderer}, playlist::{GridPlaylistRenderer, PlaylistRenderer, CompactRadioRenderer, RadioRenderer}, channel::{BackstagePostThreadRenderer, ChannelRenderer, ChannelVideoPlayerRenderer, GridChannelRenderer, ChannelAboutFullMetadataRenderer, RichGridRenderer, C4TabbedHeaderRenderer, RichItemRenderer}, misc::{HashtagHeaderRenderer, MessageRenderer, ShelfRenderer, ReelShelfRenderer, ContinuationItemRenderer, ItemSectionRenderer, SectionListRenderer, GridRenderer, ButtonRenderer, ToggleButtonRenderer, TwoColumnBrowseResultsRenderer, TwoColumnWatchNextResults, TwoColumnSearchResultsRenderer, SingleColumnBrowseResultsRenderer, IncludingResultsForRenderer, ShowingResultsForRenderer}};
 
 #[derive(Debug, Clone, Deserialize)]
 #[serde(rename_all = "camelCase")]
@@ -24,6 +24,8 @@ pub enum ItemSectionRendererContents{
     ChannelAboutFullMetadataRenderer(ChannelAboutFullMetadataRenderer),
     RecognitionShelfRenderer(Value), // Channel members but needs more investigation
     MessageRenderer(MessageRenderer), // Contains messages that e.g the channel has no videos
+    ShowingResultsForRenderer(ShowingResultsForRenderer),// When youtube returns other results
+    IncludingResultsForRenderer(IncludingResultsForRenderer), // When youtube returns other results
 }
 #[derive(Debug, Clone, Deserialize)]
 #[serde(rename_all = "camelCase")]
