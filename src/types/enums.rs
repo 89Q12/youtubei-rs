@@ -22,7 +22,6 @@ pub enum ItemSectionRendererContents{
     CommentsEntryPointHeaderRenderer(Value),
     RadioRenderer(RadioRenderer), // Wrapper for CompactRadioRenderer
     ChannelAboutFullMetadataRenderer(ChannelAboutFullMetadataRenderer),
-    #[serde(skip)]
     RecognitionShelfRenderer(Value), // Channel members but needs more investigation
     MessageRenderer(MessageRenderer), // Contains messages that e.g the channel has no videos
     ShowingResultsForRenderer(ShowingResultsForRenderer),// When youtube returns other results
@@ -49,9 +48,7 @@ pub enum NextContents{
     VideoSecondaryInfoRenderer(VideoSecondaryInfoRenderer),
     ContinuationItemRenderer(ContinuationItemRenderer),
     ItemSectionRenderer(ItemSectionRenderer),
-    #[serde(skip)]
     PromotedSparklesWebRenderer(Value),
-    #[serde(skip)]
     MerchandiseShelfRenderer(Value), // Basically ads but we dont want those so we don't parse it further
 }
 #[derive(Debug, Clone, Deserialize)]
@@ -78,9 +75,7 @@ pub enum TopLevelButtons{
 #[serde(rename_all = "camelCase")]
 pub enum MetadataRowContents{
     MetadataRowRenderer(MetadataRowRenderer),
-    #[serde(skip)]
     MetadataRowHeaderRenderer(Value),
-    #[serde(skip)]
     RichMetadataRowRenderer(Value),
 }
 
