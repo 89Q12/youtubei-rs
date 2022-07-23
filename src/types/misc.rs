@@ -1,7 +1,7 @@
 use serde::Deserialize;
 use serde_json::Value;
 
-use super::{video::ReelItemRenderer, playlist::NextPlaylistWrapper, endpoints::{NavigationEndpoint, ContinuationEndpoint}, enums::{NextContents, ItemSectionRendererContents, TopLevelButtons}, channel::TabRendererWrapper, accessibility::{Accessibility, AccessibilityData}, thumbnail::{Thumbnail, ThumbnailUrlOnlyWrapper}};
+use super::{video::ReelItemRenderer, playlist::NextPlaylistWrapper, endpoints::{NavigationEndpoint, ContinuationEndpoint}, enums::{NextContents, ItemSectionRendererContents, TopLevelButtons}, channel::TabRendererWrapper, accessibility::{Accessibility, AccessibilityData}, thumbnail::ThumbnailUrlOnlyWrapper};
 
 #[derive(Debug, Clone, Deserialize)]
 #[serde(rename_all = "camelCase")]
