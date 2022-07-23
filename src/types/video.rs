@@ -450,3 +450,16 @@ pub struct TranslationLanguages{
     pub language_code: String,
     pub language_name: SimpleText,
 }
+
+#[derive(Debug, Clone, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct CompactMovieRenderer{
+    pub thumbnail: Thumbnails,
+    pub title: RunsSimpleTextAccessibility,
+    pub length_text: Option<AccessibilitySimpleText>, // None if its a live video
+    pub navigation_endpoint: NavigationEndpoint,
+    pub badges: Option<Vec<BadgeRendererVec>>,
+    pub owner_badges: Option<Vec<BadgeRendererVec>>,
+    pub short_byline_text: Runs,
+    pub top_metadata_items: Vec<SimpleText>,
+}
