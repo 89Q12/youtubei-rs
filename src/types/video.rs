@@ -1,4 +1,4 @@
-use super::{misc::*, endpoints::NavigationEndpoint, enums::MetadataRowContents, channel::ChannelThumbnailSupportedRenderers, thumbnail::Thumbnails, accessibility::Accessibility};
+use super::{misc::*, endpoints::NavigationEndpoint, enums::{MetadataRowContents, ThumbnailOverlays}, channel::ChannelThumbnailSupportedRenderers, thumbnail::Thumbnails, accessibility::Accessibility};
 use serde::Deserialize;
 
 #[derive(Debug, Clone, Deserialize)]
@@ -19,6 +19,7 @@ pub struct VideoRenderer {
     pub short_byline_text: Runs,
     pub short_view_count_text: Option<RunsSimpleTextAccessibility>, // None if upcoming
     pub upcoming_event_data: Option<UpcomingEventData>,
+    pub thumbnail_overlays: Vec<ThumbnailOverlays>,
 }
 
 #[derive(Debug, Clone, Deserialize)]
@@ -37,6 +38,7 @@ pub struct CompactVideoRenderer {
     pub owner_badges: Option<Vec<BadgeRendererVec>>,
     pub short_byline_text: Runs,
     pub short_view_count_text: RunsSimpleTextAccessibility, // contains runs if video is live_now instead of simple_text
+    pub thumbnail_overlays: Vec<ThumbnailOverlays>,
 }
 
 #[derive(Debug, Clone, Deserialize)]
@@ -50,7 +52,8 @@ pub struct GridVideoRenderer {
     pub navigation_endpoint: NavigationEndpoint,
     pub owner_badges: Option<Vec<BadgeRendererVec>>,
     pub short_view_count_text: RunsSimpleTextAccessibility,
-    pub upcoming_event_data: Option<UpcomingEventData>,
+    pub upcoming_event_data: Option<UpcomingEventData>, // Should be None when its a live video
+    pub thumbnail_overlays: Vec<ThumbnailOverlays>,
 }
 #[derive(Debug, Clone, Deserialize)]
 #[serde(rename_all = "camelCase")]

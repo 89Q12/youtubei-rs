@@ -131,47 +131,6 @@ mod tests {
           },
           "simpleText": "14.6M subscribers"
         },
-        "subscribeButton": {
-          "buttonRenderer": {
-            "style": "STYLE_DESTRUCTIVE",
-            "size": "SIZE_DEFAULT",
-            "isDisabled": false,
-            "text": {
-              "runs": [
-                {
-                  "text": "Subscribe"
-                }
-              ]
-            },
-            "navigationEndpoint": {
-              "clickTrackingParams": "CJsFEPBbIhMIxdPE6tSW-AIVjoJVCh0LJgkw",
-              "commandMetadata": {
-                "webCommandMetadata": {
-                  "url": "https://accounts.google.com/ServiceLogin?service=youtube&uilel=3&passive=true&continue=https%3A%2F%2Fwww.youtube.com%2Fsignin%3Faction_handle_signin%3Dtrue%26app%3Ddesktop%26hl%3Den%26next%3D%252Fresults%253Fsearch_query%253Dltt%252Bchannel%26continue_action%3DQUFFLUhqa2gxeFVlVU52ajhOYWZnbG1FTWFBRlliT3NXd3xBQ3Jtc0tuWTc2NUp0ZWUyWlV0d2ZwbkNyTVpyaktZbThnOVhDMTNNVElxSWs1d0NkM2tDQU5DNV9pQTZ1S3Vxclc3TlpkUFdwYjJYZVJUazNTb2ZMSV8tTUVqSzc5cXhIT3ZiMEhTMlRMdDJNNTQ5a3JSUHV2eWFYcGFWRHlkbWYyMGNCV19GOXY2UTNJMWZIRWVQYUtsclFQaHJKTDd3SHlOTExCVm9VN0pFWWdyeVM3SHkzQUR1N0FxakFpbl8xYlI5ZG01UmRHczRHWF9Ub19KZzlVcG1aVFUyaGhKcENB&hl=en",
-                  "webPageType": "WEB_PAGE_TYPE_UNKNOWN",
-                  "rootVe": 83769
-                }
-              },
-              "signInEndpoint": {
-                "nextEndpoint": {
-                  "clickTrackingParams": "CJsFEPBbIhMIxdPE6tSW-AIVjoJVCh0LJgkw",
-                  "commandMetadata": {
-                    "webCommandMetadata": {
-                      "url": "/results?search_query=ltt+channel",
-                      "webPageType": "WEB_PAGE_TYPE_SEARCH",
-                      "rootVe": 4724
-                    }
-                  },
-                  "searchEndpoint": {
-                    "query": "ltt channel"
-                  }
-                },
-                "continueAction": "QUFFLUhqa2gxeFVlVU52ajhOYWZnbG1FTWFBRlliT3NXd3xBQ3Jtc0tuWTc2NUp0ZWUyWlV0d2ZwbkNyTVpyaktZbThnOVhDMTNNVElxSWs1d0NkM2tDQU5DNV9pQTZ1S3Vxclc3TlpkUFdwYjJYZVJUazNTb2ZMSV8tTUVqSzc5cXhIT3ZiMEhTMlRMdDJNNTQ5a3JSUHV2eWFYcGFWRHlkbWYyMGNCV19GOXY2UTNJMWZIRWVQYUtsclFQaHJKTDd3SHlOTExCVm9VN0pFWWdyeVM3SHkzQUR1N0FxakFpbl8xYlI5ZG01UmRHczRHWF9Ub19KZzlVcG1aVFUyaGhKcENB"
-              }
-            },
-            "trackingParams": "CJsFEPBbIhMIxdPE6tSW-AIVjoJVCh0LJgkw"
-          }
-        },
         "trackingParams": "CJoFENowGAAiEwjF08Tq1Jb4AhWOglUKHQsmCTA=",
         "longBylineText": {
           "runs": [
@@ -194,7 +153,22 @@ mod tests {
               }
             }
           ]
-        }
+        },
+        "thumbnailOverlays": [
+          {
+            "thumbnailOverlayTimeStatusRenderer": {
+              "text": {
+                "accessibility": {
+                  "accessibilityData": {
+                    "label": "2 hours, 21 minutes, 34 seconds"
+                  }
+                },
+                "simpleText": "2:21:34"
+              },
+              "style": "DEFAULT"
+            }
+          },
+        ]
         });
         let u: ChannelRenderer = serde_json::from_value(j).unwrap();
         assert_eq!(u.title.simple_text, "Linus Tech Tips");
@@ -583,7 +557,22 @@ mod tests {
             "accessibilityData": {
               "label": "Story Time! - WAN Show May 27, 2022 - 1 hour, 39 minutes - Go to channel - Linus Tech Tips - 472K views - Streamed 10 days ago - play video"
             }
-          }
+          },
+          "thumbnailOverlays": [
+            {
+              "thumbnailOverlayTimeStatusRenderer": {
+                "text": {
+                  "accessibility": {
+                    "accessibilityData": {
+                      "label": "2 hours, 21 minutes, 34 seconds"
+                    }
+                  },
+                  "simpleText": "2:21:34"
+                },
+                "style": "DEFAULT"
+              }
+            },
+          ]
         });
         let u: CompactVideoRenderer = serde_json::from_value(j).unwrap();
         assert_eq!(
@@ -758,6 +747,21 @@ mod tests {
             },
             "simpleText": "1.3M views"
           },
+          "thumbnailOverlays": [
+            {
+              "thumbnailOverlayTimeStatusRenderer": {
+                "text": {
+                  "accessibility": {
+                    "accessibilityData": {
+                      "label": "2 hours, 21 minutes, 34 seconds"
+                    }
+                  },
+                  "simpleText": "2:21:34"
+                },
+                "style": "DEFAULT"
+              }
+            },
+          ]
         });
         let u: VideoRenderer = serde_json::from_value(j).unwrap();
         assert_eq!(
