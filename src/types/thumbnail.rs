@@ -1,6 +1,6 @@
 use serde::Deserialize;
 
-use super::{accessibility::Accessibility, misc::AccessibilitySimpleText};
+use super::{accessibility::Accessibility, misc::{AccessibilitySimpleText, RunsSimpleTextAccessibility}};
 
 #[derive(Debug, Clone, Deserialize)]
 pub struct Thumbnails{
@@ -36,6 +36,6 @@ pub struct ThumbnailUrlOnlyWrapper{
 }
 #[derive(Debug, Clone, Deserialize)]
 pub struct ThumbnailOverlayTimeStatusRenderer{
-    pub text: AccessibilitySimpleText,
+    pub text: RunsSimpleTextAccessibility,
     pub style: String
 }
