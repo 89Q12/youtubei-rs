@@ -1,6 +1,6 @@
 use serde::Deserialize;
 
-use super::{misc::*, endpoints::NavigationEndpoint, enums::{ItemSectionRendererContents, RichGridRendererContent, TabRendererContent}, video::VideoRendererWrapper, thumbnail::{Thumbnails, ThumbnailsAccessibility, ShowCustomThumbnailRenderer}, accessibility::Accessibility};
+use super::{misc::*, endpoints::NavigationEndpoint, enums::{ItemSectionRendererContents, RichGridRendererContent, TabRendererContent, BackstageAttachments, CommunityPost}, video::{VideoRendererWrapper, VideoRenderer}, thumbnail::{Thumbnails, ThumbnailsAccessibility, ShowCustomThumbnailRenderer}, accessibility::{Accessibility, AccessibilityData}};
 
 #[derive(Debug, Clone, Deserialize)]
 #[serde(rename_all = "camelCase")]
@@ -85,12 +85,6 @@ pub struct ChannelAboutFullMetadataRenderer{
 }
 #[derive(Debug, Clone, Deserialize)]
 #[serde(rename_all = "camelCase")]
-pub enum CommunityPost{
-    SharedPostRenderer(SharedPostRenderer),
-    BackstagePostRenderer(BackstagePostRenderer)
-}
-#[derive(Debug, Clone, Deserialize)]
-#[serde(rename_all = "camelCase")]
 pub struct GridShowRenderer{
     pub navigation_endpoint: NavigationEndpoint,
     pub thumbnail_renderer: ShowCustomThumbnailRenderer,
@@ -161,7 +155,7 @@ pub struct BackstagePostRenderer{
     pub author_thumbnail: Thumbnails,
     pub author_endpoint: NavigationEndpoint,
     pub content_text: RunsOption,
-    pub backstage_attachment: Option<BackstageImageRenderer>,
+    pub backstage_attachment: Option<BackstageAttachments>,
     pub published_time_text: RunsSimpleTextAccessibility,
     pub vote_count: AccessibilitySimpleText,
 }
@@ -176,11 +170,6 @@ pub struct SharedPostRenderer{
     pub original_post: BackstagePostRendererWrapper,
     pub thumbnail: ThumbnailsAccessibility
 }
-#[derive(Debug, Clone, Deserialize)]
-#[serde(rename_all = "camelCase")]
-pub struct BackstageImageRenderer{
-    pub backstage_image_renderer: Option<CommunityPostAttachmentImage>,
-}
 
 #[derive(Debug, Clone, Deserialize)]
 #[serde(rename_all = "camelCase")]
@@ -189,7 +178,17 @@ pub struct TabRendererWrapper{
     pub expandable_tab_renderer: Option<TabRenderer>
 }
 #[derive(Debug, Clone, Deserialize)]
-pub struct CommunityPostAttachmentImage{
+pub struct BackstageImageRenderer{
     pub image: Thumbnails,
     pub command: NavigationEndpoint,
+}
+#[derive(Debug, Clone, Deserialize)]
+pub struct PostMultiImageRenderer{
+    pub images: Vec<BackstageImageRenderer>,
+}
+#[derive(Debug, Clone, Deserialize)]
+pub struct PollRenderer{
+    pub choices: Runs,
+    pub total_votes: SimpleText,
+    pub accessibility_data: AccessibilityData,
 }

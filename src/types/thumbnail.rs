@@ -1,6 +1,6 @@
 use serde::Deserialize;
 
-use super::{accessibility::Accessibility, misc::{AccessibilitySimpleText, RunsSimpleTextAccessibility}};
+use super::{accessibility::Accessibility, misc::RunsSimpleTextAccessibility};
 
 #[derive(Debug, Clone, Deserialize)]
 pub struct Thumbnails{

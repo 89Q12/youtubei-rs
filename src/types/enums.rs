@@ -1,6 +1,6 @@
 use serde::Deserialize;
 use serde_json::Value;
-use super::{video::{VideoRenderer, VideoPrimaryInfoRenderer, VideoSecondaryInfoRenderer, CompactVideoRenderer, GridVideoRenderer, CommentThreadRenderer, CommentRenderer, MetadataRowRenderer, CompactMovieRenderer, PlaylistVideoRenderer}, playlist::{GridPlaylistRenderer, PlaylistRenderer, CompactRadioRenderer, RadioRenderer, CompactPlaylistRenderer, PlaylistMetadataRenderer, PlaylistVideoListRenderer, PlaylistHeaderRenderer}, channel::{BackstagePostThreadRenderer, ChannelRenderer, ChannelVideoPlayerRenderer, GridChannelRenderer, ChannelAboutFullMetadataRenderer, RichGridRenderer, C4TabbedHeaderRenderer, RichItemRenderer, ChannelMetadataRenderer, GridRadioRenderer}, misc::{HashtagHeaderRenderer, MessageRenderer, ShelfRenderer, ReelShelfRenderer, ContinuationItemRenderer, ItemSectionRenderer, SectionListRenderer, GridRenderer, ButtonRenderer, ToggleButtonRenderer, TwoColumnBrowseResultsRenderer, TwoColumnWatchNextResults, TwoColumnSearchResultsRenderer, SingleColumnBrowseResultsRenderer, IncludingResultsForRenderer, ShowingResultsForRenderer}, thumbnail::ThumbnailOverlayTimeStatusRenderer};
+use super::{video::{VideoRenderer, VideoPrimaryInfoRenderer, VideoSecondaryInfoRenderer, CompactVideoRenderer, GridVideoRenderer, CommentThreadRenderer, CommentRenderer, MetadataRowRenderer, CompactMovieRenderer, PlaylistVideoRenderer}, playlist::{GridPlaylistRenderer, PlaylistRenderer, CompactRadioRenderer, RadioRenderer, CompactPlaylistRenderer, PlaylistMetadataRenderer, PlaylistVideoListRenderer, PlaylistHeaderRenderer}, channel::{BackstagePostThreadRenderer, ChannelRenderer, ChannelVideoPlayerRenderer, GridChannelRenderer, ChannelAboutFullMetadataRenderer, RichGridRenderer, C4TabbedHeaderRenderer, RichItemRenderer, ChannelMetadataRenderer, GridRadioRenderer, BackstageImageRenderer, PostMultiImageRenderer, PollRenderer, BackstagePostRenderer, SharedPostRenderer}, misc::{HashtagHeaderRenderer, MessageRenderer, ShelfRenderer, ReelShelfRenderer, ContinuationItemRenderer, ItemSectionRenderer, SectionListRenderer, GridRenderer, ButtonRenderer, ToggleButtonRenderer, TwoColumnBrowseResultsRenderer, TwoColumnWatchNextResults, TwoColumnSearchResultsRenderer, SingleColumnBrowseResultsRenderer, IncludingResultsForRenderer, ShowingResultsForRenderer}, thumbnail::ThumbnailOverlayTimeStatusRenderer};
 
 #[derive(Debug, Clone, Deserialize)]
 #[serde(rename_all = "camelCase")]
@@ -110,4 +110,19 @@ pub enum ThumbnailOverlays{
     ThumbnailOverlayTimeStatusRenderer(ThumbnailOverlayTimeStatusRenderer),
     ThumbnailOverlayToggleButtonRenderer(Value),
     ThumbnailOverlayNowPlayingRenderer(Value),
+}
+#[derive(Debug, Clone, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub enum BackstageAttachments{
+    BackstageImageRenderer(BackstageImageRenderer),
+    VideoRenderer(VideoRenderer),
+    PostMultiImageRenderer(PostMultiImageRenderer),
+    PollRenderer(PollRenderer),
+}
+
+#[derive(Debug, Clone, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub enum CommunityPost{
+    SharedPostRenderer(SharedPostRenderer),
+    BackstagePostRenderer(BackstagePostRenderer)
 }
