@@ -103,6 +103,7 @@ pub struct ShelfContent{
     pub vertical_list_renderer: Option<VerticalListRenderer>,
     pub horizontal_list_renderer: Option<HorizontalListRenderer>,
     pub play_all_button: Option<PlayAllButton>,
+    pub expanded_shelf_contents_renderer: Option<ExpandedShelfContentRenderer>,
 }
 #[derive(Debug, Clone, Deserialize)]
 #[serde(rename_all = "camelCase")]
@@ -120,6 +121,11 @@ pub struct VerticalListRenderer{
     pub items: Vec<ItemSectionRendererContents>,
     pub collapsed_item_count: usize,
     pub collapsed_state_button_text: Runs,
+}
+#[derive(Debug, Clone, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct ExpandedShelfContentRenderer{
+    pub items: Vec<ItemSectionRendererContents>,
 }
 #[derive(Debug, Clone, Deserialize)]
 #[serde(rename_all = "camelCase")]
