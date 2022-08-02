@@ -13,7 +13,7 @@ pub(crate) async fn browse_continuation(
     tracing::event!(target: "youtubei_rs", Level::TRACE, "Requesting browse results for continuation: {}", continuation);
 
     let data = json!({
-      "context": make_context(&client_config),
+      "context": make_context(client_config),
       "continuation": continuation,
     });
 
@@ -29,7 +29,7 @@ pub(crate) async fn browse_browseid(
     tracing::event!(target: "youtubei_rs", Level::TRACE, "Requesting browse results for browseId: {}", browse_id);
 
     let data = json!({
-      "context": make_context(&client_config),
+      "context": make_context(client_config),
       "browseId": browse_id,
       "params": params,
     });
@@ -46,7 +46,7 @@ pub(crate) async fn browse_with_data(
     merge(
         &mut browse_data,
         &json!({
-          "context": make_context(&client_config),
+          "context": make_context(client_config),
         }),
     );
 
@@ -61,11 +61,11 @@ pub(crate) async fn next(
     tracing::event!(target: "youtubei_rs", Level::TRACE, "Requesting next results for continuation: {}", continuation);
 
     let data = json!({
-      "context": make_context(&client_config),
+      "context": make_context(client_config),
       "continuation": continuation,
     });
 
-    return post_json("/youtubei/v1/next", data, &client_config).await;
+    return post_json("/youtubei/v1/next", data, client_config).await;
 }
 
 /// Prepares the data and makes a post request to the next endpoint
@@ -80,7 +80,7 @@ pub(crate) async fn next_with_data(
         &json!({ "context": make_context(client_config) }),
     );
 
-    return post_json("/youtubei/v1/next", data, &client_config).await;
+    return post_json("/youtubei/v1/next", data, client_config).await;
 }
 
 /// Prepares the data and makes a post request to the player endpoint
@@ -97,7 +97,7 @@ pub(crate) async fn player(
       "params": params,
     });
 
-    return post_json("/youtubei/v1/player", data, &client_config).await;
+    return post_json("/youtubei/v1/player", data, client_config).await;
 }
 
 /// Prepares the data and makes a post request to the resolve_url endpoint,
@@ -109,11 +109,11 @@ pub(crate) async fn resolve_url(
     tracing::event!(target: "youtubei_rs", Level::TRACE, "Resolving url: {}", url);
 
     let data = json!({
-      "context": make_context(&client_config),
+      "context": make_context(client_config),
       "url": url,
     });
 
-    return post_json("/youtubei/v1/navigation/resolve_url", data, &client_config).await;
+    return post_json("/youtubei/v1/navigation/resolve_url", data, client_config).await;
 }
 
 /// Prepares the data and makes a post request to the search endpoint
@@ -126,7 +126,7 @@ pub(crate) async fn search(
 
     let data = json!({
       "query": search_query,
-      "context": make_context(&client_config),
+      "context": make_context(client_config),
       "params": params,
     });
 
@@ -141,11 +141,11 @@ pub(crate) async fn search_continuation(
     tracing::event!(target: "youtubei_rs", Level::TRACE, "Requesting search results for continuation: {}", continuation);
 
     let data = json!({
-      "context": make_context(&client_config),
+      "context": make_context(client_config),
       "continuation": continuation,
     });
 
-    return post_json("/youtubei/v1/search", data, &client_config).await;
+    return post_json("/youtubei/v1/search", data, client_config).await;
 }
 
 /// Takes the client_config and makes a json object that is used as context for the api call.
@@ -201,37 +201,37 @@ async fn post_json(
                 tracing::event!(target: "youtubei_rs", Level::DEBUG, "Successfully requested data from endpoint: {}", endpoint);
 
                 if !val["error"].is_null() {
-                    return Err(RequestError {
+                    Err(RequestError {
                         message: val["error"]["message"].to_string(),
                         status: StatusCode::BAD_REQUEST,
                         endpoint: endpoint.to_string(),
                         request_data: data,
-                    });
+                    })
                 } else {
-                    return Ok(val);
+                    Ok(val)
                 }
             }
             Err(e) => {
                 tracing::error!("Failed to extract json from response: {:?}", e);
 
-                return Err(RequestError {
+                Err(RequestError {
                     message: e.to_string(),
                     status: StatusCode::BAD_REQUEST,
                     endpoint: endpoint.to_string(),
                     request_data: data,
-                });
+                })
             }
         },
 
         Err(e) => {
             tracing::event!(target: "youtubei_rs", Level::ERROR, "Request failed: {:?}", e);
 
-            return Err(RequestError {
+            Err(RequestError {
                 message: e.to_string(),
                 status: e.status().unwrap(),
                 endpoint: endpoint.to_string(),
                 request_data: data,
-            });
+            })
         }
-    };
+    }
 }

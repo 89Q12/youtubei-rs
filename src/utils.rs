@@ -54,10 +54,7 @@ pub fn unwrap_to_string(input: Option<&str>) -> String {
 }
 
 pub fn unwrap_to_i64(input: Option<i64>) -> i64 {
-    match input {
-        Some(n) => n,
-        None => 0,
-    }
+    input.unwrap_or(0)
 }
 
 /// Utility function to get likes for a video
@@ -124,11 +121,7 @@ pub fn get_description(video: &NextResult) -> String {
 /// Utility function to check if the author is verified it takes the first BadgeRenderer
 pub fn get_author_verified(video: &MetadataBadgeRenderer) -> bool {
     match &video.icon {
-        Some(icon) => match icon.icon_type.as_str() {
-            "OFFICIAL_ARTIST_BADGE" => true,
-            "CHECK_CIRCLE_THICK" => true,
-            _ => false,
-        },
+        Some(icon) => matches!(icon.icon_type.as_str(), "OFFICIAL_ARTIST_BADGE" | "CHECK_CIRCLE_THICK"),
         None => false,
     }
 }
@@ -180,10 +173,7 @@ pub fn get_continuation_comments(video: &NextResult) -> Option<String> {
         types::enums::TwoColumnTypes::TwoColumnWatchNextResults(res) => {
             match res.results.results.contents.last().unwrap() {
                 types::enums::NextContents::ContinuationItemRenderer(cir) => {
-                    match &cir.continuation_endpoint.continuation_command {
-                        Some(cmd) => Some(cmd.token.clone()),
-                        None => None,
-                    }
+                    cir.continuation_endpoint.continuation_command.as_ref().map(|cmd| cmd.token.clone())
                 }
                 _ => None,
             }
@@ -202,10 +192,7 @@ pub fn get_continuation_related(video: &NextResult) -> Option<String> {
             .unwrap()
         {
             types::enums::NextContents::ContinuationItemRenderer(cir) => {
-                match &cir.continuation_endpoint.continuation_command {
-                    Some(cmd) => Some(cmd.token.clone()),
-                    None => None,
-                }
+                cir.continuation_endpoint.continuation_command.as_ref().map(|cmd| cmd.token.clone())
             }
             _ => None,
         },

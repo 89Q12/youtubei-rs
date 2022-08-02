@@ -167,10 +167,12 @@ impl ClientConfig {
     pub fn name(&self) -> String {
         self.client_type.get_client_type().name
     }
+
     pub fn version(&self) -> String {
         self.client_type.get_client_type().version
     }
+
     pub fn region(&self) -> &str {
-        return &self.region;
+        &self.region
     }
 }

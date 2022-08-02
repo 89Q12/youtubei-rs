@@ -32,7 +32,7 @@ pub async fn next_video_id(
 
     match json {
         Ok(json) => match extract_next_result(&json) {
-            Ok(result) => return Ok(result),
+            Ok(result) => Ok(result),
             Err(err) => {
                 tracing::event!(target: "youtubei_rs", Level::ERROR, "Error parsing next result: {}", err);
 
@@ -44,13 +44,13 @@ pub async fn next_video_id(
                     ));
 
                     log += &json.to_string();
-                    fs::write(format!("json_dump_endpoint_next"), log).unwrap();
+                    fs::write("json_dump_endpoint_next".to_string(), log).unwrap();
                 }
 
-                return Err(Errors::ParseError(err));
+                Err(Errors::ParseError(err))
             }
         },
-        Err(err) => return Err(Errors::RequestError(err)),
+        Err(err) => Err(Errors::RequestError(err)),
     }
 }
 
@@ -75,13 +75,13 @@ pub async fn next_continuation(
                         continuation, err
                     ));
                     log += &json.to_string();
-                    fs::write(format!("json_dump_endpoint_next_ctoken"), log).unwrap();
+                    fs::write("json_dump_endpoint_next_ctoken".to_string(), log).unwrap();
                 }
 
-                return Err(Errors::ParseError(err));
+                Err(Errors::ParseError(err))
             }
         },
-        Err(err) => return Err(Errors::RequestError(err)),
+        Err(err) => Err(Errors::RequestError(err)),
     }
 }
 
@@ -95,7 +95,7 @@ pub async fn browse_id(
     let json = browse_browseid(&browse_id, &params, client_config).await;
     match json {
         Ok(json) => match extract_browse_result(&json) {
-            Ok(result) => return Ok(result),
+            Ok(result) => Ok(result),
             Err(err) => {
                 tracing::event!(target: "youtubei_rs", Level::ERROR, "Error parsing browse result: {}", err);
 
@@ -108,13 +108,13 @@ pub async fn browse_id(
                     ));
 
                     log += &json.to_string();
-                    fs::write(format!("json_dump_endpoint_browse"), log).unwrap();
+                    fs::write("json_dump_endpoint_browse".to_string(), log).unwrap();
                 }
 
-                return Err(Errors::ParseError(err));
+                Err(Errors::ParseError(err))
             }
         },
-        Err(err) => return Err(Errors::RequestError(err)),
+        Err(err) => Err(Errors::RequestError(err)),
     }
 }
 
@@ -127,7 +127,7 @@ pub async fn browse_custom_data(
     let json = browse_with_data(data.clone(), client_config).await;
     match json {
         Ok(json) => match extract_browse_result(&json) {
-            Ok(result) => return Ok(result),
+            Ok(result) => Ok(result),
             Err(err) => {
                 tracing::event!(target: "youtubei_rs", Level::ERROR, "Error parsing browse result: {}", err);
 
@@ -136,17 +136,17 @@ pub async fn browse_custom_data(
 
                     let mut log = String::from(&format!(
                         "------------------------\n Custom Data: {}\n Error {} \n------------------------",
-                        data.to_string(), err
+                        data, err
                     ));
 
                     log += &json.to_string();
-                    fs::write(format!("json_dump_endpoint_browse_custom_data"), log).unwrap();
+                    fs::write("json_dump_endpoint_browse_custom_data", log).unwrap();
                 }
 
-                return Err(Errors::ParseError(err));
+                Err(Errors::ParseError(err))
             }
         },
-        Err(err) => return Err(Errors::RequestError(err)),
+        Err(err) => Err(Errors::RequestError(err)),
     }
 }
 
@@ -159,7 +159,7 @@ pub async fn browse_continuation(
     let json = endpoints::browse_continuation(&continuation, client_config).await;
     match json {
         Ok(json) => match extract_browse_result(&json) {
-            Ok(result) => return Ok(result),
+            Ok(result) => Ok(result),
             Err(err) => {
                 tracing::event!(target: "youtubei_rs", Level::ERROR, "Error parsing browse result: {}", err);
 
@@ -172,13 +172,13 @@ pub async fn browse_continuation(
                     ));
 
                     log += &json.to_string();
-                    fs::write(format!("json_dump_endpoint_browse_ctoken"), log).unwrap();
+                    fs::write("json_dump_endpoint_browse_ctoken".to_string(), log).unwrap();
                 }
 
-                return Err(Errors::ParseError(err));
+                Err(Errors::ParseError(err))
             }
         },
-        Err(err) => return Err(Errors::RequestError(err)),
+        Err(err) => Err(Errors::RequestError(err)),
     }
 }
 
@@ -192,7 +192,7 @@ pub async fn player(
     let json = endpoints::player(&video_id, &params, client_config).await;
     match json {
         Ok(json) => match extract_player_result(&json) {
-            Ok(result) => return Ok(result),
+            Ok(result) => Ok(result),
             Err(err) => {
                 tracing::event!(target: "youtubei_rs",Level::ERROR,"Error parsing player result: {}", err);
 
@@ -207,10 +207,11 @@ pub async fn player(
                     log += &json.to_string();
                     fs::write(format!("json_dump_endpoint_player"), log).unwrap();
                 }
-                return Err(Errors::ParseError(err));
+
+                Err(Errors::ParseError(err))
             }
         },
-        Err(err) => return Err(Errors::RequestError(err)),
+        Err(err) => Err(Errors::RequestError(err)),
     }
 }
 
@@ -220,7 +221,7 @@ pub async fn resolve(url: String, client_config: &ClientConfig) -> Result<Resolv
     let json = endpoints::resolve_url(&url, client_config).await;
     match json {
         Ok(json) => match extract_resolve_result(&json) {
-            Ok(result) => return Ok(result),
+            Ok(result) => Ok(result),
             Err(err) => {
                 tracing::event!(target: "youtubei_rs",Level::ERROR,"Error parsing resolve result: {}",err);
 
@@ -232,13 +233,13 @@ pub async fn resolve(url: String, client_config: &ClientConfig) -> Result<Resolv
                     ));
 
                     log += &json.to_string();
-                    fs::write(format!("json_dump_endpoint_resolve"), log).unwrap();
+                    fs::write("json_dump_endpoint_resolve".to_string(), log).unwrap();
                 }
 
-                return Err(Errors::ParseError(err));
+                Err(Errors::ParseError(err))
             }
         },
-        Err(err) => return Err(Errors::RequestError(err)),
+        Err(err) => Err(Errors::RequestError(err)),
     }
 }
 
@@ -247,12 +248,12 @@ pub async fn search(
     params: String,
     client_config: &ClientConfig,
 ) -> Result<SearchResult, Errors> {
-    tracing::event!(target: "youtubei_rs",Level::TRACE,"Preparing search request for query id: {} and params: {}",query, params);
+    tracing::event!(target: "youtubei_rs", Level::TRACE, "Preparing search request for query id: {} and params: {}", query, params);
 
     let json = endpoints::search(&query, &params, client_config).await;
     match json {
         Ok(json) => match extract_search_result(&json) {
-            Ok(result) => return Ok(result),
+            Ok(result) => Ok(result),
             Err(err) => {
                 tracing::event!(target: "youtubei_rs", Level::ERROR, "Error parsing next result: {}", err);
 
@@ -265,10 +266,10 @@ pub async fn search(
                     ));
 
                     log += &json.to_string();
-                    fs::write(format!("json_dump_endpoint_search"), log).unwrap();
+                    fs::write("json_dump_endpoint_search".to_string(), log).unwrap();
                 }
 
-                return Err(Errors::ParseError(err));
+                Err(Errors::ParseError(err))
             }
         },
         Err(err) => return Err(Errors::RequestError(err)),
@@ -284,7 +285,7 @@ pub async fn search_continuation(
     let json = endpoints::search_continuation(&continuation, client_config).await;
     match json {
         Ok(json) => match extract_search_result(&json) {
-            Ok(result) => return Ok(result),
+            Ok(result) => Ok(result),
             Err(err) => {
                 tracing::event!(target: "youtubei_rs", Level::ERROR, "Error parsing next result: {}", err);
 
@@ -297,12 +298,12 @@ pub async fn search_continuation(
                     ));
 
                     log += &json.to_string();
-                    fs::write(format!("json_dump_endpoint_search_ctoken"), log).unwrap();
+                    fs::write("json_dump_endpoint_search_ctoken".to_string(), log).unwrap();
                 }
 
-                return Err(Errors::ParseError(err));
+                Err(Errors::ParseError(err))
             }
         },
-        Err(err) => return Err(Errors::RequestError(err)),
+        Err(err) => Err(Errors::RequestError(err)),
     }
 }
