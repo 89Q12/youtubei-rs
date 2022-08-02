@@ -113,11 +113,15 @@ impl ClientConfig {
         dump_on_error: bool,
     ) -> Self {
         let mut headers = header::HeaderMap::new();
+
         headers.insert(
             "Content-Type",
             header::HeaderValue::from_static("application/json; charset=UTF-8"),
         );
-        headers.insert("Accept-Encoding", header::HeaderValue::from_static("gzip"));
+        headers.insert(
+            "Accept-Encoding",
+            header::HeaderValue::from_static("gzip")
+        );
         headers.insert(
             "accept",
             header::HeaderValue::from_static(
@@ -140,13 +144,17 @@ impl ClientConfig {
             "x-youtube-client-version",
             header::HeaderValue::from_static("2.20200609"),
         );
-        headers.insert("cookie", header::HeaderValue::from_static("CONSENT=YES+"));
+        headers.insert(
+            "cookie", header::HeaderValue::from_static("CONSENT=YES+")
+        );
+
         let _http_client = reqwest::ClientBuilder::new()
-        .https_only(true)
-        .user_agent("Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3904.97 Safari/537.36")
-        .default_headers(headers)
-        .gzip(true)
-        .build().unwrap();
+            .https_only(true)
+            .user_agent("Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3904.97 Safari/537.36")
+            .default_headers(headers)
+            .gzip(true)
+            .build().unwrap();
+
         Self {
             client_type,
             region,

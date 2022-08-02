@@ -12,6 +12,7 @@ pub fn default_client_config() -> ClientConfig {
         true,
     )
 }
+
 /// Used to merge 2 values into one, probably could be optimized
 pub fn merge(a: &mut Value, b: &Value) {
     match (a, b) {
@@ -31,6 +32,7 @@ pub fn merge(a: &mut Value, b: &Value) {
         }
     }
 }
+
 /// Utility function to check if a channel is verified
 /// Takes &Value with index "ownerBadges`\[`0`\]`" or "badges"
 /// returns true if channel is verified else false
@@ -92,9 +94,11 @@ pub fn get_likes(video: &NextResult) -> String {
         _ => unreachable!(),
     }
 }
+
 /// Utility function to build the description for a video
 pub fn get_description(video: &NextResult) -> String {
-    let mut desc = String::from("");
+    let mut desc = String::new();
+
     match video.contents.as_ref().unwrap() {
         types::enums::TwoColumnTypes::TwoColumnWatchNextResults(res) => {
             match res.results.results.contents.get(1).unwrap() {
@@ -113,6 +117,7 @@ pub fn get_description(video: &NextResult) -> String {
         }
         _ => unreachable!(),
     }
+
     desc
 }
 
@@ -127,6 +132,7 @@ pub fn get_author_verified(video: &MetadataBadgeRenderer) -> bool {
         None => false,
     }
 }
+
 /// Utility function to get the subscriber count
 pub fn get_subcribe_count(video: &NextResult) -> String {
     match video.contents.as_ref().unwrap() {
@@ -135,7 +141,7 @@ pub fn get_subcribe_count(video: &NextResult) -> String {
                 types::enums::NextContents::VideoSecondaryInfoRenderer(vsir) => {
                     match &vsir.owner.video_owner_renderer.subscriber_count_text {
                         Some(text) => text.simple_text.clone(),
-                        None => String::from(""),
+                        None => String::new(),
                     }
                 }
                 _ => unreachable!(),
@@ -144,6 +150,7 @@ pub fn get_subcribe_count(video: &NextResult) -> String {
         _ => unreachable!(),
     }
 }
+
 /// Utility function to get the thumbnail of the video owner
 pub fn get_owner_thumbnail(video: &NextResult) -> String {
     match video.contents.as_ref().unwrap() {
@@ -166,7 +173,8 @@ pub fn get_owner_thumbnail(video: &NextResult) -> String {
         _ => unreachable!(),
     }
 }
-/// Utility function to  the continuation of the video comments
+
+/// Utility function to the continuation of the video comments
 pub fn get_continuation_comments(video: &NextResult) -> Option<String> {
     match video.contents.as_ref().unwrap() {
         types::enums::TwoColumnTypes::TwoColumnWatchNextResults(res) => {
