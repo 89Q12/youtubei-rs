@@ -32,7 +32,7 @@ When creating the client_config manually, you can parse true/false as the last p
 ## Example
 
 ```rust
-use youtubei_rs::{query::player, utils::default_client_config};
+use youtubei_rs::{query::player, utils::default_client_config, tokio};
 
 #[tokio::main]
 async fn main() {
@@ -54,7 +54,7 @@ async fn main() {
 For logging, tracing is used so `tracing_subscribe` can be installed for easier use of tracing. The library has as target youtubei_rs with debug, trace, and error levels.
 
 ```rust
-use youtubei_rs::{query::player, utils::default_client_config};
+use youtubei_rs::{query::player, utils::default_client_config, tokio};
 
 #[tokio::main]
 async fn main() {
