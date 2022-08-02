@@ -15,8 +15,6 @@ use crate::types::query_results::PlayerResult;
 use crate::types::query_results::ResolveResult;
 use crate::types::query_results::SearchResult;
 
-
-
 pub async fn next_video_id(
     video_id: String,
     params: String,

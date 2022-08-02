@@ -1,9 +1,12 @@
 use serde::Deserialize;
 
-use super::{video::ChildVideoRendererWrapper, misc::*, endpoints::NavigationEndpoint, thumbnail::Thumbnails, enums::PlaylistVideoListContent};
+use super::{
+    endpoints::NavigationEndpoint, enums::PlaylistVideoListContent, misc::*, thumbnail::Thumbnails,
+    video::ChildVideoRendererWrapper,
+};
 #[derive(Debug, Clone, Deserialize)]
 #[serde(rename_all = "camelCase")]
-pub struct PlaylistRenderer{
+pub struct PlaylistRenderer {
     pub playlist_id: String,
     pub title: SimpleText,
     pub thumbnails: Vec<Thumbnails>,
@@ -15,20 +18,20 @@ pub struct PlaylistRenderer{
 
 #[derive(Debug, Clone, Deserialize)]
 #[serde(rename_all = "camelCase")]
-pub struct GridPlaylistRenderer{
+pub struct GridPlaylistRenderer {
     pub playlist_id: String,
     pub title: RunsSimpleTextAccessibility,
     pub thumbnail: Thumbnails,
     pub video_count_text: Runs,
     pub video_count_short_text: SimpleText,
     pub view_playlist_text: Runs,
-    pub published_time_text:  Option<SimpleText>, // looks like it misses sometimes
-    pub owner_badges:Option<Vec<BadgeRendererVec>>,
+    pub published_time_text: Option<SimpleText>, // looks like it misses sometimes
+    pub owner_badges: Option<Vec<BadgeRendererVec>>,
     pub navigation_endpoint: NavigationEndpoint,
 }
 #[derive(Debug, Clone, Deserialize)]
 #[serde(rename_all = "camelCase")]
-pub struct CompactRadioRenderer{
+pub struct CompactRadioRenderer {
     pub navigation_endpoint: NavigationEndpoint,
     pub playlist_id: String,
     pub secondary_navigation_endpoint: NavigationEndpoint,
@@ -39,12 +42,12 @@ pub struct CompactRadioRenderer{
 }
 #[derive(Debug, Clone, Deserialize)]
 #[serde(rename_all = "camelCase")]
-pub struct NextPlaylistWrapper{
+pub struct NextPlaylistWrapper {
     pub playlist: NextPlaylist,
 }
 #[derive(Debug, Clone, Deserialize)]
 #[serde(rename_all = "camelCase")]
-pub struct NextPlaylist{
+pub struct NextPlaylist {
     pub playlist_id: String,
     pub title: String,
     pub current_index: u16,
@@ -55,17 +58,16 @@ pub struct NextPlaylist{
     pub continuations: Vec<NextContinuationDataWrapper>,
     pub short_byline_text: Runs,
     pub long_byline_text: Runs,
-    pub title_text:Runs,
-
+    pub title_text: Runs,
 }
 #[derive(Debug, Clone, Deserialize)]
 #[serde(rename_all = "camelCase")]
-pub struct PlaylistPanelVideoRendererWrapper{
-    pub playlist_panel_video_renderer: PlaylistPanelVideoRenderer
+pub struct PlaylistPanelVideoRendererWrapper {
+    pub playlist_panel_video_renderer: PlaylistPanelVideoRenderer,
 }
 #[derive(Debug, Clone, Deserialize)]
 #[serde(rename_all = "camelCase")]
-pub struct PlaylistPanelVideoRenderer{
+pub struct PlaylistPanelVideoRenderer {
     pub video_id: String,
     pub title: AccessibilitySimpleText,
     pub long_byline_text: Runs,
@@ -77,7 +79,7 @@ pub struct PlaylistPanelVideoRenderer{
 }
 #[derive(Debug, Clone, Deserialize)]
 #[serde(rename_all = "camelCase")]
-pub struct RadioRenderer{
+pub struct RadioRenderer {
     pub navigation_endpoint: NavigationEndpoint,
     pub playlist_id: String,
     pub title: SimpleText,
@@ -88,8 +90,8 @@ pub struct RadioRenderer{
 }
 #[derive(Debug, Clone, Deserialize)]
 #[serde(rename_all = "camelCase")]
-pub struct CompactPlaylistRenderer{
-    pub video_count_text:Runs,
+pub struct CompactPlaylistRenderer {
+    pub video_count_text: Runs,
     pub video_count_short_text: SimpleText,
     pub title: SimpleText,
     pub thumbnail: Thumbnails,
@@ -100,18 +102,18 @@ pub struct CompactPlaylistRenderer{
 }
 #[derive(Debug, Clone, Deserialize)]
 #[serde(rename_all = "camelCase")]
-pub struct PlaylistVideoListRenderer{
+pub struct PlaylistVideoListRenderer {
     pub contents: Vec<PlaylistVideoListContent>,
-    pub playlist_id: String
+    pub playlist_id: String,
 }
 #[derive(Debug, Clone, Deserialize)]
 #[serde(rename_all = "camelCase")]
-pub struct PlaylistMetadataRenderer{
+pub struct PlaylistMetadataRenderer {
     pub title: String,
 }
 #[derive(Debug, Clone, Deserialize)]
 #[serde(rename_all = "camelCase")]
-pub struct PlaylistHeaderRenderer{
+pub struct PlaylistHeaderRenderer {
     pub playlist_id: String,
     pub title: SimpleText,
     pub play_endpoint: NavigationEndpoint,

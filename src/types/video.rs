@@ -1,4 +1,11 @@
-use super::{misc::*, endpoints::NavigationEndpoint, enums::{MetadataRowContents, ThumbnailOverlays}, channel::ChannelThumbnailSupportedRenderers, thumbnail::Thumbnails, accessibility::Accessibility};
+use super::{
+    accessibility::Accessibility,
+    channel::ChannelThumbnailSupportedRenderers,
+    endpoints::NavigationEndpoint,
+    enums::{MetadataRowContents, ThumbnailOverlays},
+    misc::*,
+    thumbnail::Thumbnails,
+};
 use serde::Deserialize;
 
 #[derive(Debug, Clone, Deserialize)]
@@ -62,7 +69,7 @@ pub struct VideoPrimaryInfoRenderer {
     pub view_count: VideoViewCountRendererWrapper,
     pub date_text: SimpleText,
     pub video_actions: MenuRendererWrapper,
-    pub super_title_link: Option<Runs>
+    pub super_title_link: Option<Runs>,
 }
 #[derive(Debug, Clone, Deserialize)]
 #[serde(rename_all = "camelCase")]
@@ -103,16 +110,16 @@ pub struct ChildVideoRendererWrapper {
 
 #[derive(Debug, Clone, Deserialize)]
 #[serde(rename_all = "camelCase")]
-pub struct PlayerMicroformatRenderer{
-    pub player_microformat_renderer: PlayerMicroformat
+pub struct PlayerMicroformatRenderer {
+    pub player_microformat_renderer: PlayerMicroformat,
 }
 #[derive(Debug, Clone, Deserialize)]
 #[serde(rename_all = "camelCase")]
-pub struct PlayerMicroformat{
+pub struct PlayerMicroformat {
     pub thumbnail: Thumbnails,
     pub title: SimpleText,
-    pub description: Option<SimpleText>,// Presumably none if the video is a short
-    pub external_channel_id:String,
+    pub description: Option<SimpleText>, // Presumably none if the video is a short
+    pub external_channel_id: String,
     pub is_family_safe: bool,
     pub view_count: String,
     pub category: String,
@@ -122,40 +129,39 @@ pub struct PlayerMicroformat{
     pub live_broadcast_details: Option<LiveBroadcastDetails>,
     pub upload_date: String,
     pub is_unlisted: bool,
-
 }
 #[derive(Debug, Clone, Deserialize)]
 #[serde(rename_all = "camelCase")]
-pub struct LiveBroadcastDetails{
+pub struct LiveBroadcastDetails {
     pub is_live_now: bool,
-    pub start_timestamp: String
+    pub start_timestamp: String,
 }
 #[derive(Debug, Clone, Deserialize)]
 #[serde(rename_all = "camelCase")]
-pub struct VideoDetails{
+pub struct VideoDetails {
     pub video_id: String,
     pub title: String,
     pub length_seconds: String,
     pub keywords: Option<Vec<String>>,
     pub channel_id: String,
-    pub short_description:  Option<String>,// Presumably none if the video is a short
+    pub short_description: Option<String>, // Presumably none if the video is a short
     pub thumbnail: Thumbnails,
     pub view_count: String,
     pub author: String,
     pub is_private: bool,
     pub is_live_content: bool,
-    pub is_upcoming: Option<bool>
+    pub is_upcoming: Option<bool>,
 }
 #[derive(Debug, Clone, Deserialize)]
 #[serde(rename_all = "camelCase")]
-pub struct PlayerStoryboardSpecRenderer{
+pub struct PlayerStoryboardSpecRenderer {
     pub spec: String,
 }
 #[derive(Debug, Clone, Deserialize)]
 #[serde(rename_all = "camelCase")]
-pub struct StoryboardWrapper{
+pub struct StoryboardWrapper {
     pub player_storyboard_spec_renderer: Option<PlayerStoryboardSpecRenderer>,
-    pub player_live_storyboard_spec_renderer: Option<PlayerStoryboardSpecRenderer>
+    pub player_live_storyboard_spec_renderer: Option<PlayerStoryboardSpecRenderer>,
 }
 #[derive(Debug, Clone, Deserialize)]
 #[serde(rename_all = "camelCase")]
@@ -164,8 +170,8 @@ pub struct StreamingData {
     pub formats: Option<Vec<Format>>, // None if its a live stream
     pub adaptive_formats: Vec<Format>,
     pub dash_manifest_url: Option<String>, // None if its not a live stream
-    pub hls_manifest_url: Option<String>,// None if its not a live stream
-    pub hls_formats: Option<Vec<Format>> // None if its not a live stream and the user agent wasnt Safari
+    pub hls_manifest_url: Option<String>,  // None if its not a live stream
+    pub hls_formats: Option<Vec<Format>>, // None if its not a live stream and the user agent wasnt Safari
 }
 
 #[derive(Debug, Clone, Deserialize)]
@@ -195,7 +201,7 @@ pub struct Format {
 pub enum VideoQuality {
     Small,
     Medium,
-    Large
+    Large,
 }
 
 #[derive(Debug, Clone, Deserialize, PartialEq, Eq, PartialOrd, Ord)]
@@ -203,7 +209,7 @@ pub enum AudioQuality {
     #[serde(rename = "AUDIO_QUALITY_LOW")]
     Low,
     #[serde(rename = "AUDIO_QUALITY_MEDIUM")]
-    Medium
+    Medium,
 }
 
 #[derive(Debug, Clone, Deserialize)]
@@ -216,16 +222,16 @@ pub struct Range {
 #[serde(rename_all = "UPPERCASE")]
 pub enum ProjectionType {
     Rectangular,
-    Mesh
+    Mesh,
 }
 #[derive(Debug, Clone, Deserialize)]
 #[serde(rename_all = "camelCase")]
-pub struct CommentRendererWrapper{
+pub struct CommentRendererWrapper {
     pub comment_renderer: CommentRenderer,
 }
 #[derive(Debug, Clone, Deserialize)]
 #[serde(rename_all = "camelCase")]
-pub struct CommentRenderer{
+pub struct CommentRenderer {
     pub author_text: SimpleText,
     pub author_thumbnail: Thumbnails,
     pub author_endpoint: NavigationEndpoint,
@@ -234,44 +240,44 @@ pub struct CommentRenderer{
     pub comment_id: String,
     pub vote_count: Option<AccessibilitySimpleText>, // None if there is no likes on the comment
     pub reply_count: Option<i16>,
-    pub author_comment_badge: Option<AuthorCommentBadgeRendererWrapper>
+    pub author_comment_badge: Option<AuthorCommentBadgeRendererWrapper>,
 }
 #[derive(Debug, Clone, Deserialize)]
 #[serde(rename_all = "camelCase")]
-pub struct AuthorCommentBadgeRendererWrapper{
+pub struct AuthorCommentBadgeRendererWrapper {
     pub author_comment_badge_renderer: AuthorCommentBadgeRenderer,
 }
 #[derive(Debug, Clone, Deserialize)]
 #[serde(rename_all = "camelCase")]
-pub struct AuthorCommentBadgeRenderer{
+pub struct AuthorCommentBadgeRenderer {
     pub icon: IconType,
     pub icon_tooltip: String,
 }
 #[derive(Debug, Clone, Deserialize)]
 #[serde(rename_all = "camelCase")]
-pub struct CommentRepliesRendererWrapper{
-    pub comment_replies_renderer: CommentRepliesRenderer
+pub struct CommentRepliesRendererWrapper {
+    pub comment_replies_renderer: CommentRepliesRenderer,
 }
 #[derive(Debug, Clone, Deserialize)]
-pub struct CommentRepliesRenderer{
-    pub contents: Vec<ContinuationItemRendererWrapper>
+pub struct CommentRepliesRenderer {
+    pub contents: Vec<ContinuationItemRendererWrapper>,
 }
 
 #[derive(Debug, Clone, Deserialize)]
 #[serde(rename_all = "camelCase")]
-pub struct VideoViewCountRenderer{
-    pub view_count:  Option<RunsSimpleTextAccessibility>,
+pub struct VideoViewCountRenderer {
+    pub view_count: Option<RunsSimpleTextAccessibility>,
     pub short_view_count: Option<SimpleText>,
 }
 #[derive(Debug, Clone, Deserialize)]
 #[serde(rename_all = "camelCase")]
-pub struct VideoViewCountRendererWrapper{
+pub struct VideoViewCountRendererWrapper {
     pub video_view_count_renderer: VideoViewCountRenderer,
 }
 
 #[derive(Debug, Clone, Deserialize)]
 #[serde(rename_all = "camelCase")]
-pub struct VideoOwnerRenderer{
+pub struct VideoOwnerRenderer {
     pub thumbnail: Thumbnails,
     pub title: Runs,
     pub navigation_endpoint: NavigationEndpoint,
@@ -280,124 +286,123 @@ pub struct VideoOwnerRenderer{
 }
 #[derive(Debug, Clone, Deserialize)]
 #[serde(rename_all = "camelCase")]
-pub struct Owner{
+pub struct Owner {
     pub video_owner_renderer: VideoOwnerRenderer,
 }
 #[derive(Debug, Clone, Deserialize)]
 #[serde(rename_all = "camelCase")]
-pub struct MetadataRowContainer{
-    pub metadata_row_container_renderer: MetadataRowContainerRenderer
+pub struct MetadataRowContainer {
+    pub metadata_row_container_renderer: MetadataRowContainerRenderer,
 }
 #[derive(Debug, Clone, Deserialize)]
-pub struct MetadataRowContainerRenderer{
+pub struct MetadataRowContainerRenderer {
     pub rows: Option<Vec<MetadataRowContents>>,
 }
 #[derive(Debug, Clone, Deserialize)]
 #[serde(rename_all = "camelCase")]
-pub struct MetadataRowRenderer{
+pub struct MetadataRowRenderer {
     pub title: SimpleText,
     pub contents: Vec<RunsSimpleTextAccessibility>,
-    
 }
 #[derive(Debug, Clone, Deserialize)]
 #[serde(rename_all = "camelCase")]
-pub struct UpcomingEventData{
+pub struct UpcomingEventData {
     pub start_time: String,
-    pub upcoming_event_text:Runs,
+    pub upcoming_event_text: Runs,
 }
 
 #[derive(Debug, Clone, Deserialize)]
 #[serde(rename_all = "camelCase")]
-pub struct VideoRendererWrapper{
-    pub video_renderer: VideoRenderer
+pub struct VideoRendererWrapper {
+    pub video_renderer: VideoRenderer,
 }
 #[derive(Debug, Clone, Deserialize)]
 #[serde(rename_all = "camelCase")]
-pub struct PlayerOverlayRendererWrapper{
+pub struct PlayerOverlayRendererWrapper {
     pub player_overlay_renderer: PlayerOverlayRenderer,
 }
 #[derive(Debug, Clone, Deserialize)]
 #[serde(rename_all = "camelCase")]
-pub struct PlayerOverlayRenderer{
-    pub decorated_player_bar_renderer:  Option<DecoratedPlayerBarRendererWrapper>,
+pub struct PlayerOverlayRenderer {
+    pub decorated_player_bar_renderer: Option<DecoratedPlayerBarRendererWrapper>,
 }
 #[derive(Debug, Clone, Deserialize)]
 #[serde(rename_all = "camelCase")]
-pub struct DecoratedPlayerBarRendererWrapper{
-    pub decorated_player_bar_renderer: DecoratedPlayerBarRenderer
+pub struct DecoratedPlayerBarRendererWrapper {
+    pub decorated_player_bar_renderer: DecoratedPlayerBarRenderer,
 }
 #[derive(Debug, Clone, Deserialize)]
 #[serde(rename_all = "camelCase")]
-pub struct DecoratedPlayerBarRenderer{
+pub struct DecoratedPlayerBarRenderer {
     pub player_bar: PlayerBar,
 }
 
 #[derive(Debug, Clone, Deserialize)]
 #[serde(rename_all = "camelCase")]
-pub struct PlayerBar{
-    pub multi_markers_player_bar_renderer: MultiMarkersPlayerBarRenderer
+pub struct PlayerBar {
+    pub multi_markers_player_bar_renderer: MultiMarkersPlayerBarRenderer,
 }
 #[derive(Debug, Clone, Deserialize)]
 #[serde(rename_all = "camelCase")]
-pub struct MultiMarkersPlayerBarRenderer{
-    pub markers_map: Vec<MarkersMap>
+pub struct MultiMarkersPlayerBarRenderer {
+    pub markers_map: Vec<MarkersMap>,
 }
 #[derive(Debug, Clone, Deserialize)]
-pub struct MarkersMap{
+pub struct MarkersMap {
     pub key: String,
-    pub value: MarkersMapValues
+    pub value: MarkersMapValues,
 }
 #[derive(Debug, Clone, Deserialize)]
-pub struct MarkersMapValues{
+pub struct MarkersMapValues {
     pub chapters: Option<Vec<Chapter>>,
-    pub heatmap: Option<HeatMap>
+    pub heatmap: Option<HeatMap>,
 }
 
 #[derive(Debug, Clone, Deserialize)]
 #[serde(rename_all = "camelCase")]
-pub struct Chapter{
-    pub chapter_renderer: ChapterRenderer
+pub struct Chapter {
+    pub chapter_renderer: ChapterRenderer,
 }
 #[derive(Debug, Clone, Deserialize)]
 #[serde(rename_all = "camelCase")]
-pub struct ChapterRenderer{
+pub struct ChapterRenderer {
     pub title: SimpleText,
     pub time_range_start_millis: u32,
     pub on_active_command: OnActiveCommand,
-    pub thumbnail: Thumbnails
+    pub thumbnail: Thumbnails,
 }
 #[derive(Debug, Clone, Deserialize)]
 #[serde(rename_all = "camelCase")]
-pub struct OnActiveCommand{
-    pub set_active_panel_item_action: SetActivePanelItemAction
+pub struct OnActiveCommand {
+    pub set_active_panel_item_action: SetActivePanelItemAction,
 }
 #[derive(Debug, Clone, Deserialize)]
 #[serde(rename_all = "camelCase")]
-pub struct SetActivePanelItemAction{
-    pub item_index: u16
+pub struct SetActivePanelItemAction {
+    pub item_index: u16,
 }
 #[derive(Debug, Clone, Deserialize)]
 #[serde(rename_all = "camelCase")]
-pub struct HeatMap{
-    pub heatmap_renderer: HeatMapRenderer
+pub struct HeatMap {
+    pub heatmap_renderer: HeatMapRenderer,
 }
 #[derive(Debug, Clone, Deserialize)]
 #[serde(rename_all = "camelCase")]
-pub struct HeatMapRenderer{
+pub struct HeatMapRenderer {
     pub max_height_dp: u16,
     pub min_height_dp: u16,
     pub show_hide_animation_duration_millis: u16,
     pub heat_markers_decorations: Vec<HeatMarkersDecorations>,
-    pub heat_markers: Vec<HeatMarkers>
+    pub heat_markers: Vec<HeatMarkers>,
 }
 #[derive(Debug, Clone, Deserialize)]
 #[serde(rename_all = "camelCase")]
-pub struct HeatMarkersDecorations{
-    pub timed_marker_decoration_renderer: TimedMarkerDecorationRenderer
+pub struct HeatMarkersDecorations {
+    pub timed_marker_decoration_renderer: TimedMarkerDecorationRenderer,
 }
 #[derive(Debug, Clone, Deserialize)]
 #[serde(rename_all = "camelCase")]
-pub struct TimedMarkerDecorationRenderer{
+pub struct TimedMarkerDecorationRenderer {
     pub visible_time_range_start_millis: u32,
     pub visible_time_range_end_millis: u32,
     pub decoration_time_millis: u32,
@@ -405,59 +410,59 @@ pub struct TimedMarkerDecorationRenderer{
 }
 #[derive(Debug, Clone, Deserialize)]
 #[serde(rename_all = "camelCase")]
-pub struct HeatMarkers{
+pub struct HeatMarkers {
     pub heat_marker_renderer: HeatMarkerRenderer,
 }
 #[derive(Debug, Clone, Deserialize)]
 #[serde(rename_all = "camelCase")]
-pub struct HeatMarkerRenderer{
+pub struct HeatMarkerRenderer {
     pub time_range_start_millis: u32,
     pub marker_duration_millis: u32,
-    pub heat_marker_intensity_score_normalized: f32
+    pub heat_marker_intensity_score_normalized: f32,
 }
 #[derive(Debug, Clone, Deserialize)]
-pub struct PlayabilityStatus{
+pub struct PlayabilityStatus {
     pub status: String,
     pub reason: Option<String>,
 }
 #[derive(Debug, Clone, Deserialize)]
 #[serde(rename_all = "camelCase")]
-pub struct PlayerCaptionsTracklistRenderer{
+pub struct PlayerCaptionsTracklistRenderer {
     pub player_captions_tracklist_renderer: PlayerCaptionsTracklist,
 }
 #[derive(Debug, Clone, Deserialize)]
 #[serde(rename_all = "camelCase")]
-pub struct  PlayerCaptionsTracklist{
+pub struct PlayerCaptionsTracklist {
     pub caption_tracks: Vec<CaptionTrack>,
     pub audio_tracks: Vec<AudioTrack>,
     pub translation_languages: Vec<TranslationLanguages>,
-    pub default_audio_track_index: u16
+    pub default_audio_track_index: u16,
 }
 #[derive(Debug, Clone, Deserialize)]
 #[serde(rename_all = "camelCase")]
-pub struct CaptionTrack{
+pub struct CaptionTrack {
     pub base_url: String,
     pub name: SimpleText,
     pub vss_id: String,
     pub language_code: String,
     pub kind: Option<String>,
-    pub is_translatable: bool
+    pub is_translatable: bool,
 }
 #[derive(Debug, Clone, Deserialize)]
 #[serde(rename_all = "camelCase")]
-pub struct AudioTrack{
-    pub caption_track_indices: Vec<u16>
+pub struct AudioTrack {
+    pub caption_track_indices: Vec<u16>,
 }
 #[derive(Debug, Clone, Deserialize)]
 #[serde(rename_all = "camelCase")]
-pub struct TranslationLanguages{
+pub struct TranslationLanguages {
     pub language_code: String,
     pub language_name: SimpleText,
 }
 
 #[derive(Debug, Clone, Deserialize)]
 #[serde(rename_all = "camelCase")]
-pub struct CompactMovieRenderer{
+pub struct CompactMovieRenderer {
     pub thumbnail: Thumbnails,
     pub title: RunsSimpleTextAccessibility,
     pub length_text: Option<AccessibilitySimpleText>, // None if its a live video
@@ -470,7 +475,7 @@ pub struct CompactMovieRenderer{
 
 #[derive(Debug, Clone, Deserialize)]
 #[serde(rename_all = "camelCase")]
-pub struct PlaylistVideoRenderer{
+pub struct PlaylistVideoRenderer {
     pub video_id: String,
     pub thumbnail: Thumbnails,
     pub title: Runs,

@@ -821,12 +821,12 @@ mod tests {
         let result: BrowseResult = serde_json::from_value(j).unwrap();
         assert_eq!(result.contents.is_some(), true);
         assert_eq!(
-          match result.metadata.unwrap() {
-              enums::MetadataRenderers::ChannelMetadataRenderer(ch) => ch.title,
-              _ => unreachable!(),
-          },
-          "Linus Tech Tips"
-      );
+            match result.metadata.unwrap() {
+                enums::MetadataRenderers::ChannelMetadataRenderer(ch) => ch.title,
+                _ => unreachable!(),
+            },
+            "Linus Tech Tips"
+        );
     }
     #[tokio::test]
     async fn test_browse_playlist() {
@@ -870,10 +870,10 @@ mod tests {
         assert_eq!(result.contents.is_none(), true);
         assert_eq!(result.on_response_received_actions.is_some(), true);
         assert_eq!(
-          match result.metadata.unwrap(){
-            enums::MetadataRenderers::ChannelMetadataRenderer(ch) => ch.title,
-            _ => unreachable!(),
-          },
+            match result.metadata.unwrap() {
+                enums::MetadataRenderers::ChannelMetadataRenderer(ch) => ch.title,
+                _ => unreachable!(),
+            },
             "Linus Tech Tips"
         );
     }

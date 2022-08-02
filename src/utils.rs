@@ -118,15 +118,14 @@ pub fn get_description(video: &NextResult) -> String {
 
 /// Utility function to check if the author is verified it takes the first BadgeRenderer
 pub fn get_author_verified(video: &MetadataBadgeRenderer) -> bool {
-    match &video.icon{
-        Some(icon) =>  match icon.icon_type.as_str() {
+    match &video.icon {
+        Some(icon) => match icon.icon_type.as_str() {
             "OFFICIAL_ARTIST_BADGE" => true,
             "CHECK_CIRCLE_THICK" => true,
             _ => false,
         },
-        None =>false,
+        None => false,
     }
-
 }
 /// Utility function to get the subscriber count
 pub fn get_subcribe_count(video: &NextResult) -> String {

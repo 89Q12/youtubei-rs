@@ -1,10 +1,20 @@
 use serde::Deserialize;
 
-use super::{misc::*, endpoints::NavigationEndpoint, enums::{ItemSectionRendererContents, RichGridRendererContent, TabRendererContent, BackstageAttachments, CommunityPost}, video::{VideoRendererWrapper, VideoRenderer}, thumbnail::{Thumbnails, ThumbnailsAccessibility, ShowCustomThumbnailRenderer}, accessibility::{Accessibility, AccessibilityData}};
+use super::{
+    accessibility::{Accessibility, AccessibilityData},
+    endpoints::NavigationEndpoint,
+    enums::{
+        BackstageAttachments, CommunityPost, ItemSectionRendererContents, RichGridRendererContent,
+        TabRendererContent,
+    },
+    misc::*,
+    thumbnail::{ShowCustomThumbnailRenderer, Thumbnails, ThumbnailsAccessibility},
+    video::{VideoRenderer, VideoRendererWrapper},
+};
 
 #[derive(Debug, Clone, Deserialize)]
 #[serde(rename_all = "camelCase")]
-pub struct ChannelRenderer{
+pub struct ChannelRenderer {
     pub channel_id: String,
     pub title: SimpleText,
     pub navigation_endpoint: NavigationEndpoint,
@@ -18,7 +28,7 @@ pub struct ChannelRenderer{
 }
 
 #[derive(Debug, Clone, Deserialize)]
-pub struct TabRenderer{
+pub struct TabRenderer {
     pub endpoint: Option<NavigationEndpoint>,
     pub title: Option<String>,
     pub selected: Option<bool>,
@@ -28,7 +38,7 @@ pub struct TabRenderer{
 
 #[derive(Debug, Clone, Deserialize)]
 #[serde(rename_all = "camelCase")]
-pub struct ChannelMetadataRenderer{
+pub struct ChannelMetadataRenderer {
     pub title: String,
     pub description: String,
     pub rss_url: String,
@@ -38,31 +48,31 @@ pub struct ChannelMetadataRenderer{
     pub avatar: Thumbnails,
     pub channel_url: String,
     pub is_family_safe: bool,
-    pub available_country_codes: Vec<String>
+    pub available_country_codes: Vec<String>,
 }
 
 #[derive(Debug, Clone, Deserialize)]
-pub struct BackstagePostThreadRenderer{
-    pub post: CommunityPost
+pub struct BackstagePostThreadRenderer {
+    pub post: CommunityPost,
 }
 #[derive(Debug, Clone, Deserialize)]
 #[serde(rename_all = "camelCase")]
-pub struct BackstagePostRendererWrapper{
+pub struct BackstagePostRendererWrapper {
     pub backstage_post_renderer: BackstagePostRenderer,
 }
 #[derive(Debug, Clone, Deserialize)]
 #[serde(rename_all = "camelCase")]
-pub struct ChannelVideoPlayerRenderer{
+pub struct ChannelVideoPlayerRenderer {
     pub video_id: String,
     pub title: Runs,
     pub description: Runs,
     pub view_count_text: SimpleText,
-    pub published_time_text:Runs,
+    pub published_time_text: Runs,
 }
 
 #[derive(Debug, Clone, Deserialize)]
 #[serde(rename_all = "camelCase")]
-pub struct GridChannelRenderer{
+pub struct GridChannelRenderer {
     pub channel_id: String,
     pub title: SimpleText,
     pub navigation_endpoint: NavigationEndpoint,
@@ -74,25 +84,25 @@ pub struct GridChannelRenderer{
 
 #[derive(Debug, Clone, Deserialize)]
 #[serde(rename_all = "camelCase")]
-pub struct ChannelAboutFullMetadataRenderer{
+pub struct ChannelAboutFullMetadataRenderer {
     pub description: Option<SimpleText>,
     pub view_count_text: SimpleText,
     pub joined_date_text: Runs,
     pub title: SimpleText,
     pub avatar: Thumbnails,
     pub country: Option<SimpleText>,
-    pub channel_id: String
+    pub channel_id: String,
 }
 #[derive(Debug, Clone, Deserialize)]
 #[serde(rename_all = "camelCase")]
-pub struct GridShowRenderer{
+pub struct GridShowRenderer {
     pub navigation_endpoint: NavigationEndpoint,
     pub thumbnail_renderer: ShowCustomThumbnailRenderer,
     pub title: SimpleText,
 }
 #[derive(Debug, Clone, Deserialize)]
 #[serde(rename_all = "camelCase")]
-pub struct GridRadioRenderer{
+pub struct GridRadioRenderer {
     pub navigation_endpoint: NavigationEndpoint,
     pub secondary_navigation_endpoint: NavigationEndpoint,
     pub playlist_id: String,
@@ -103,53 +113,52 @@ pub struct GridRadioRenderer{
 }
 #[derive(Debug, Clone, Deserialize)]
 #[serde(rename_all = "camelCase")]
-pub struct ChannelFeaturedContentRenderer{
+pub struct ChannelFeaturedContentRenderer {
     pub title: Runs,
     pub items: ItemSectionRendererContents,
 }
 #[derive(Debug, Clone, Deserialize)]
 #[serde(rename_all = "camelCase")]
-pub struct ChannelThumbnailSupportedRenderers{
-    pub channel_thumbnail_with_link_renderer: ChannelThumbnailWithLinkRenderer
+pub struct ChannelThumbnailSupportedRenderers {
+    pub channel_thumbnail_with_link_renderer: ChannelThumbnailWithLinkRenderer,
 }
 #[derive(Debug, Clone, Deserialize)]
 #[serde(rename_all = "camelCase")]
-pub struct ChannelThumbnailWithLinkRenderer{
+pub struct ChannelThumbnailWithLinkRenderer {
     pub thumbnail: Thumbnails,
     pub accessibility: Accessibility,
     pub navigation_endpoint: NavigationEndpoint,
 }
 
 #[derive(Debug, Clone, Deserialize)]
-pub struct RichGridRenderer{
+pub struct RichGridRenderer {
     pub contents: Vec<RichGridRendererContent>,
 }
 #[derive(Debug, Clone, Deserialize)]
-pub struct RichItemRenderer{
-    pub content: VideoRendererWrapper
+pub struct RichItemRenderer {
+    pub content: VideoRendererWrapper,
 }
 #[derive(Debug, Clone, Deserialize)]
 #[serde(rename_all = "camelCase")]
-pub struct C4TabbedHeaderRendererWrapper{
+pub struct C4TabbedHeaderRendererWrapper {
     pub c4_tabbed_header_renderer: C4TabbedHeaderRenderer,
 }
 #[derive(Debug, Clone, Deserialize)]
 #[serde(rename_all = "camelCase")]
-pub struct C4TabbedHeaderRenderer{
+pub struct C4TabbedHeaderRenderer {
     pub channel_id: String,
     pub title: Option<String>, // None if the channels is terminated or the channel doesn't exist
-    pub navigation_endpoint: Option<NavigationEndpoint>,// None if the channels is terminated or the channel doesn't exist
+    pub navigation_endpoint: Option<NavigationEndpoint>, // None if the channels is terminated or the channel doesn't exist
     pub avatar: Thumbnails,
     pub banner: Option<Thumbnails>,
     pub tv_banner: Option<Thumbnails>,
     pub mobile_banner: Option<Thumbnails>,
     pub badges: Option<Vec<BadgeRendererVec>>,
     pub subscriber_count_text: Option<AccessibilitySimpleText>,
-   
 }
 #[derive(Debug, Clone, Deserialize)]
 #[serde(rename_all = "camelCase")]
-pub struct BackstagePostRenderer{
+pub struct BackstagePostRenderer {
     pub post_id: String,
     pub author_text: Runs,
     pub author_thumbnail: Thumbnails,
@@ -161,33 +170,33 @@ pub struct BackstagePostRenderer{
 }
 #[derive(Debug, Clone, Deserialize)]
 #[serde(rename_all = "camelCase")]
-pub struct SharedPostRenderer{
+pub struct SharedPostRenderer {
     pub post_id: String,
     pub content: Runs,
     pub display_name: RunsSimpleTextAccessibility,
     pub endpoint: NavigationEndpoint,
     pub navigation_endpoint: NavigationEndpoint,
     pub original_post: BackstagePostRendererWrapper,
-    pub thumbnail: ThumbnailsAccessibility
+    pub thumbnail: ThumbnailsAccessibility,
 }
 
 #[derive(Debug, Clone, Deserialize)]
 #[serde(rename_all = "camelCase")]
-pub struct TabRendererWrapper{
+pub struct TabRendererWrapper {
     pub tab_renderer: Option<TabRenderer>,
-    pub expandable_tab_renderer: Option<TabRenderer>
+    pub expandable_tab_renderer: Option<TabRenderer>,
 }
 #[derive(Debug, Clone, Deserialize)]
-pub struct BackstageImageRenderer{
+pub struct BackstageImageRenderer {
     pub image: Thumbnails,
     pub command: NavigationEndpoint,
 }
 #[derive(Debug, Clone, Deserialize)]
-pub struct PostMultiImageRenderer{
+pub struct PostMultiImageRenderer {
     pub images: Vec<BackstageImageRenderer>,
 }
 #[derive(Debug, Clone, Deserialize)]
-pub struct PollRenderer{
+pub struct PollRenderer {
     pub choices: Runs,
     pub total_votes: SimpleText,
     pub accessibility_data: AccessibilityData,

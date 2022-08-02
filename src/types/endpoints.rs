@@ -6,14 +6,14 @@ pub struct NavigationEndpoint {
     pub browse_endpoint: Option<BrowseEndpoint>,
     pub watch_endpoint: Option<WatchEndpoint>,
     pub continuation_endpoint: Option<ContinuationEndpoint>,
-    pub reel_watch_endpoint: Option<ReelWatchEndpoint>
+    pub reel_watch_endpoint: Option<ReelWatchEndpoint>,
 }
 
 #[derive(Debug, Clone, Deserialize)]
 #[serde(rename_all = "camelCase")]
-pub struct ReelWatchEndpoint{
+pub struct ReelWatchEndpoint {
     pub video_id: String,
-    pub params: String
+    pub params: String,
 }
 #[derive(Debug, Clone, Deserialize)]
 #[serde(rename_all = "camelCase")]
@@ -32,15 +32,15 @@ pub struct BrowseEndpoint {
 
 #[derive(Debug, Clone, Deserialize)]
 #[serde(rename_all = "camelCase")]
-pub struct ContinuationEndpoint{
+pub struct ContinuationEndpoint {
     pub continuation_command: Option<ContinuationCommand>,
-    pub get_transcript: Option<GetTranscriptEndpoint>
+    pub get_transcript: Option<GetTranscriptEndpoint>,
 }
 #[derive(Debug, Clone, Deserialize)]
-pub struct ContinuationCommand{
-    pub token: String
+pub struct ContinuationCommand {
+    pub token: String,
 }
 #[derive(Debug, Clone, Deserialize)]
-pub struct GetTranscriptEndpoint{
-    pub params: String
+pub struct GetTranscriptEndpoint {
+    pub params: String,
 }
