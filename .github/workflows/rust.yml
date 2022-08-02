@@ -1,4 +1,4 @@
-name: Build and test
+name: Build, lint, test, and format
 
 on:
   push:
@@ -11,12 +11,19 @@ env:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v3
-    - name: Build
-      run: cargo build
-    - name: Run tests
-      run: cargo test --verbose
+     - uses: actions/checkout@v3
+
+     - name: Build
+       run: cargo build
+
+     - name: Clippy
+       run: cargo clippy
+
+     - name: Run tests
+       run: cargo test --verbose
+
+     - name: Format code
+       run: cargo fmt
