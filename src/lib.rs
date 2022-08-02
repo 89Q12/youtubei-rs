@@ -15,7 +15,12 @@ pub mod types;
 /// Contains utilities for various tasks.
 pub mod utils;
 
-// Contains test functions. Consider moving to a separate file.
+// Re-import tokio
+pub extern crate tokio;
+
+// TODO: Consider doing the same for serde_json
+
+// Contains test functions. TODO: Consider moving to a separate file.
 #[cfg(test)]
 mod tests {
     use serde_json::json;
