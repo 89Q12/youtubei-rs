@@ -9,7 +9,7 @@ use super::{
     },
     misc::*,
     thumbnail::{ShowCustomThumbnailRenderer, Thumbnails, ThumbnailsAccessibility},
-    video::{VideoRenderer, VideoRendererWrapper},
+    video::{VideoRendererWrapper},
 };
 
 #[derive(Debug, Clone, Deserialize)]
