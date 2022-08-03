@@ -820,7 +820,7 @@ mod tests {
         ).await.unwrap();
 
         let result: NextResult = serde_json::from_value(j).unwrap();
-        assert_eq!(result.contents.is_none(), true)
+        assert!(result.contents.is_none())
     }
 
     #[tokio::test]
@@ -832,7 +832,7 @@ mod tests {
                 .unwrap();
 
         let result: BrowseResult = serde_json::from_value(j).unwrap();
-        assert_eq!(result.contents.is_some(), true);
+        assert!(result.contents.is_some());
     }
 
     #[tokio::test]
@@ -848,7 +848,7 @@ mod tests {
 
         let result: BrowseResult = serde_json::from_value(j).unwrap();
 
-        assert_eq!(result.contents.is_some(), true);
+        assert!(result.contents.is_some());
         assert_eq!(
             match result.metadata.unwrap() {
                 enums::MetadataRenderers::ChannelMetadataRenderer(ch) => ch.title,
@@ -868,7 +868,7 @@ mod tests {
 
         let result: BrowseResult = serde_json::from_value(j).unwrap();
 
-        assert_eq!(result.contents.is_some(), true);
+        assert!(result.contents.is_some());
         assert_eq!(
             match result.metadata.unwrap() {
                 enums::MetadataRenderers::PlaylistMetadataRenderer(pl) => pl.title,
@@ -888,7 +888,7 @@ mod tests {
 
         let result: BrowseResult = serde_json::from_value(j).unwrap();
 
-        assert_eq!(result.contents.is_some(), true);
+        assert!(result.contents.is_some());
         assert_eq!(
             match result.metadata.unwrap() {
                 enums::MetadataRenderers::ChannelMetadataRenderer(ch) => ch.title,
@@ -908,8 +908,8 @@ mod tests {
 
         let result: BrowseResult = serde_json::from_value(j).unwrap();
 
-        assert_eq!(result.contents.is_none(), true);
-        assert_eq!(result.on_response_received_actions.is_some(), true);
+        assert!(result.contents.is_none());
+        assert!(result.on_response_received_actions.is_some());
         assert_eq!(
             match result.metadata.unwrap() {
                 enums::MetadataRenderers::ChannelMetadataRenderer(ch) => ch.title,
@@ -982,7 +982,7 @@ mod tests {
             },
             0
         );
-        assert_eq!(result.refinements.is_none(), false);
+        assert!(result.refinements.is_some());
     }
 
     #[tokio::test]
@@ -1015,7 +1015,7 @@ mod tests {
 
         let result: ResolveResult = serde_json::from_value(j).unwrap();
 
-        assert_eq!(result.endpoint.browse_endpoint.is_some(), true);
+        assert!(result.endpoint.browse_endpoint.is_some());
         assert_ne!(result.endpoint.browse_endpoint.unwrap().browse_id, "")
     }
 
@@ -1031,7 +1031,7 @@ mod tests {
             .unwrap(),
         );
 
-        assert_eq!(result.is_ok(), true);
+        assert!(result.is_ok());
         assert_ne!(
             result.unwrap().endpoint.browse_endpoint.unwrap().browse_id,
             ""
@@ -1045,7 +1045,7 @@ mod tests {
             &endpoints::search("ltt", "", client_config).await.unwrap(),
         );
 
-        assert_eq!(result.is_ok(), true);
+        assert!(result.is_ok());
     }
 
     #[tokio::test]
@@ -1055,7 +1055,7 @@ mod tests {
             &endpoints::search("", "", client_config).await.unwrap(),
         );
 
-        assert_eq!(result.is_ok(), false);
+        assert!(result.is_err());
         assert_eq!(result.unwrap_err().to_parse_type, "SearchResult");
     }
 
@@ -1068,7 +1068,7 @@ mod tests {
                 .unwrap(),
         );
 
-        assert_eq!(result.is_ok(), true);
+        assert!(result.is_ok());
     }
 
     #[tokio::test]
@@ -1080,7 +1080,7 @@ mod tests {
                 .unwrap(),
         );
 
-        assert_eq!(result.is_ok(), false);
+        assert!(result.is_err());
         assert_eq!(result.unwrap_err().to_parse_type, "NextResult");
     }
 
@@ -1097,7 +1097,7 @@ mod tests {
             .unwrap(),
         );
 
-        assert_eq!(result.is_ok(), true);
+        assert!(result.is_ok());
     }
     #[tokio::test]
     async fn test_browse_extractor_error() {
@@ -1110,7 +1110,7 @@ mod tests {
                 .unwrap(),
         );
 
-        assert_eq!(result.is_ok(), false);
+        assert!(result.is_err());
         assert_eq!(result.unwrap_err().to_parse_type, "BrowseResult");
     }
 
@@ -1123,7 +1123,7 @@ mod tests {
                 .unwrap(),
         );
 
-        assert_eq!(result.is_ok(), true);
+        assert!(result.is_ok());
     }
 
     #[tokio::test]
@@ -1133,7 +1133,7 @@ mod tests {
             &endpoints::player("", "", client_config).await.unwrap(),
         );
 
-        assert_eq!(result.is_ok(), false);
+        assert!(result.is_err());
         assert_eq!(result.unwrap_err().to_parse_type, "PlayerResult");
     }
 
@@ -1142,7 +1142,7 @@ mod tests {
         let client_config = &default_client_config();
         let result = endpoints::browse_browseid("", "", client_config).await;
 
-        assert_eq!(result.is_ok(), false);
+        assert!(result.is_err());
         assert_eq!(result.unwrap_err().status, 400);
     }
 
@@ -1155,7 +1155,7 @@ mod tests {
                 .unwrap();
 
         let result: Result<NextResult, serde_json::Error> = serde_json::from_value(j);
-        assert_eq!(result.is_ok(), true);
+        assert!(result.is_ok());
     }
 
     #[tokio::test]
@@ -1166,7 +1166,7 @@ mod tests {
             .unwrap();
 
         let result: Result<PlayerResult, serde_json::Error> = serde_json::from_value(j);
-        assert_eq!(result.is_ok(), true);
+        assert!(result.is_ok());
     }
 
     #[tokio::test]
@@ -1184,7 +1184,7 @@ mod tests {
 
         let result: Result<NextResult, serde_json::Error> = serde_json::from_value(j);
 
-        assert_eq!(result.is_ok(), true);
+        assert!(result.is_ok());
         assert_eq!(
             match result.unwrap().contents.unwrap() {
                 crate::types::enums::TwoColumnTypes::TwoColumnWatchNextResults(res) =>
@@ -1207,7 +1207,7 @@ mod tests {
         .unwrap();
 
         let result: Result<BrowseResult, serde_json::Error> = serde_json::from_value(j);
-        assert_eq!(result.is_ok(), true);
+        assert!(result.is_ok());
     }
 
     #[tokio::test]
@@ -1222,7 +1222,7 @@ mod tests {
         .unwrap();
 
         let result: Result<BrowseResult, serde_json::Error> = serde_json::from_value(j);
-        assert_eq!(result.is_ok(), true);
+        assert!(result.is_ok());
     }
 
     #[tokio::test]
@@ -1237,7 +1237,7 @@ mod tests {
         .unwrap();
 
         let result: Result<BrowseResult, serde_json::Error> = serde_json::from_value(j);
-        assert_eq!(result.is_ok(), true);
+        assert!(result.is_ok());
     }
 
     #[tokio::test]
@@ -1252,7 +1252,7 @@ mod tests {
         .unwrap();
 
         let result: Result<BrowseResult, serde_json::Error> = serde_json::from_value(j);
-        assert_eq!(result.is_ok(), true);
+        assert!(result.is_ok());
     }
 
     #[tokio::test]
@@ -1267,7 +1267,7 @@ mod tests {
         .unwrap();
 
         let result: Result<BrowseResult, serde_json::Error> = serde_json::from_value(j);
-        assert_eq!(result.is_ok(), true);
+        assert!(result.is_ok());
     }
 
     #[tokio::test]
@@ -1283,14 +1283,13 @@ mod tests {
 
         let result: Result<BrowseResult, serde_json::Error> = serde_json::from_value(j);
 
-        assert_eq!(result.is_ok(), true);
-        assert_eq!(
+        assert!(result.is_ok());
+        assert!(
             match result.unwrap().contents.unwrap() {
                 crate::types::enums::TwoColumnTypes::TwoColumnBrowseResultsRenderer(res) =>
                     res.tabs.last().unwrap().expandable_tab_renderer.is_some(),
                 _ => unreachable!(),
-            },
-            true
+            }
         );
     }
     #[tokio::test]
@@ -1309,14 +1308,13 @@ mod tests {
 
         let result: Result<BrowseResult, serde_json::Error> = serde_json::from_value(j);
 
-        assert_eq!(result.is_ok(), true);
-        assert_eq!(
+        assert!(result.is_ok());
+        assert!(
             match result.unwrap().contents.unwrap() {
                 crate::types::enums::TwoColumnTypes::TwoColumnBrowseResultsRenderer(res) =>
                     res.tabs.last().unwrap().expandable_tab_renderer.is_some(),
                 _ => unreachable!(),
-            },
-            true
+            }
         );
     }
 }

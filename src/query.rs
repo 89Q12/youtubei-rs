@@ -44,7 +44,7 @@ pub async fn next_video_id(
                     ));
 
                     log += &json.to_string();
-                    fs::write("json_dump_endpoint_next".to_string(), log).unwrap();
+                    fs::write("json_dump_endpoint_next", log).unwrap();
                 }
 
                 Err(Errors::ParseError(err))
@@ -63,7 +63,7 @@ pub async fn next_continuation(
     let json = next(&continuation, client_config).await;
     match json {
         Ok(json) => match extract_next_result(&json) {
-            Ok(result) => return Ok(result),
+            Ok(result) => Ok(result),
             Err(err) => {
                 tracing::event!(target: "youtubei_rs", Level::ERROR, "Error parsing next result: {}", err);
 
@@ -75,7 +75,7 @@ pub async fn next_continuation(
                         continuation, err
                     ));
                     log += &json.to_string();
-                    fs::write("json_dump_endpoint_next_ctoken".to_string(), log).unwrap();
+                    fs::write("json_dump_endpoint_next_ctoken", log).unwrap();
                 }
 
                 Err(Errors::ParseError(err))
@@ -108,7 +108,7 @@ pub async fn browse_id(
                     ));
 
                     log += &json.to_string();
-                    fs::write("json_dump_endpoint_browse".to_string(), log).unwrap();
+                    fs::write("json_dump_endpoint_browse", log).unwrap();
                 }
 
                 Err(Errors::ParseError(err))
@@ -172,7 +172,7 @@ pub async fn browse_continuation(
                     ));
 
                     log += &json.to_string();
-                    fs::write("json_dump_endpoint_browse_ctoken".to_string(), log).unwrap();
+                    fs::write("json_dump_endpoint_browse_ctoken", log).unwrap();
                 }
 
                 Err(Errors::ParseError(err))
@@ -205,7 +205,7 @@ pub async fn player(
                     ));
 
                     log += &json.to_string();
-                    fs::write(format!("json_dump_endpoint_player"), log).unwrap();
+                    fs::write("json_dump_endpoint_player", log).unwrap();
                 }
 
                 Err(Errors::ParseError(err))
@@ -233,7 +233,7 @@ pub async fn resolve(url: String, client_config: &ClientConfig) -> Result<Resolv
                     ));
 
                     log += &json.to_string();
-                    fs::write("json_dump_endpoint_resolve".to_string(), log).unwrap();
+                    fs::write("json_dump_endpoint_resolve", log).unwrap();
                 }
 
                 Err(Errors::ParseError(err))
@@ -266,13 +266,13 @@ pub async fn search(
                     ));
 
                     log += &json.to_string();
-                    fs::write("json_dump_endpoint_search".to_string(), log).unwrap();
+                    fs::write("json_dump_endpoint_search", log).unwrap();
                 }
 
                 Err(Errors::ParseError(err))
             }
         },
-        Err(err) => return Err(Errors::RequestError(err)),
+        Err(err) => Err(Errors::RequestError(err)),
     }
 }
 
@@ -298,7 +298,7 @@ pub async fn search_continuation(
                     ));
 
                     log += &json.to_string();
-                    fs::write("json_dump_endpoint_search_ctoken".to_string(), log).unwrap();
+                    fs::write("json_dump_endpoint_search_ctoken", log).unwrap();
                 }
 
                 Err(Errors::ParseError(err))
