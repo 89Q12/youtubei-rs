@@ -1,5 +1,5 @@
 # youtubei-rs
-An asynchronous implementation of the invidious InnerTube (aka youtubei) API wrapper.
+An asynchronous implementation of the Invidious InnerTube (aka youtubei) API wrapper.
 
 Uses `tokio`, `reqwest`, `serde` and `serde_json`.
 
@@ -28,6 +28,8 @@ When creating the client_config manually, you can parse true/false as the last p
  - `browse_continuation`: Fetch more browse(aka a channel or playlist) results for a given ctoken
  - `resolve`: Resolve a given URL
  - `player`: Get player data for a given videoId
+ 
+ For in depth info, take a look at [query.rs](https://github.com/11Tuvork28/youtubei-rs/blob/main/src/query.rs) and [tests.rs](https://github.com/11Tuvork28/youtubei-rs/blob/master/src/tests.rc).
 
 ## Example
 
@@ -42,7 +44,7 @@ async fn main() {
     // Get player for video with id `gC6dQrScmHE`
     let player = player(
         String::from("gC6dQrScmHE"), // Video ID
-        String::from(""), // Parameters
+        String::new(), // Parameters
         &client_config // Client config
     ).await.except("Couldn't fetch the video info");
 
@@ -51,6 +53,7 @@ async fn main() {
 ```
 
 ### With logging
+
 For logging, tracing is used so `tracing_subscribe` can be installed for easier use of tracing. The library has as target youtubei_rs with debug, trace, and error levels.
 
 ```rust
@@ -67,22 +70,10 @@ async fn main() {
     // Get player for video with id `gC6dQrScmHE`
     let player = player(
         String::from("gC6dQrScmHE"), // Video ID
-        String::from(""), // Parameters
+        String::new(), // Parameters
         &client_config // Client config
     ).await.except("Couldn't fetch the video info");
 
     println!("{}", player.video_details.title); // Print the video title
 }
 ```
-
-## Legacy queries
- - `get_video`: Fetches all information about the video except captions and storyboards
- - `get_channel_info`: Fetches all channel information and about tab
- - `get_channel_tab`: Fetches a specific tab like videos to get channel videos
- - `search`: Search YouTube
- - `load_search`: Continue search with ctoken
- - `get_comments`: Loads initial comments or more comments for video
- - `load_related_videos`: Loads the related videos
- - `get_playlist`: Loads a playlist
-
-For in depth info, take a look at [query.rs](https://github.com/11Tuvork28/youtubei-rs/blob/main/src/query.rs) and [tests.rs](https://github.com/11Tuvork28/youtubei-rs/blob/master/src/tests.rc).
