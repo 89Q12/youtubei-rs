@@ -144,7 +144,7 @@ pub enum BackstageAttachments {
     BackstageImageRenderer(BackstageImageRenderer),
     VideoRenderer(VideoRenderer),
     PostMultiImageRenderer(PostMultiImageRenderer),
-    PollRenderer(PollRenderer),
+    PollRenderer(Value),
 }
 
 #[derive(Debug, Clone, Deserialize)]
