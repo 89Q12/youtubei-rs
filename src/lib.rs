@@ -1,19 +1,17 @@
 /// Contains functions to generate the data to make an API call.
 /// Private because they return raw data and or errors.
-pub(crate) mod endpoints;
-
 /// Private because they are intended to be called by query functions only.
-pub(crate) mod extractors;
-
 /// Contains the main functions of this library.
 /// Refer to the tests for usage information.
-pub mod query;
+mod api;
 
 /// Contains all the structs used to represent the data returned by the API.
-pub mod types;
+pub mod models;
 
 /// Contains utilities for various tasks.
 pub mod utils;
+pub mod client;
+mod traits;
 
 // Re-import tokio
 pub extern crate tokio;
@@ -25,15 +23,15 @@ pub extern crate tokio;
 mod tests {
     use serde_json::json;
 
-    use crate::types::{
+    use crate::models::{
         channel::*,
         enums,
         video::{CompactVideoRenderer, VideoPrimaryInfoRenderer, VideoSecondaryInfoRenderer},
     };
 
     use crate::{
-        endpoints, extractors,
-        types::{
+        api::{endpoints,extractors},
+        models::{
             filter,
             query_results::{BrowseResult, NextResult, PlayerResult, ResolveResult, SearchResult},
             video::VideoRenderer,
@@ -803,7 +801,7 @@ mod tests {
 
         assert_ne!(
             match result.contents.unwrap() {
-                crate::types::enums::TwoColumnTypes::TwoColumnWatchNextResults(res) =>
+                crate::models::enums::TwoColumnTypes::TwoColumnWatchNextResults(res) =>
                     res.results.results.contents.len(),
                 _ => unreachable!(),
             },
@@ -940,7 +938,7 @@ mod tests {
         let result: SearchResult = serde_json::from_value(j).unwrap();
         assert_ne!(
             match result.contents {
-                crate::types::enums::TwoColumnTypes::TwoColumnSearchResultsRenderer(res) =>
+                crate::models::enums::TwoColumnTypes::TwoColumnSearchResultsRenderer(res) =>
                     res.primary_contents.section_list_renderer.contents.len(),
                 _ => unreachable!(),
             },
@@ -957,7 +955,7 @@ mod tests {
 
         assert_ne!(
             match result.contents {
-                crate::types::enums::TwoColumnTypes::TwoColumnSearchResultsRenderer(res) =>
+                crate::models::enums::TwoColumnTypes::TwoColumnSearchResultsRenderer(res) =>
                     res.primary_contents.section_list_renderer.contents.len(),
                 _ => unreachable!(),
             },
@@ -976,7 +974,7 @@ mod tests {
 
         assert_ne!(
             match result.contents {
-                crate::types::enums::TwoColumnTypes::TwoColumnSearchResultsRenderer(res) =>
+                crate::models::enums::TwoColumnTypes::TwoColumnSearchResultsRenderer(res) =>
                     res.primary_contents.section_list_renderer.contents.len(),
                 _ => unreachable!(),
             },
@@ -995,7 +993,7 @@ mod tests {
         let result: SearchResult = serde_json::from_value(j).unwrap();
         assert_ne!(
             match result.contents {
-                crate::types::enums::TwoColumnTypes::TwoColumnSearchResultsRenderer(res) =>
+                crate::models::enums::TwoColumnTypes::TwoColumnSearchResultsRenderer(res) =>
                     res.primary_contents.section_list_renderer.contents.len(),
                 _ => unreachable!(),
             },
@@ -1187,7 +1185,7 @@ mod tests {
         assert!(result.is_ok());
         assert_eq!(
             match result.unwrap().contents.unwrap() {
-                crate::types::enums::TwoColumnTypes::TwoColumnWatchNextResults(res) =>
+                crate::models::enums::TwoColumnTypes::TwoColumnWatchNextResults(res) =>
                     res.playlist.unwrap().playlist.title,
                 _ => unreachable!(),
             },
@@ -1286,7 +1284,7 @@ mod tests {
         assert!(result.is_ok());
         assert!(
             match result.unwrap().contents.unwrap() {
-                crate::types::enums::TwoColumnTypes::TwoColumnBrowseResultsRenderer(res) =>
+                crate::models::enums::TwoColumnTypes::TwoColumnBrowseResultsRenderer(res) =>
                     res.tabs.last().unwrap().expandable_tab_renderer.is_some(),
                 _ => unreachable!(),
             }
@@ -1311,7 +1309,7 @@ mod tests {
         assert!(result.is_ok());
         assert!(
             match result.unwrap().contents.unwrap() {
-                crate::types::enums::TwoColumnTypes::TwoColumnBrowseResultsRenderer(res) =>
+                crate::models::enums::TwoColumnTypes::TwoColumnBrowseResultsRenderer(res) =>
                     res.tabs.last().unwrap().expandable_tab_renderer.is_some(),
                 _ => unreachable!(),
             }

@@ -3,14 +3,14 @@ use std::fs;
 use serde_json::{json, Value};
 use tracing::Level;
 
-use crate::endpoints;
-use crate::endpoints::*;
-use crate::extractors::*;
+use crate::api::endpoints;
+use crate::api::endpoints::*;
+use crate::api::extractors::*;
 
-use crate::types::client::ClientConfig;
-use crate::types::error::Errors;
+use crate::client::client::ClientConfig;
+use crate::models::error::Errors;
 
-use crate::types::query_results::{
+use crate::models::query_results::{
     BrowseResult, NextResult, PlayerResult, ResolveResult, SearchResult,
 };
 

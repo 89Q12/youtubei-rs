@@ -1,6 +1,6 @@
 use serde_json::Value;
 
-use crate::types::{
+use crate::models::{
     error::ParseError,
     query_results::{BrowseResult, NextResult, PlayerResult, ResolveResult, SearchResult},
 };

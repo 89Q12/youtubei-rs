@@ -1,8 +1,6 @@
 pub mod accessibility;
 /// Channel related structs and enums
 pub mod channel;
-/// Client related structs and enums
-pub mod client;
 /// Endpoint related structs and enums
 pub mod endpoints;
 pub mod enums;

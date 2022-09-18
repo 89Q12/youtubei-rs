@@ -1,7 +1,8 @@
-use crate::types::client::ClientConfig;
-use crate::types::misc::MetadataBadgeRenderer;
-use crate::types::query_results::NextResult;
-use crate::types::{self, client};
+use crate::client::client::ClientConfig;
+use crate::client::client;
+use crate::models::misc::MetadataBadgeRenderer;
+use crate::models::query_results::NextResult;
+use crate::models;
 use serde_json::Value;
 
 pub fn default_client_config() -> ClientConfig {
@@ -60,9 +61,9 @@ pub fn unwrap_to_i64(input: Option<i64>) -> i64 {
 /// Utility function to get likes for a video
 pub fn get_likes(video: &NextResult) -> String {
     match video.contents.as_ref().unwrap() {
-        types::enums::TwoColumnTypes::TwoColumnWatchNextResults(res) => {
+        models::enums::TwoColumnTypes::TwoColumnWatchNextResults(res) => {
             match res.results.results.contents.get(0).unwrap() {
-                types::enums::NextContents::VideoPrimaryInfoRenderer(vsir) => {
+                models::enums::NextContents::VideoPrimaryInfoRenderer(vsir) => {
                     match vsir
                         .video_actions
                         .menu_renderer
@@ -74,8 +75,8 @@ pub fn get_likes(video: &NextResult) -> String {
                         .get(0)
                         .unwrap()
                     {
-                        types::enums::TopLevelButtons::ButtonRenderer(_) => unreachable!(),
-                        types::enums::TopLevelButtons::ToggleButtonRenderer(btn) => btn
+                        models::enums::TopLevelButtons::ButtonRenderer(_) => unreachable!(),
+                        models::enums::TopLevelButtons::ToggleButtonRenderer(btn) => btn
                             .default_text
                             .accessibility
                             .as_ref()
@@ -97,9 +98,9 @@ pub fn get_description(video: &NextResult) -> String {
     let mut desc = String::new();
 
     match video.contents.as_ref().unwrap() {
-        types::enums::TwoColumnTypes::TwoColumnWatchNextResults(res) => {
+        models::enums::TwoColumnTypes::TwoColumnWatchNextResults(res) => {
             match res.results.results.contents.get(1).unwrap() {
-                types::enums::NextContents::VideoSecondaryInfoRenderer(vsir) => {
+                models::enums::NextContents::VideoSecondaryInfoRenderer(vsir) => {
                     match &vsir.description {
                         Some(description) => {
                             for text in description.runs.iter() {
@@ -129,9 +130,9 @@ pub fn get_author_verified(video: &MetadataBadgeRenderer) -> bool {
 /// Utility function to get the subscriber count
 pub fn get_subcribe_count(video: &NextResult) -> String {
     match video.contents.as_ref().unwrap() {
-        types::enums::TwoColumnTypes::TwoColumnWatchNextResults(res) => {
+        models::enums::TwoColumnTypes::TwoColumnWatchNextResults(res) => {
             match res.results.results.contents.get(1).unwrap() {
-                types::enums::NextContents::VideoSecondaryInfoRenderer(vsir) => {
+                models::enums::NextContents::VideoSecondaryInfoRenderer(vsir) => {
                     match &vsir.owner.video_owner_renderer.subscriber_count_text {
                         Some(text) => text.simple_text.clone(),
                         None => String::new(),
@@ -147,9 +148,9 @@ pub fn get_subcribe_count(video: &NextResult) -> String {
 /// Utility function to get the thumbnail of the video owner
 pub fn get_owner_thumbnail(video: &NextResult) -> String {
     match video.contents.as_ref().unwrap() {
-        types::enums::TwoColumnTypes::TwoColumnWatchNextResults(res) => {
+        models::enums::TwoColumnTypes::TwoColumnWatchNextResults(res) => {
             match res.results.results.contents.get(1).unwrap() {
-                types::enums::NextContents::VideoSecondaryInfoRenderer(vsir) => {
+                models::enums::NextContents::VideoSecondaryInfoRenderer(vsir) => {
                     return vsir
                         .owner
                         .video_owner_renderer
@@ -170,9 +171,9 @@ pub fn get_owner_thumbnail(video: &NextResult) -> String {
 /// Utility function to the continuation of the video comments
 pub fn get_continuation_comments(video: &NextResult) -> Option<String> {
     match video.contents.as_ref().unwrap() {
-        types::enums::TwoColumnTypes::TwoColumnWatchNextResults(res) => {
+        models::enums::TwoColumnTypes::TwoColumnWatchNextResults(res) => {
             match res.results.results.contents.last().unwrap() {
-                types::enums::NextContents::ContinuationItemRenderer(cir) => {
+                models::enums::NextContents::ContinuationItemRenderer(cir) => {
                     cir.continuation_endpoint.continuation_command.as_ref().map(|cmd| cmd.token.clone())
                 }
                 _ => None,
@@ -184,14 +185,14 @@ pub fn get_continuation_comments(video: &NextResult) -> Option<String> {
 /// Utility function to  the continuation of related videos
 pub fn get_continuation_related(video: &NextResult) -> Option<String> {
     match video.contents.as_ref().unwrap() {
-        types::enums::TwoColumnTypes::TwoColumnWatchNextResults(res) => match res
+        models::enums::TwoColumnTypes::TwoColumnWatchNextResults(res) => match res
             .secondary_results
             .secondary_results
             .results
             .last()
             .unwrap()
         {
-            types::enums::NextContents::ContinuationItemRenderer(cir) => {
+            models::enums::NextContents::ContinuationItemRenderer(cir) => {
                 cir.continuation_endpoint.continuation_command.as_ref().map(|cmd| cmd.token.clone())
             }
             _ => None,

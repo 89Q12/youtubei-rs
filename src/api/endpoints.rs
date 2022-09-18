@@ -1,5 +1,5 @@
-use crate::types::client::ClientConfig;
-use crate::types::error::RequestError;
+use crate::client::client::ClientConfig;
+use crate::models::error::RequestError;
 use crate::utils::merge;
 use reqwest::StatusCode;
 use serde_json::{json, Value};
