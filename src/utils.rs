@@ -1,5 +1,5 @@
-use crate::client::client::ClientConfig;
-use crate::client::client;
+use crate::client::ClientConfig;
+use crate::client;
 use crate::models::misc::MetadataBadgeRenderer;
 use crate::models::query_results::NextResult;
 use crate::models;

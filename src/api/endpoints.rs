@@ -1,4 +1,4 @@
-use crate::client::client::ClientConfig;
+use crate::client::ClientConfig;
 use crate::models::error::RequestError;
 use crate::utils::merge;
 use reqwest::StatusCode;

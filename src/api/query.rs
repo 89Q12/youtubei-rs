@@ -7,7 +7,7 @@ use crate::api::endpoints;
 use crate::api::endpoints::*;
 use crate::api::extractors::*;
 
-use crate::client::client::ClientConfig;
+use crate::client::ClientConfig;
 use crate::models::error::Errors;
 
 use crate::models::query_results::{

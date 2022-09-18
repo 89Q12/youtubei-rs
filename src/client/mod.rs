@@ -1,2 +1,5 @@
 /// Client related structs and enums
-pub mod client;
+mod client;
+pub use client::ClientConfig;
+mod clientTypes;
+pub use clientTypes::*;
