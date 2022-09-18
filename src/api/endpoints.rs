@@ -1,4 +1,4 @@
-use crate::client::ClientConfig;
+use crate::client::Client;
 use crate::models::error::RequestError;
 use crate::utils::merge;
 use reqwest::StatusCode;
@@ -8,7 +8,7 @@ use tracing::Level;
 /// Prepares the data and makes a post request to the browse endpoint
 pub(crate) async fn browse_continuation(
     continuation: &str,
-    client_config: &ClientConfig,
+    client_config: &Client,
 ) -> Result<Value, RequestError> {
     tracing::event!(target: "youtubei_rs", Level::TRACE, "Requesting browse results for continuation: {}", continuation);
 
@@ -24,7 +24,7 @@ pub(crate) async fn browse_continuation(
 pub(crate) async fn browse_browseid(
     browse_id: &str,
     params: &str,
-    client_config: &ClientConfig,
+    client_config: &Client,
 ) -> Result<Value, RequestError> {
     tracing::event!(target: "youtubei_rs", Level::TRACE, "Requesting browse results for browseId: {}", browse_id);
 
@@ -39,7 +39,7 @@ pub(crate) async fn browse_browseid(
 
 pub(crate) async fn browse_with_data(
     mut browse_data: Value,
-    client_config: &ClientConfig,
+    client_config: &Client,
 ) -> Result<Value, RequestError> {
     tracing::event!(target: "youtubei_rs", Level::TRACE, "Requesting browse results with data: {}", browse_data);
 
@@ -56,7 +56,7 @@ pub(crate) async fn browse_with_data(
 /// Prepares the data and makes a post request to the next endpoint
 pub(crate) async fn next(
     continuation: &str,
-    client_config: &ClientConfig,
+    client_config: &Client,
 ) -> Result<Value, RequestError> {
     tracing::event!(target: "youtubei_rs", Level::TRACE, "Requesting next results for continuation: {}", continuation);
 
@@ -71,7 +71,7 @@ pub(crate) async fn next(
 /// Prepares the data and makes a post request to the next endpoint
 pub(crate) async fn next_with_data(
     mut data: serde_json::Value,
-    client_config: &ClientConfig,
+    client_config: &Client,
 ) -> Result<Value, RequestError> {
     tracing::trace!("Requesting next results for with: {}", data);
 
@@ -87,7 +87,7 @@ pub(crate) async fn next_with_data(
 pub(crate) async fn player(
     video_id: &str,
     params: &str,
-    client_config: &ClientConfig,
+    client_config: &Client,
 ) -> Result<Value, RequestError> {
     tracing::event!(target: "youtubei_rs", Level::TRACE, "Requesting player results for videoId: {}", video_id);
 
@@ -104,7 +104,7 @@ pub(crate) async fn player(
 /// which returns another endpoint to query
 pub(crate) async fn resolve_url(
     url: &str,
-    client_config: &ClientConfig,
+    client_config: &Client,
 ) -> Result<Value, RequestError> {
     tracing::event!(target: "youtubei_rs", Level::TRACE, "Resolving url: {}", url);
 
@@ -120,7 +120,7 @@ pub(crate) async fn resolve_url(
 pub(crate) async fn search(
     search_query: &str,
     params: &str,
-    client_config: &ClientConfig,
+    client_config: &Client,
 ) -> Result<Value, RequestError> {
     tracing::event!(target: "youtubei_rs", Level::TRACE, "Requesting search results for query: {}", search_query);
 
@@ -136,7 +136,7 @@ pub(crate) async fn search(
 /// Prepares the data and makes a post request to the search endpoint
 pub(crate) async fn search_continuation(
     continuation: &str,
-    client_config: &ClientConfig,
+    client_config: &Client,
 ) -> Result<Value, RequestError> {
     tracing::event!(target: "youtubei_rs", Level::TRACE, "Requesting search results for continuation: {}", continuation);
 
@@ -149,7 +149,7 @@ pub(crate) async fn search_continuation(
 }
 
 /// Takes the client_config and makes a json object that is used as context for the api call.
-fn make_context(client_config: &ClientConfig) -> serde_json::Value {
+fn make_context(client_config: &Client) -> serde_json::Value {
     let mut client_context = json!({
         "hl": "en",
         "gl": client_config.region(),
@@ -158,16 +158,15 @@ fn make_context(client_config: &ClientConfig) -> serde_json::Value {
     });
 
     if !client_config
-        .client_type
         .get_client_type()
         .screen
         .is_empty()
     {
         client_context["clientScreen"] =
-            serde_json::Value::String(client_config.client_type.get_client_type().screen);
+            serde_json::Value::String(client_config.get_client_type().screen);
     }
 
-    if client_config.client_type.get_client_type().screen == "EMBED" {
+    if client_config.get_client_type().screen == "EMBED" {
         client_context["third_party"] =
             json!({"embedUrl": "https://www.youtube.com/embed/dQw4w9WgXcQ"})
     }
@@ -179,17 +178,17 @@ fn make_context(client_config: &ClientConfig) -> serde_json::Value {
 async fn post_json(
     endpoint: &str,
     data: Value,
-    client_config: &ClientConfig,
+    client_config: &Client,
 ) -> Result<Value, RequestError> {
     tracing::event!(target: "youtubei_rs", Level::TRACE, "Making a POST request to endpoint: {}, with data: {}", endpoint, data);
 
     let url = format!(
         "{endpoint}?key={}&prettyPrint=false",
-        &client_config.client_type.get_client_type().api_key
+        &client_config.get_client_type().api_key
     );
 
     let wrapped_response = client_config
-        .http_client
+        .get_http_client()
         .post("https://www.youtube.com".to_owned() + &url)
         .json(&data)
         .send()

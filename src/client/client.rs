@@ -1,20 +1,22 @@
-use reqwest::header;
-use reqwest::Client;
+use super::ClientType;
 use super::client_types::ClientTypes;
+use reqwest::header;
+use reqwest::Client as reqwest_client;
+use serde_json::Value;
 /// Represents the client_config used by the endpoint functions
 /// to determine gl and hl params in the request context.
 /// Will later be used to choose a appropriate proxy.
-pub struct ClientConfig {
-    pub client_type: ClientTypes,
-    pub region: String,
-    pub proxy_region: String,
-    pub http_client: Client,
-    pub dump_on_error: bool,
+pub struct Client {
+    client_type: ClientTypes,
+    region: String,
+    proxy_region: String,
+    http_client: reqwest_client,
+    dump_on_error: bool,
 }
 
-impl ClientConfig {
+impl Client {
     /// Constructs a new ClientConfig with the client and all required headers
-    pub fn new(
+   pub(crate) fn new(
         client_type: ClientTypes,
         region: String,
         proxy_region: String,
@@ -26,10 +28,7 @@ impl ClientConfig {
             "Content-Type",
             header::HeaderValue::from_static("application/json; charset=UTF-8"),
         );
-        headers.insert(
-            "Accept-Encoding",
-            header::HeaderValue::from_static("gzip")
-        );
+        headers.insert("Accept-Encoding", header::HeaderValue::from_static("gzip"));
         headers.insert(
             "accept",
             header::HeaderValue::from_static(
@@ -52,9 +51,7 @@ impl ClientConfig {
             "x-youtube-client-version",
             header::HeaderValue::from_static("2.20200609"),
         );
-        headers.insert(
-            "cookie", header::HeaderValue::from_static("CONSENT=YES+")
-        );
+        headers.insert("cookie", header::HeaderValue::from_static("CONSENT=YES+"));
 
         let _http_client = reqwest::ClientBuilder::new()
             .https_only(true)
@@ -82,5 +79,47 @@ impl ClientConfig {
 
     pub fn region(&self) -> &str {
         &self.region
+    }
+    pub fn get_client_type(&self) -> ClientType {
+        self.client_type.get_client_type()
+    }
+    pub fn get_http_client(&self) -> &reqwest_client {
+        &self.http_client
+    }
+    pub fn dump_on_error(&self) -> bool {
+        self.dump_on_error
+    }
+}
+
+pub struct ClientBuilder {
+    cl_type: ClientTypes,
+    cl_region: String,
+    cl_proxy: String,
+    cl_dump_on_error: bool,
+}
+
+impl ClientBuilder {
+    pub fn new() -> ClientBuilder {
+        ClientBuilder {
+            cl_type: ClientTypes::Web,
+            cl_region: String::from("US"),
+            cl_proxy: String::default(),
+            cl_dump_on_error: false,
+        }
+    }
+    pub fn set_client_type(&mut self, client_type: ClientTypes) {
+        self.cl_type = client_type;
+    }
+    pub fn set_proxy_region(&mut self, proxy_region: String) {
+        self.cl_proxy = proxy_region;
+    }
+    pub fn set_proxy_uri(&mut self, proxy: String) {
+        self.cl_proxy = proxy;
+    }
+    pub fn set_dump_on_error(&mut self, dump_on_error: bool) {
+        self.cl_dump_on_error = dump_on_error;
+    }
+    pub fn build(&mut self) -> Client{
+        Client::new(self.cl_type.clone(), self.cl_region.to_owned(), self.cl_proxy.to_owned(), self.cl_dump_on_error)
     }
 }

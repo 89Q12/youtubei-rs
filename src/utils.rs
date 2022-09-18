@@ -1,17 +1,12 @@
-use crate::client::ClientConfig;
-use crate::client;
+use crate::client::{Client, ClientBuilder};
+
 use crate::models::misc::MetadataBadgeRenderer;
 use crate::models::query_results::NextResult;
 use crate::models;
 use serde_json::Value;
 
-pub fn default_client_config() -> ClientConfig {
-    ClientConfig::new(
-        client::ClientTypes::Web,
-        "US".to_string(),
-        "US".to_string(),
-        true,
-    )
+pub fn default_client_config() -> Client {
+    ClientBuilder::new().build()
 }
 
 /// Used to merge 2 values into one, probably could be optimized

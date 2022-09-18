@@ -7,7 +7,7 @@ use crate::api::endpoints;
 use crate::api::endpoints::*;
 use crate::api::extractors::*;
 
-use crate::client::ClientConfig;
+use crate::client::Client;
 use crate::models::error::Errors;
 
 use crate::models::query_results::{
@@ -17,7 +17,7 @@ use crate::models::query_results::{
 pub async fn next_video_id(
     video_id: String,
     params: String,
-    client_config: &ClientConfig,
+    client_config: &Client,
 ) -> Result<NextResult, Errors> {
     tracing::event!(target: "youtubei_rs", Level::TRACE, "Preparing next request for video id: {} and params: {}", video_id, params);
 
@@ -36,7 +36,7 @@ pub async fn next_video_id(
             Err(err) => {
                 tracing::event!(target: "youtubei_rs", Level::ERROR, "Error parsing next result: {}", err);
 
-                if client_config.dump_on_error {
+                if client_config.dump_on_error() {
                     tracing::event!(target: "youtubei_rs", Level::ERROR, "Dumping json for request with error: {}, ID: {}, Params: {}", err, video_id, params);
                     let mut log = String::from(&format!(
                         "------------------------\n Video ID: {}\n Params: {}\n Error: {} \n------------------------",
@@ -56,7 +56,7 @@ pub async fn next_video_id(
 
 pub async fn next_continuation(
     continuation: String,
-    client_config: &ClientConfig,
+    client_config: &Client,
 ) -> Result<NextResult, Errors> {
     tracing::event!(target: "youtubei_rs", Level::TRACE, "Preparing next request for continuation: {}", continuation);
 
@@ -67,7 +67,7 @@ pub async fn next_continuation(
             Err(err) => {
                 tracing::event!(target: "youtubei_rs", Level::ERROR, "Error parsing next result: {}", err);
 
-                if client_config.dump_on_error {
+                if client_config.dump_on_error() {
                     tracing::event!(target: "youtubei_rs", Level::DEBUG, "Dumping json for request with error: {}, CToken: {}", err, continuation);
 
                     let mut log = String::from(&format!(
@@ -88,7 +88,7 @@ pub async fn next_continuation(
 pub async fn browse_id(
     browse_id: String,
     params: String,
-    client_config: &ClientConfig,
+    client_config: &Client,
 ) -> Result<BrowseResult, Errors> {
     tracing::event!(target: "youtubei_rs", Level::TRACE, "Preparing browse request for browse ID: {} and params: {}", browse_id, params);
 
@@ -99,7 +99,7 @@ pub async fn browse_id(
             Err(err) => {
                 tracing::event!(target: "youtubei_rs", Level::ERROR, "Error parsing browse result: {}", err);
 
-                if client_config.dump_on_error {
+                if client_config.dump_on_error() {
                     tracing::event!(target: "youtubei_rs", Level::DEBUG, "Dumping json for request with error: {}, ID: {}, params: {}", err, browse_id, params);
 
                     let mut log = String::from(&format!(
@@ -120,7 +120,7 @@ pub async fn browse_id(
 
 pub async fn browse_custom_data(
     data: Value,
-    client_config: &ClientConfig,
+    client_config: &Client,
 ) -> Result<BrowseResult, Errors> {
     tracing::event!(target: "youtubei_rs", Level::TRACE, "Preparing browse request for browse data: {}", data);
 
@@ -131,7 +131,7 @@ pub async fn browse_custom_data(
             Err(err) => {
                 tracing::event!(target: "youtubei_rs", Level::ERROR, "Error parsing browse result: {}", err);
 
-                if client_config.dump_on_error {
+                if client_config.dump_on_error() {
                     tracing::event!(target: "youtubei_rs", Level::ERROR,"Dumping json for request with error: {}", err);
 
                     let mut log = String::from(&format!(
@@ -152,7 +152,7 @@ pub async fn browse_custom_data(
 
 pub async fn browse_continuation(
     continuation: String,
-    client_config: &ClientConfig,
+    client_config: &Client,
 ) -> Result<BrowseResult, Errors> {
     tracing::event!(target: "youtubei_rs", Level::TRACE, "Preparing browse request for continuation: {}", continuation);
 
@@ -163,7 +163,7 @@ pub async fn browse_continuation(
             Err(err) => {
                 tracing::event!(target: "youtubei_rs", Level::ERROR, "Error parsing browse result: {}", err);
 
-                if client_config.dump_on_error {
+                if client_config.dump_on_error() {
                     tracing::event!(target: "youtubei_rs", Level::ERROR, "Dumping json for request with error: {}, CToken: {}", err, continuation);
 
                     let mut log = String::from(&format!(
@@ -185,7 +185,7 @@ pub async fn browse_continuation(
 pub async fn player(
     video_id: String,
     params: String,
-    client_config: &ClientConfig,
+    client_config: &Client,
 ) -> Result<PlayerResult, Errors> {
     tracing::event!(target: "youtubei_rs", Level::TRACE, "Preparing player request for video id: {} and params: {}", video_id, params);
 
@@ -196,7 +196,7 @@ pub async fn player(
             Err(err) => {
                 tracing::event!(target: "youtubei_rs",Level::ERROR,"Error parsing player result: {}", err);
 
-                if client_config.dump_on_error {
+                if client_config.dump_on_error() {
                     tracing::event!(target: "youtubei_rs",Level::ERROR,"Dumping json for request with error: {}, ID: {}, params: {}", err, video_id, params);
 
                     let mut log = String::from(&format!(
@@ -215,7 +215,7 @@ pub async fn player(
     }
 }
 
-pub async fn resolve(url: String, client_config: &ClientConfig) -> Result<ResolveResult, Errors> {
+pub async fn resolve(url: String, client_config: &Client) -> Result<ResolveResult, Errors> {
     tracing::event!(target: "youtubei_rs", Level::TRACE, "Preparing resolve request for url: {}", url);
 
     let json = endpoints::resolve_url(&url, client_config).await;
@@ -225,7 +225,7 @@ pub async fn resolve(url: String, client_config: &ClientConfig) -> Result<Resolv
             Err(err) => {
                 tracing::event!(target: "youtubei_rs",Level::ERROR,"Error parsing resolve result: {}",err);
 
-                if client_config.dump_on_error {
+                if client_config.dump_on_error() {
                     tracing::event!(target: "youtubei_rs",Level::ERROR,"Dumping json for request with error: {}, url: {}",err,url);
                     let mut log = String::from(&format!(
                         "------------------------ \n URL: {} \nError {} \n------------------------",
@@ -246,7 +246,7 @@ pub async fn resolve(url: String, client_config: &ClientConfig) -> Result<Resolv
 pub async fn search(
     query: String,
     params: String,
-    client_config: &ClientConfig,
+    client_config: &Client,
 ) -> Result<SearchResult, Errors> {
     tracing::event!(target: "youtubei_rs", Level::TRACE, "Preparing search request for query id: {} and params: {}", query, params);
 
@@ -257,7 +257,7 @@ pub async fn search(
             Err(err) => {
                 tracing::event!(target: "youtubei_rs", Level::ERROR, "Error parsing next result: {}", err);
 
-                if client_config.dump_on_error {
+                if client_config.dump_on_error() {
                     tracing::event!(target: "youtubei_rs", Level::ERROR, "Dumping json for request with error: {}, Search query: {}, params: {}", err, query, params);
 
                     let mut log = String::from(&format!(
@@ -278,7 +278,7 @@ pub async fn search(
 
 pub async fn search_continuation(
     continuation: String,
-    client_config: &ClientConfig,
+    client_config: &Client,
 ) -> Result<SearchResult, Errors> {
     tracing::event!(target: "youtubei_rs", Level::TRACE, "Preparing search request for continuation: {}", continuation);
 
@@ -289,7 +289,7 @@ pub async fn search_continuation(
             Err(err) => {
                 tracing::event!(target: "youtubei_rs", Level::ERROR, "Error parsing next result: {}", err);
 
-                if client_config.dump_on_error {
+                if client_config.dump_on_error() {
                     tracing::event!(target: "youtubei_rs", Level::ERROR,"Dumping json for request with error: {}, CToken: {}", err, continuation);
 
                     let mut log = String::from(&format!(

@@ -12,14 +12,14 @@ use serde::{Deserialize, Serialize};
 ///   "hl": "en"
 /// },
 /// ```
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, Clone)]
 pub struct ClientType {
     pub name: String,
     pub version: String,
     pub api_key: String,
     pub screen: String,
 }
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, Clone)]
 pub enum ClientTypes {
     Web,
     WebEmbeddedPlayer,
