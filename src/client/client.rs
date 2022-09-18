@@ -1,6 +1,6 @@
 use reqwest::header;
 use reqwest::Client;
-use super::clientTypes::ClientTypes;
+use super::client_types::ClientTypes;
 /// Represents the client_config used by the endpoint functions
 /// to determine gl and hl params in the request context.
 /// Will later be used to choose a appropriate proxy.
